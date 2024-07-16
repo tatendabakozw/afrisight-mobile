@@ -15,6 +15,18 @@ export default function TabLayout() {
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen
+        name="register"
+        options={{
+          title: "Register",
+        }}
+      />
+      <Stack.Screen
+        name="verification"
+        options={{
+          title: "Verify Indentity",
+        }}
+      />
+      <Stack.Screen
         name="forgot-password"
         options={{
           title: "Forgot Password",

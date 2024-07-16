@@ -9,17 +9,17 @@ import { Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import GoogleAuthButton from "@/components/buttons/GoogleAuthButton";
 import FacebookAuthButton from "@/components/buttons/FacebookAuthButton";
-import CheckBox from "@/components/inputs/CheckBox";
-import { Link } from "expo-router";
+import { Link, useNavigation } from "expo-router";
 
-const Login = () => {
+const Register = () => {
   const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(false);
   const [show_password, setShowPassword] = useState(false);
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setlastName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [isSelected, setSelection] = useState(false);
-
+  const navigation = useNavigation();
   const renderPasswordIcon = (showPassword: boolean) => {
     return showPassword ? (
       <Ionicons name="eye" size={24} color="#a1a1aa" />
@@ -32,10 +32,11 @@ const Login = () => {
     setShowPassword(!show_password);
   };
 
-  const loginWithEmail = async () => {
+  const RegisterWithEmail = async () => {
     try {
       setLoading(true);
-      // TODO - auth logic
+      //   @ts-ignore
+      navigation.navigate("verification");
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -44,7 +45,7 @@ const Login = () => {
   return (
     <View
       style={[
-        tw`gap-6 w-full px-6 py-8 h-full bg-white items-center justify-center gap-6`,
+        tw`gap-6 w-full px-6 pb-6 h-full bg-white items-center justify-center gap-6`,
         {
           paddingTop: insets.top,
         },
@@ -54,9 +55,21 @@ const Login = () => {
         <LogoAlt />
       </View>
       <CustomInput
+        value={first_name}
+        setValue={setFirstName}
+        placeholder="john"
+        label="First Name"
+      />
+      <CustomInput
+        value={last_name}
+        setValue={setlastName}
+        placeholder="doe"
+        label="Last Name"
+      />
+      <CustomInput
         value={email}
         setValue={setEmail}
-        placeholder="example@gmail.com"
+        placeholder="email@example.com"
         label="Email"
       />
       <CustomInput
@@ -68,23 +81,10 @@ const Login = () => {
         placeholder="******"
         label="Password"
       />
-      <View style={tw`flex flex-row items-center justify-between w-full`}>
-        <View style={tw`flex flex-row gap-2 items-center`}>
-          <CheckBox />
-          <Text style={tw`text-zinc-500 text-xs`}>Keep me signed in</Text>
-        </View>
 
-        <Link href={"/forgot-password"}>
-          <Text
-            style={tw`text-[${Colors.light.primary}] font-semibold text-xs`}
-          >
-            Forgot password
-          </Text>
-        </Link>
-      </View>
       <PrimaryButton
-        text="Sign In"
-        onPress={loginWithEmail}
+        text="Sign Up"
+        onPress={RegisterWithEmail}
         loading={loading}
       />
       <View style={tw`flex flex-row items-center gap-2`}>
@@ -96,18 +96,18 @@ const Login = () => {
       <FacebookAuthButton />
 
       <Text style={tw`text-zinc-700`}>
-        Don't have an account?{" "}
+        Already Registered?{" "}
         <Link
-          href={"register"}
+          href={"/register"}
           style={tw`font-semibold text-[${Colors.light.primary}]`}
         >
-          Sign Up
+          Sign In
         </Link>
       </Text>
     </View>
   );
 };
 
-export default Login;
+export default Register;
 
 const styles = StyleSheet.create({});
