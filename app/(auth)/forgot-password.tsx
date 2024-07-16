@@ -4,16 +4,29 @@ import tw from "twrnc";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import CustomInput from "@/components/inputs/CustomInput";
+import { useNavigation } from "expo-router";
+import EmailSuccessModal from "@/components/modals/EmailSuccessModal";
 
 const ForgotPassword = () => {
   const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const navigation = useNavigation();
+
+  const onLongPress = () => {
+    setModalVisible(true);
+    setTimeout(() => {
+      setModalVisible(false);
+    }, 1500);
+  };
 
   const resetpasswordHandler = async () => {
     try {
       setLoading(true);
-      // reset password login
+      // @ts-ignore
+      navigation.navigate("reset-password");
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -38,9 +51,14 @@ const ForgotPassword = () => {
         label="Email"
       />
       <PrimaryButton
+        onLongPress={onLongPress}
         text="Reset Password"
         onPress={resetpasswordHandler}
         loading={loading}
+      />
+      <EmailSuccessModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
       />
     </View>
   );

@@ -15,11 +15,20 @@ type Props = {
   loading?: boolean;
   error?: boolean;
   success?: boolean;
+  onLongPress?: () => void;
 };
 
-const PrimaryButton = ({ text, onPress, loading, error, success }: Props) => {
+const PrimaryButton = ({
+  text,
+  onPress,
+  loading,
+  error,
+  success,
+  onLongPress,
+}: Props) => {
   return (
     <TouchableOpacity
+      onLongPress={onLongPress}
       activeOpacity={0.7}
       onPress={onPress}
       style={tw`${
