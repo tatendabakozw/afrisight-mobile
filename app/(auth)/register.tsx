@@ -9,7 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import GoogleAuthButton from "@/components/buttons/GoogleAuthButton";
 import FacebookAuthButton from "@/components/buttons/FacebookAuthButton";
-import { Link, useNavigation } from "expo-router";
+import { Link, router, useNavigation } from "expo-router";
 
 const Register = () => {
   const insets = useSafeAreaInsets();
@@ -19,7 +19,7 @@ const Register = () => {
   const [last_name, setlastName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const navigation = useNavigation();
+
   const renderPasswordIcon = (showPassword: boolean) => {
     return showPassword ? (
       <Ionicons name="eye" size={24} color="#a1a1aa" />
@@ -35,8 +35,7 @@ const Register = () => {
   const RegisterWithEmail = async () => {
     try {
       setLoading(true);
-      //   @ts-ignore
-      navigation.navigate("verification");
+      router.push("/verification");
       setLoading(false);
     } catch (error) {
       setLoading(false);

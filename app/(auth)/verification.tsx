@@ -12,11 +12,11 @@ import {
 import React, { useState, useRef } from "react";
 import tw from "twrnc";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import PulsingView from "@/components/pulse-view/PulseView";
 import RegisterSuccessModal from "@/components/modals/RegisterSuccessModal";
+import { router } from "expo-router";
 
 const Verification: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -48,11 +48,14 @@ const Verification: React.FC = () => {
   const verifyUser = () => {
     if (code.includes("")) {
       setError(true);
+      router.push("/(onboarding)");
     } else {
       setModalVisible(true);
       setTimeout(() => {
+        router.push("/(onboarding)");
         setModalVisible(false);
       }, 2000);
+      router.push("/(onboarding)");
     }
   };
 

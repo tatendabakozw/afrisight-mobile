@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import React, { useState } from "react";
 import tw from "twrnc";
 import LogoAlt from "@/assets/svgs/LogoAlt";

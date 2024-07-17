@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import tw from "twrnc";
 import CustomInput from "@/components/inputs/CustomInput";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
@@ -52,8 +52,7 @@ const ResetPassword = () => {
   const resetpasswordHandler = async () => {
     try {
       setLoading(true);
-      // @ts-ignore
-      navigation.navigate("reset-password");
+      router.push("/reset-password");
       setLoading(false);
     } catch (error) {
       setLoading(false);

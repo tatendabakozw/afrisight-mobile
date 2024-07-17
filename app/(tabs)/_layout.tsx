@@ -1,19 +1,8 @@
 import React from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Tabs } from "expo-router";
-import { Pressable } from "react-native";
-
+import { Tabs } from "expo-router";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -27,13 +16,21 @@ export default function TabLayout() {
         headerShown: useClientOnlyValue(false, true),
       }}
     >
-      <Tabs.Screen name="index" options={{ headerShown: false }} />
       <Tabs.Screen
-        name="two"
-        options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
+        name="index"
+        options={{ headerShown: false, title: "Gigs" }}
+      />
+      <Tabs.Screen
+        name="history"
+        options={{ headerShown: false, title: "History" }}
+      />
+      <Tabs.Screen
+        name="wallet"
+        options={{ headerShown: false, title: "Gigs" }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{ headerShown: false, title: "Profile" }}
       />
     </Tabs>
   );
