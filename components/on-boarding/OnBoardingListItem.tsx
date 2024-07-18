@@ -80,7 +80,7 @@ const OnBoardingListItem = ({ item, index, x }: Props) => {
   return (
     <View
       style={[
-        tw`flex flex-col pt-20 px-6 `,
+        tw`flex flex-col pt-4 px-6 `,
         styles.itemContainer,
         { width: SCREEN_WIDTH },
       ]}

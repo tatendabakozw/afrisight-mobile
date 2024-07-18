@@ -1,4 +1,10 @@
-import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  ScrollView,
+} from "react-native";
 import React, { useState } from "react";
 import tw from "twrnc";
 import LogoAlt from "@/assets/svgs/LogoAlt";
@@ -42,9 +48,9 @@ const Register = () => {
     }
   };
   return (
-    <View
-      style={[
-        tw`gap-6 w-full px-6 pb-6 h-full bg-white items-center justify-center gap-6`,
+    <ScrollView
+      contentContainerStyle={[
+        tw`gap-6 w-full px-6 pb-6 flex-1 h-full bg-white items-center justify-center gap-6`,
         {
           paddingTop: insets.top,
         },
@@ -103,7 +109,7 @@ const Register = () => {
           Sign In
         </Link>
       </Text>
-    </View>
+    </ScrollView>
   );
 };
 

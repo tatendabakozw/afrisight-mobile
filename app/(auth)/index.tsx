@@ -70,7 +70,7 @@ const Login = () => {
       />
       <View style={tw`flex flex-row items-center justify-between w-full`}>
         <View style={tw`flex flex-row gap-2 items-center`}>
-          <CheckBox />
+          <CheckBox isChecked={isSelected} setIsChecked={setSelection} />
           <Text style={tw`text-zinc-500 text-xs`}>Keep me signed in</Text>
         </View>
 
