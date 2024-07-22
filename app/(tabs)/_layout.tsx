@@ -17,6 +17,8 @@ import {
 import { WalletIconOutline } from "@/assets/svgs/nav-icons/WalletIcon";
 import { SettingsIconOutline } from "@/assets/svgs/nav-icons/SettingsIcon";
 import { View } from "@/components/Themed";
+import NavBar from "@/components/navigation/navbar/NavBar";
+import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 
 interface IconProps {
   children?: ReactNode;
@@ -62,7 +64,8 @@ export default function TabLayout() {
         tabBarLabelStyle: {
           fontSize: 13,
         },
-        headerShown: false,
+        headerShown: useClientOnlyValue(false, true),
+        header: (props) => <NavBar {...props} />,
         tabBarStyle: {
           height: 65,
           paddingVertical: Platform.OS === "ios" ? 15 : 0,
@@ -80,22 +83,10 @@ export default function TabLayout() {
         tabBarShowLabel: false,
       })}
     >
-      <Tabs.Screen
-        name="index"
-        options={{ headerShown: false, title: "Home" }}
-      />
-      <Tabs.Screen
-        name="gigs"
-        options={{ headerShown: false, title: "Gigs" }}
-      />
-      <Tabs.Screen
-        name="status"
-        options={{ headerShown: false, title: "Status" }}
-      />
-      <Tabs.Screen
-        name="wallet"
-        options={{ headerShown: false, title: "Wallet" }}
-      />
+      <Tabs.Screen name="index" options={{ title: "Home" }} />
+      <Tabs.Screen name="gigs" options={{ title: "Gigs" }} />
+      <Tabs.Screen name="status" options={{ title: "Status" }} />
+      <Tabs.Screen name="wallet" options={{ title: "Wallet" }} />
       <Tabs.Screen
         name="settings"
         options={{

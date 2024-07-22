@@ -38,7 +38,7 @@ const TabsWithChat = ({ children }: Props) => {
             onPressOut={handlePressOut}
             style={tw`bg-[${Colors.light.primary}] p-4 rounded-full`}
           >
-            <Ionicons name="chatbox-outline" size={24} color="white" />
+            <Ionicons name="chatbox-outline" size={24} color="#09090b" />
           </TouchableOpacity>
         </Animated.View>
       </View>
