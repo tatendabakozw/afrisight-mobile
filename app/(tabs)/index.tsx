@@ -13,6 +13,7 @@ import tw from "twrnc";
 import TabsWithChat from "@/layouts/TabsWithChat";
 import RecentActivityComponent from "@/components/recent-activity/RecentActivityComponent";
 import GigItem from "@/components/git-item/GigItem";
+import AllGigs from "@/components/git-item/AllGigs";
 
 const cards = [
   {
@@ -51,13 +52,13 @@ export default function Home() {
     <TabsWithChat>
       <View
         style={[
-          tw`bg-zinc-50 pt-4 flex-1`, // Added flex-1 here
+          tw`bg-zinc-50 flex-1`, // Added flex-1 here
           styles.container,
         ]}
       >
         <ScrollView
           style={tw`flex-1`}
-          contentContainerStyle={tw`gap-4 pt-6 pb-32`} // Removed flex-1 from here
+          contentContainerStyle={tw`gap-4 pb-32`} // Removed flex-1 from here
         >
           <View style={tw`gap-4 pt-6 `}>
             <View style={tw`px-4`}>
@@ -108,11 +109,7 @@ export default function Home() {
             <Text style={tw`text-zinc-400 text-lg px-4 pt-2`}>
               Recommendations
             </Text>
-            <View style={tw`gap-8 px-4`}>
-              {[1, 2, 3, 4, 5, 6, 6, 6, 6, 6].map((item, index) => (
-                <GigItem key={index} />
-              ))}
-            </View>
+            <AllGigs />
           </View>
         </ScrollView>
       </View>

@@ -12,6 +12,7 @@ import {
   View,
   Platform,
 } from "react-native";
+import Colors from "@/constants/Colors";
 
 // Enable LayoutAnimation on Android
 if (
@@ -21,7 +22,14 @@ if (
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const NavBar = ({ navigation, back, options }: any) => {
+const search_filters = [
+  { name: "All", _id: "all" },
+  { name: "Inprogress", _id: "inprogress" },
+  { name: "New", _id: "new" },
+  { name: "Saved", _id: "saved" },
+];
+
+const NavBar = ({ navigation, back, options, route }: any) => {
   const insets = useSafeAreaInsets();
   const [searchClicked, setSearchClicked] = useState(false);
   const toggleSearch = () => {
@@ -30,6 +38,9 @@ const NavBar = ({ navigation, back, options }: any) => {
   };
   const title =
     options.title !== undefined ? options.title : options.route.name;
+
+  const [selected_option, setSelectedOption] = useState(search_filters[0]);
+  const currentRouteName = route.name;
 
   return (
     <View
@@ -79,6 +90,26 @@ const NavBar = ({ navigation, back, options }: any) => {
           <AntDesign name="search1" size={20} color="#52525b" />
           <Text style={tw`rounded-full text-zinc-400 flex-1`}>Search</Text>
         </TouchableOpacity>
+      )}
+
+      {/* filters */}
+      {currentRouteName === "gigs" && (
+        <View style={tw`flex flex-row items-center gap-4`}>
+          {search_filters.map((item) => (
+            <TouchableOpacity
+              onPress={() => setSelectedOption(item)}
+              activeOpacity={0.7}
+              style={tw`${
+                selected_option._id === item._id
+                  ? `bg-[${Colors.light.primary}] border-[${Colors.light.primary}] `
+                  : "bg-white border-zinc-200/50 "
+              } px-4 py-2  rounded-full border`}
+              key={item._id}
+            >
+              <Text style={tw`text-sm`}>{item.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       )}
     </View>
   );

@@ -65,7 +65,7 @@ export default function TabLayout() {
           fontSize: 13,
         },
         headerShown: useClientOnlyValue(false, true),
-        header: (props) => <NavBar {...props} />,
+        header: (props) => <NavBar {...props} route={route} />,
         tabBarStyle: {
           height: 65,
           paddingVertical: Platform.OS === "ios" ? 15 : 0,
