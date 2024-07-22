@@ -1,36 +1,107 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Tabs } from "expo-router";
+import { Platform } from "react-native";
 import Colors from "@/constants/Colors";
-import { useColorScheme } from "@/components/useColorScheme";
-import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import {
+  HomeIconOutline,
+  HomeIconSolid,
+} from "@/assets/svgs/nav-icons/HomeIcon";
+import {
+  GigsIconOutline,
+  GigsIconSolid,
+} from "@/assets/svgs/nav-icons/GigsIcon";
+import {
+  StatusIconOutline,
+  StatusIconSolid,
+} from "@/assets/svgs/nav-icons/StatusIcon";
+import { WalletIconOutline } from "@/assets/svgs/nav-icons/WalletIcon";
+import { SettingsIconOutline } from "@/assets/svgs/nav-icons/SettingsIcon";
+import { View } from "@/components/Themed";
+
+interface IconProps {
+  children?: ReactNode;
+}
+
+// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+function TabBarIcon({ children }: IconProps) {
+  return children;
+}
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color }) => {
+          let imageName;
+
+          switch (route.name) {
+            case "index":
+              imageName = focused ? <HomeIconSolid /> : <HomeIconOutline />;
+              break;
+            case "gigs":
+              imageName = focused ? <GigsIconSolid /> : <GigsIconOutline />;
+              break;
+            case "status":
+              imageName = focused ? <StatusIconSolid /> : <StatusIconOutline />;
+              break;
+            case "wallet":
+              imageName = focused ? <HomeIconSolid /> : <WalletIconOutline />;
+              break;
+            case "settings":
+              imageName = focused ? <HomeIconSolid /> : <SettingsIconOutline />;
+              break;
+            default:
+              imageName = <HomeIconSolid />;
+              break;
+          }
+
+          return <TabBarIcon children={imageName} />;
+        },
+        tabBarActiveTintColor: Colors.light.primary,
+        tabBarInactiveTintColor: "#94a3b8",
+        tabBarLabelStyle: {
+          fontSize: 13,
+        },
+        headerShown: false,
+        tabBarStyle: {
+          height: 65,
+          paddingVertical: Platform.OS === "ios" ? 15 : 0,
+          position: "absolute",
+          bottom: 15,
+          left: 10,
+          right: 10,
+          borderRadius: 50,
+          backgroundColor: "#fff",
+          borderTopWidth: 0,
+          borderColor: "#f4f4f5",
+          borderWidth: 1,
+          elevation: 0.09,
+        },
+        tabBarShowLabel: false,
+      })}
     >
       <Tabs.Screen
         name="index"
+        options={{ headerShown: false, title: "Home" }}
+      />
+      <Tabs.Screen
+        name="gigs"
         options={{ headerShown: false, title: "Gigs" }}
       />
       <Tabs.Screen
-        name="history"
-        options={{ headerShown: false, title: "History" }}
+        name="status"
+        options={{ headerShown: false, title: "Status" }}
       />
       <Tabs.Screen
         name="wallet"
-        options={{ headerShown: false, title: "Gigs" }}
+        options={{ headerShown: false, title: "Wallet" }}
       />
       <Tabs.Screen
-        name="profile"
-        options={{ headerShown: false, title: "Profile" }}
+        name="settings"
+        options={{
+          headerShown: false,
+          title: "Settings",
+        }}
       />
     </Tabs>
   );
