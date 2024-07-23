@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AntDesign, Feather } from "@expo/vector-icons";
+import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import tw from "twrnc";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
@@ -13,7 +13,7 @@ import {
   Platform,
 } from "react-native";
 import Colors from "@/constants/Colors";
-import NotificationButton from "@/components/buttons/NotificationButton";
+import { router } from "expo-router";
 
 // Enable LayoutAnimation on Android
 if (
@@ -62,7 +62,11 @@ const NavBar = ({ navigation, back, options, route }: any) => {
               Kudai Mapuranga
             </Text>
           </View>
-          <NotificationButton />
+          <TouchableOpacity
+            style={tw`bg-white rounded-full p-3 border border-zinc-200/50`}
+          >
+            <Ionicons name="notifications-outline" size={20} color="#3f3f46" />
+          </TouchableOpacity>
         </View>
       )}
       {searchClicked ? (
@@ -87,6 +91,13 @@ const NavBar = ({ navigation, back, options, route }: any) => {
           >
             <AntDesign name="search1" size={20} color="#52525b" />
             <Text style={tw`rounded-full text-zinc-400`}>Search</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => router.push("filter-modal")}
+            style={tw`flex flex-row items-center bg-white p-3 gap-4 rounded-full border border-zinc-200/50`}
+          >
+            <AntDesign name="filter" size={20} color="#3f3f46" />
           </TouchableOpacity>
         </View>
       )}
