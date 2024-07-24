@@ -9,7 +9,7 @@ const AllGigs = () => {
       style={tw`flex-1`}
       contentContainerStyle={tw`gap-4  pb-8`} // Removed flex-1 from here
     >
-      <View style={tw`gap-8 px-4 `}>
+      <View style={tw`gap-6 px-4 `}>
         {[1, 2, 3, 4, 5, 6, 6, 6, 6, 6, 3, 3, 3, 3, 3, 3, 3].map(
           (item, index) => (
             <GigItem key={index} />

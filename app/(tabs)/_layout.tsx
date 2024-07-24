@@ -14,9 +14,11 @@ import {
   StatusIconOutline,
   StatusIconSolid,
 } from "@/assets/svgs/nav-icons/StatusIcon";
-import { WalletIconOutline } from "@/assets/svgs/nav-icons/WalletIcon";
+import {
+  WalletIconOutline,
+  WalletIconSolid,
+} from "@/assets/svgs/nav-icons/WalletIcon";
 import { SettingsIconOutline } from "@/assets/svgs/nav-icons/SettingsIcon";
-import { View } from "@/components/Themed";
 import NavBar from "@/components/navigation/navbar/NavBar";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 
@@ -47,7 +49,7 @@ export default function TabLayout() {
               imageName = focused ? <StatusIconSolid /> : <StatusIconOutline />;
               break;
             case "wallet":
-              imageName = focused ? <HomeIconSolid /> : <WalletIconOutline />;
+              imageName = focused ? <WalletIconSolid /> : <WalletIconOutline />;
               break;
             case "settings":
               imageName = focused ? <HomeIconSolid /> : <SettingsIconOutline />;
@@ -86,7 +88,10 @@ export default function TabLayout() {
       <Tabs.Screen name="index" options={{ title: "Home" }} />
       <Tabs.Screen name="gigs" options={{ title: "Gigs" }} />
       <Tabs.Screen name="status" options={{ title: "Status" }} />
-      <Tabs.Screen name="wallet" options={{ title: "Wallet" }} />
+      <Tabs.Screen
+        name="wallet"
+        options={{ title: "Wallet", headerShown: false }}
+      />
       <Tabs.Screen
         name="settings"
         options={{

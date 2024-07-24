@@ -8,14 +8,14 @@ type Props = {};
 const GigItem = (props: Props) => {
   return (
     <View style={tw`rounded-3xl gap-2`}>
-      <View style={tw`flex flex-row items-center gap-2`}>
+      <View style={tw`flex flex-row items-center gap-4`}>
         <Image
           height={20}
           width={20}
           style={tw`h-16 w-16 bg-red-100 rounded-2xl`}
           source={require("../../assets/images/home-assets/profile-complete.jpg")}
         />
-        <View style={tw`flex flex-col gap-2 flex-1`}>
+        <View style={tw`flex flex-col gap-1 flex-1`}>
           <View style={tw`flex flex-row items-center gap-4`}>
             <Text style={tw`text-xl font-bold text-zinc-950`}>Store VSRG</Text>
             <Text
@@ -24,19 +24,19 @@ const GigItem = (props: Props) => {
               Easy
             </Text>
           </View>
-          <View style={tw`flex flex-row items-center gap-1`}>
+          <View style={tw`flex flex-row items-center gap-0.5`}>
             <View style={tw`flex flex-row items-center gap-0.5`}>
-              <MaterialIcons name="access-time" size={16} color="#0f172a" />
-              <Text style={tw`text-xs text-zinc-950 font-bold`}>{5}m</Text>
+              <MaterialIcons name="access-time" size={16} color="#a1a1aa" />
+              <Text style={tw`text-xs text-zinc-400 font-bold`}>{5}m</Text>
             </View>
-            <Entypo name="dot-single" size={16} color="#0f172a" />
+            <Entypo name="dot-single" size={16} color="#a1a1aa" />
             <View style={tw`flex flex-row items-center gap-0.5`}>
               <MaterialIcons
                 name="location-searching"
                 size={16}
-                color="#0f172a"
+                color="#a1a1aa"
               />
-              <Text style={tw`text-xs text-zinc-950 font-bold`}>Harare</Text>
+              <Text style={tw`text-xs text-zinc-400 font-bold`}>Harare</Text>
             </View>
           </View>
         </View>
