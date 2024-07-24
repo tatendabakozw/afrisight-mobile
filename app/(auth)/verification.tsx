@@ -55,7 +55,6 @@ const Verification: React.FC = () => {
         router.push("/(onboarding)");
         setModalVisible(false);
       }, 2000);
-      router.push("/(onboarding)");
     }
   };
 
