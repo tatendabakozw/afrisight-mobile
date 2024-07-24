@@ -4,17 +4,21 @@ import tw from "twrnc";
 import GigItem from "./GigItem";
 
 const AllGigs = () => {
+  const items = [1, 2, 3, 4, 5, 6, 6, 6, 6, 6, 3, 3, 3, 3, 3, 3, 3];
   return (
     <ScrollView
       style={tw`flex-1`}
       contentContainerStyle={tw`gap-4  pb-8`} // Removed flex-1 from here
     >
-      <View style={tw`gap-6 px-4 `}>
-        {[1, 2, 3, 4, 5, 6, 6, 6, 6, 6, 3, 3, 3, 3, 3, 3, 3].map(
-          (item, index) => (
-            <GigItem key={index} />
-          )
-        )}
+      <View style={tw`gap-4 px-4 `}>
+        {items.map((item, index) => (
+          <React.Fragment key={index}>
+            <GigItem />
+            {index < items.length - 1 && (
+              <View style={tw`h-px bg-gray-200/50`} />
+            )}
+          </React.Fragment>
+        ))}
       </View>
     </ScrollView>
   );
