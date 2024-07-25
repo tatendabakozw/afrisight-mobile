@@ -48,7 +48,6 @@ const Verification: React.FC = () => {
   const verifyUser = () => {
     if (code.includes("")) {
       setError(true);
-      // router.push("/(onboarding)");
     } else {
       setModalVisible(true);
       setTimeout(() => {

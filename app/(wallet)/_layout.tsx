@@ -46,11 +46,7 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <Stack>
-      <Stack.Screen name="filter-modal" options={{ presentation: "modal" }} />
-      <Stack.Screen
-        name="wallet-add-card"
-        options={{ presentation: "modal", headerShown: false }}
-      />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
     </Stack>
   );
 }

@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { Tabs } from "expo-router";
-import { Platform } from "react-native";
+import { Platform, Text } from "react-native";
 import Colors from "@/constants/Colors";
 import {
   HomeIconOutline,
@@ -61,28 +61,60 @@ export default function TabLayout() {
 
           return <TabBarIcon children={imageName} />;
         },
+        tabBarLabel: ({ focused }) => {
+          let label;
+          switch (route.name) {
+            case "index":
+              label = "Home";
+              break;
+            case "gigs":
+              label = "Gigs";
+              break;
+            case "status":
+              label = "Status";
+              break;
+            case "wallet":
+              label = "Wallet";
+              break;
+            case "settings":
+              label = "Settings";
+              break;
+            default:
+              label = "Home";
+              break;
+          }
+
+          return (
+            <Text
+              style={{
+                fontSize: 13,
+                paddingBottom: 10,
+                color: focused ? Colors.light.primary : "#6E6D7A",
+                fontWeight: focused ? "bold" : "normal",
+              }}
+            >
+              {label}
+            </Text>
+          );
+        },
         tabBarActiveTintColor: Colors.light.primary,
         tabBarInactiveTintColor: "#94a3b8",
-        tabBarLabelStyle: {
-          fontSize: 13,
-        },
+
         headerShown: useClientOnlyValue(false, true),
         header: (props) => <NavBar {...props} route={route} />,
         tabBarStyle: {
-          height: 65,
-          paddingVertical: Platform.OS === "ios" ? 15 : 0,
-          position: "absolute",
-          bottom: 15,
-          left: 10,
-          right: 10,
-          borderRadius: 50,
+          paddingVertical: Platform.OS === "ios" ? 15 : 10,
+          height: 70,
           backgroundColor: "#fff",
           borderTopWidth: 0,
           borderColor: "#f4f4f5",
-          borderWidth: 1,
-          elevation: 0.09,
+          elevation: 5,
+          shadowColor: "#000",
+          shadowOffset: { width: 1, height: -2 },
+          shadowOpacity: 0.5,
+          shadowRadius: 10,
         },
-        tabBarShowLabel: false,
+        tabBarShowLabel: true,
       })}
     >
       <Tabs.Screen name="index" options={{ title: "Home" }} />
@@ -92,6 +124,7 @@ export default function TabLayout() {
         name="wallet"
         options={{ title: "Wallet", headerShown: false }}
       />
+
       <Tabs.Screen
         name="settings"
         options={{

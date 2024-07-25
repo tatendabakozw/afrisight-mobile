@@ -29,7 +29,7 @@ const TabsWithChat = ({ children }: Props) => {
     <View style={tw`relative h-full`}>
       {children}
       <View
-        style={tw`flex flex-col items-end w-full absolute bottom-25 right-5`}
+        style={tw`flex flex-col items-end w-full absolute bottom-5 right-5`}
       >
         <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
           <TouchableOpacity

@@ -59,6 +59,7 @@ function RootLayoutNav() {
         <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(modals)" options={{ headerShown: false }} />
+        <Stack.Screen name="(wallet)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         <Stack.Screen name="filter-modal" options={{ presentation: "modal" }} />
       </Stack>
