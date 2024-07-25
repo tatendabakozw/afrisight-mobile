@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import WalletBannerSection from "@/components/wallet-banner-section/WalletBannerSection";
 import tw from "twrnc";
+import PhoneNumberInput from "@/components/inputs/PhoneNumberInput";
 
 const sections = [
   { name: "Top-up", _id: "top-up" },
@@ -38,6 +39,8 @@ const WalletAddCard = () => {
             </TouchableOpacity>
           ))}
         </View>
+        {/* phone number input */}
+        <PhoneNumberInput />
       </View>
     </View>
   );

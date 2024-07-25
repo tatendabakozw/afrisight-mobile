@@ -12,7 +12,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import tw from "twrnc";
 import TabsWithChat from "@/layouts/TabsWithChat";
 import RecentActivityComponent from "@/components/recent-activity/RecentActivityComponent";
-import GigItem from "@/components/git-item/GigItem";
 import AllGigs from "@/components/git-item/AllGigs";
 
 const cards = [

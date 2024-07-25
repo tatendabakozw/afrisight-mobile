@@ -55,7 +55,7 @@ const WalletWithdraw = () => {
           label="Amount"
         />
 
-        <PrimaryButton text="Top-up" />
+        <PrimaryButton text="Top-Up" />
       </View>
     </View>
   );
