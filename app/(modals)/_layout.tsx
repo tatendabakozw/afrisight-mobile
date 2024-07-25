@@ -51,6 +51,10 @@ function RootLayoutNav() {
         name="wallet-add-card"
         options={{ presentation: "modal", headerShown: false }}
       />
+      <Stack.Screen
+        name="wallet-withdraw"
+        options={{ presentation: "modal", headerShown: false }}
+      />
     </Stack>
   );
 }

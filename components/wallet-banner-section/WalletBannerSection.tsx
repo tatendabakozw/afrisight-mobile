@@ -59,7 +59,11 @@ const WalletBannerSection = ({ modal }: Props) => {
         </Text>
         {!modal && (
           <View style={tw`flex w-full mx-auto w-2/3 max-w-xs`}>
-            <TouchableOpacity style={tw`bg-white py-2 px-4 rounded-full`}>
+            <TouchableOpacity
+              onPress={() => router.push("(modals)/wallet-withdraw")}
+              activeOpacity={0.7}
+              style={tw`bg-white py-2 px-4 rounded-full`}
+            >
               <Text
                 style={tw`text-[${Colors.light.primary}] text-lg text-center font-semibold`}
               >
