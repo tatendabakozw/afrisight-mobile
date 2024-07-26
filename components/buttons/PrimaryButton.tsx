@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useRef } from "react";
 import tw from "twrnc";
 import Colors from "@/constants/Colors";
+import { Feather } from "@expo/vector-icons";
 
 type Props = {
   text: string;
@@ -77,10 +78,14 @@ const PrimaryButton = ({
             : muted
             ? "bg-white "
             : `bg-[${Colors.light.primary}] `
-        }  flex flex-row justify-between w-full p-3 rounded-full`}
+        }  flex flex-row justify-between items-center w-full p-3 rounded-full`}
       >
         {loading ? (
           <ActivityIndicator color="#fff" />
+        ) : success ? (
+          <Feather name="check-circle" size={20} color="white" />
+        ) : error ? (
+          <Feather name="alert-triangle" size={20} color="white" />
         ) : (
           <View style={tw`p-3 rounded-full`} />
         )}

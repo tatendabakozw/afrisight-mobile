@@ -27,9 +27,7 @@ const CustomInput = (props: Props) => {
       )}
       <View
         style={tw`${
-          props.missing
-            ? " border border-red-800/50 "
-            : " border border-zinc-300/50 "
+          props.missing ? "border border-red-400" : "border border-zinc-300/50"
         } p-3 flex flex-row items-center rounded-xl w-full`}
       >
         <TextInput
@@ -46,9 +44,7 @@ const CustomInput = (props: Props) => {
         )}
       </View>
       {props.missing && (
-        <Text
-          style={tw`text-red-800/50 w-full self-end font-semibold pl-1 text-xs text-right`}
-        >
+        <Text style={tw`text-red-500 w-full self-end pl-1 text-xs text-right`}>
           {props.label} is required
         </Text>
       )}
