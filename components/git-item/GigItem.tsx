@@ -2,14 +2,20 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import { Entypo, FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import { GigItemProps } from "@/utils/types";
 import { truncateText } from "@/app/utils/text-moderators";
 
 const GigItem = (props: GigItemProps) => {
+  const router = useRouter();
   return (
     <TouchableOpacity
-      onPress={() => router.push("(modals)/gig-description")}
+      onPress={() =>
+        router.push({
+          pathname: "(modals)/gig-description",
+          params: { gig_id: props._id, gig_type: props.type },
+        })
+      }
       style={tw`rounded-3xl gap-2`}
     >
       <View style={tw`flex flex-row items-center gap-4`}>

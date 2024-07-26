@@ -4,9 +4,12 @@ import tw from "twrnc";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import GigDescriptionHeader from "@/components/navigation/headers/GigDescriptionHeader";
+import { useLocalSearchParams } from "expo-router";
 
 const GigDescription = () => {
   const insets = useSafeAreaInsets();
+  const { gig_type, gig_id } = useLocalSearchParams();
+  console.log(gig_type);
   return (
     <ScrollView
       contentContainerStyle={[
