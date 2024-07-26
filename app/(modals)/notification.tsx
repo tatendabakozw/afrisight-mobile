@@ -16,7 +16,6 @@ import NotificationsHeader from "@/components/navigation/headers/NotificationsHe
 
 const Notification = () => {
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation();
   const notifications = [];
   return (
     <ScrollView
