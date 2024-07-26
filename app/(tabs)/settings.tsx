@@ -3,7 +3,7 @@ import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import tw from "twrnc";
 import Colors from "@/constants/Colors";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import PrimaryBorder from "@/components/borders/PrimaryBorder";
 import Heading from "@/components/heading/Heading";
 import SettingsItem from "@/components/settings-components/SettingsItem";
@@ -80,7 +80,10 @@ const Settings = () => {
         />
       </View>
       <View style={tw`py-4`} />
-      <PrimaryButton text="Logout" />
+      <PrimaryButton
+        icon={<MaterialIcons name="logout" size={20} color="white" />}
+        text="Logout"
+      />
     </View>
   );
 };

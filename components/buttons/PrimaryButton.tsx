@@ -19,6 +19,7 @@ type Props = {
   success?: boolean;
   onLongPress?: () => void;
   muted?: boolean;
+  icon?: any;
 };
 
 const PrimaryButton = ({
@@ -29,6 +30,7 @@ const PrimaryButton = ({
   success,
   onLongPress,
   muted,
+  icon,
 }: Props) => {
   const shakeAnim = useRef(new Animated.Value(0)).current;
 
@@ -78,7 +80,7 @@ const PrimaryButton = ({
             : muted
             ? "bg-white "
             : `bg-[${Colors.light.primary}] `
-        }  flex flex-row justify-between items-center w-full p-3 rounded-full`}
+        }  flex flex-row justify-between items-center w-full py-3 px-4 rounded-full`}
       >
         {loading ? (
           <ActivityIndicator color="#fff" />
@@ -86,6 +88,8 @@ const PrimaryButton = ({
           <Feather name="check-circle" size={20} color="white" />
         ) : error ? (
           <Feather name="alert-triangle" size={20} color="white" />
+        ) : icon ? (
+          <>{icon}</>
         ) : (
           <View style={tw`p-3 rounded-full`} />
         )}
