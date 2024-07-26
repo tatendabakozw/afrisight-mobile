@@ -3,6 +3,7 @@ import React from "react";
 import tw from "twrnc";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
+import PrimaryButton from "@/components/buttons/PrimaryButton";
 
 const GigDescription = () => {
   const insets = useSafeAreaInsets();
@@ -40,9 +41,60 @@ const GigDescription = () => {
         <Text style={tw`text-green-600 text-xs font-semibold`}>Level 1</Text>
       </View>
       <View style={tw`border-t border-zinc-200/50 w-full my-4`} />
-      <View style={tw`flex flex-col w-full`}>
+      <View style={tw`flex flex-col w-full gap-2`}>
         <Text style={tw`text-zinc-400 font-semibold`}>Description</Text>
+        <Text
+          style={[
+            tw`text-zinc-600`,
+            {
+              lineHeight: 20,
+            },
+          ]}
+        >
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
+          assumenda autem aperiam rerum neque. Illo accusantium reprehenderit
+          velit obcaecati illum, deserunt reiciendis, excepturi ea corporis,
+          ullam autem explicabo similique iusto.
+        </Text>
       </View>
+      <View style={tw`flex flex-col w-full gap-1`}>
+        <Text style={tw`text-zinc-400 font-semibold`}>Requirements</Text>
+        <Text
+          style={[
+            tw`text-zinc-600`,
+            {
+              lineHeight: 20,
+            },
+          ]}
+        >
+          <Text style={tw`text-zinc-950 font-semibold`}>1.</Text> Lorem, ipsum
+          dolor sit amet consectetur adipisicing elit.
+        </Text>
+        <Text
+          style={[
+            tw`text-zinc-600`,
+            {
+              lineHeight: 20,
+            },
+          ]}
+        >
+          <Text style={tw`text-zinc-950 font-semibold`}>2.</Text> Corporis illum
+          consequuntur dicta modi facilis. Officiis, minima incidunt.
+        </Text>
+        <Text
+          style={[
+            tw`text-zinc-600`,
+            {
+              lineHeight: 20,
+            },
+          ]}
+        >
+          <Text style={tw`text-zinc-950 font-semibold`}>3.</Text> Debitis hic
+          quo cupiditate quaerat architecto perspiciatis, eveniet pariatur?
+        </Text>
+      </View>
+      <View style={tw`py-2`} />
+      <PrimaryButton text="Apply" />
     </View>
   );
 };
