@@ -10,7 +10,8 @@ import Colors from "@/constants/Colors";
 import GoogleAuthButton from "@/components/buttons/GoogleAuthButton";
 import FacebookAuthButton from "@/components/buttons/FacebookAuthButton";
 import CheckBox from "@/components/inputs/CheckBox";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import { loginApiCall } from "../utils/helpers";
 
 const Login = () => {
   const insets = useSafeAreaInsets();
@@ -19,6 +20,10 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [isSelected, setSelection] = useState(false);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [missingEmail, setMissingEmail] = useState(false);
+  const [missingPassword, setMissingPassword] = useState(false);
 
   const renderPasswordIcon = (showPassword: boolean) => {
     return showPassword ? (
@@ -35,16 +40,59 @@ const Login = () => {
   const loginWithEmail = async () => {
     try {
       setLoading(true);
-      // TODO - auth logic
-      setLoading(false);
+      setError(false);
+      setSuccess(false); // Ensure success is reset to false initially
+
+      const isEmailMissing = !email;
+      const isPasswordMissing = !password;
+
+      setMissingEmail(isEmailMissing);
+      setMissingPassword(isPasswordMissing);
+
+      if (isEmailMissing || isPasswordMissing) {
+        setLoading(false);
+        setError(true);
+        setSuccess(false);
+        return;
+      }
+
+      // Simulate a delay of 1.5 seconds for the login process
+      setTimeout(async () => {
+        try {
+          // Perform the API call here
+          const response = await loginApiCall(email, password); // Assuming loginApiCall is a function that handles your API call
+
+          if (response.success) {
+            setLoading(false);
+            setSuccess(true);
+
+            // After showing success for 1 second, navigate to the new route
+            setTimeout(() => {
+              router.push("(tabs)");
+            }, 1000);
+          } else {
+            // Handle login failure
+            setLoading(false);
+            setError(true);
+          }
+        } catch (apiError) {
+          // Handle API call error
+          setLoading(false);
+          setError(true);
+          setSuccess(false);
+        }
+      }, 1500);
     } catch (error) {
+      setError(true);
+      setSuccess(false);
       setLoading(false);
     }
   };
+
   return (
     <View
       style={[
-        tw`gap-6 w-full px-6 py-8 h-full bg-white items-center justify-center gap-6`,
+        tw`gap-6 w-full px-6 py-8 h-full bg-white items-center justify-center`,
         {
           paddingTop: insets.top,
         },
@@ -58,6 +106,7 @@ const Login = () => {
         setValue={setEmail}
         placeholder="example@gmail.com"
         label="Email"
+        missing={missingEmail}
       />
       <CustomInput
         icon={renderPasswordIcon(show_password)}
@@ -67,6 +116,7 @@ const Login = () => {
         isPassword={!show_password}
         placeholder="******"
         label="Password"
+        missing={missingPassword}
       />
       <View style={tw`flex flex-row items-center justify-between w-full`}>
         <View style={tw`flex flex-row gap-2 items-center`}>
@@ -83,7 +133,9 @@ const Login = () => {
         </Link>
       </View>
       <PrimaryButton
+        success={success}
         text="Sign In"
+        error={error}
         onPress={loginWithEmail}
         loading={loading}
       />
