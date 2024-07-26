@@ -4,14 +4,9 @@ import tw from "twrnc";
 import { Entypo, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { GigItemProps } from "@/utils/types";
+import { truncateText } from "@/app/utils/text-moderators";
 
 const GigItem = (props: GigItemProps) => {
-  const truncateText = (text: string, length: number) => {
-    if (text.length <= length) {
-      return text;
-    }
-    return text.substring(0, length) + "...";
-  };
   return (
     <TouchableOpacity
       onPress={() => router.push("(modals)/gig-description")}
