@@ -11,6 +11,7 @@ import tw from "twrnc";
 import { useNavigation } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
+import NoNotificationPage from "@/components/notification/NoNotificationPage";
 
 const Notification = () => {
   const insets = useSafeAreaInsets();
@@ -38,6 +39,7 @@ const Notification = () => {
           </Text>
         </TouchableOpacity>
       </View>
+      <NoNotificationPage />
     </ScrollView>
   );
 };
