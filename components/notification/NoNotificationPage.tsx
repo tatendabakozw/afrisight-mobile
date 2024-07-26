@@ -5,7 +5,7 @@ import NoNotifications from "@/assets/svgs/no-notifications/NoNotifications";
 
 const NoNotificationPage = () => {
   return (
-    <View style={tw`h-full w-full items-center content-center gap-2 `}>
+    <View style={tw`h-full flex-1 w-full items-center justify-center gap-2 `}>
       <NoNotifications />
       <Text style={tw`text-zinc-700 text-2xl font-semibold pt-6`}>
         No Notifications Yet

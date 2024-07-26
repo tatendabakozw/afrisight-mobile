@@ -12,34 +12,23 @@ import { useNavigation } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import NoNotificationPage from "@/components/notification/NoNotificationPage";
+import NotificationsHeader from "@/components/navigation/headers/NotificationsHeader";
 
 const Notification = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
+  const notifications = [];
   return (
     <ScrollView
       contentContainerStyle={[
-        tw`bg-zinc-50 px-4 w-full flex-1 gap-4 pb-4`,
+        tw`bg-zinc-50 px-4 w-full h-full flex-1 gap-4 pb-4`,
         {
           paddingTop: insets.top,
         },
       ]}
     >
-      <View style={tw`flex flex-row gap-4 py-2`}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={tw`bg-zinc-100 rounded-full p-2`}
-        >
-          <Ionicons name="arrow-back-sharp" size={24} color="#71717a" />
-        </TouchableOpacity>
-        <View style={tw`flex-1`} />
-        <TouchableOpacity style={tw` rounded-full p-2`}>
-          <Text style={tw`text-[${Colors.light.primary}]`}>
-            Mark all as read
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <NoNotificationPage />
+      <NotificationsHeader />
+      {notifications.length < 1 && <NoNotificationPage />}
     </ScrollView>
   );
 };
