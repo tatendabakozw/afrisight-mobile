@@ -20,7 +20,7 @@ const ChatHeader = () => {
       </TouchableOpacity>
       <View style={tw`h-10 w-10 bg-zinc-200 rounded-full`} />
       <View style={tw`flex flex-col`}>
-        <Text style={tw`text-zinc-950 font-semibold`}>Admin</Text>
+        <Text style={tw`text-zinc-950 font-semibold text-lg`}>Admin</Text>
         <Text style={tw`text-xs text-zinc-400`}>Active now</Text>
       </View>
     </View>
