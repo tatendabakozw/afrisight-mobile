@@ -1,22 +1,16 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import tw from "twrnc";
-import { useNavigation } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import Colors from "@/constants/Colors";
 import NoNotificationPage from "@/components/notification/NoNotificationPage";
 import NotificationsHeader from "@/components/navigation/headers/NotificationsHeader";
+import NotificationItem from "@/components/notification/NotificationItem";
+import { View } from "@/components/Themed";
+import Heading from "@/components/heading/Heading";
 
 const Notification = () => {
   const insets = useSafeAreaInsets();
-  const notifications = [];
+  const notifications = [1, 2, 3];
   return (
     <ScrollView
       contentContainerStyle={[
@@ -27,7 +21,24 @@ const Notification = () => {
       ]}
     >
       <NotificationsHeader />
+      <Heading text="Today" />
       {notifications.length < 1 && <NoNotificationPage />}
+      {notifications.length >= 1 && (
+        <View style={tw`flex flex-col gap-6 bg-zinc-50`}>
+          {notifications.map((item) => (
+            <NotificationItem key={item} />
+          ))}
+        </View>
+      )}
+      <Heading text="Yesterday" />
+
+      {notifications.length >= 1 && (
+        <View style={tw`flex flex-col gap-6 bg-zinc-50`}>
+          {notifications.map((item) => (
+            <NotificationItem key={item} />
+          ))}
+        </View>
+      )}
     </ScrollView>
   );
 };
