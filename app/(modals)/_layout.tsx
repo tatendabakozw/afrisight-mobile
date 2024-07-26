@@ -55,6 +55,10 @@ function RootLayoutNav() {
         name="wallet-withdraw"
         options={{ presentation: "modal", headerShown: false }}
       />
+      <Stack.Screen
+        name="gig-description"
+        options={{ presentation: "modal", headerShown: false }}
+      />
     </Stack>
   );
 }

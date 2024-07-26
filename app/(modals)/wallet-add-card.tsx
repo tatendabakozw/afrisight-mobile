@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import WalletBannerSection from "@/components/wallet-banner-section/WalletBannerSection";
 import tw from "twrnc";
 import PhoneNumberInput from "@/components/inputs/PhoneNumberInput";
+import Colors from "@/constants/Colors";
+import { Feather } from "@expo/vector-icons";
 
 const sections = [
   { name: "Top-up", _id: "top-up" },
@@ -41,6 +43,24 @@ const WalletAddCard = () => {
         </View>
         {/* phone number input */}
         <PhoneNumberInput />
+        <Text>Your Numbers</Text>
+        <View
+          style={tw`flex flex-row bg-white items-center gap-2 p-2 rounded-lg border border-zinc-200/50`}
+        >
+          <View
+            style={tw`bg-zinc-200 rounded-lg p-3 items-center justify-center`}
+          >
+            <Text
+              style={tw`text-[${Colors.light.primary}] text-xs font-semibold`}
+            >
+              +263
+            </Text>
+          </View>
+          <Text style={tw`flex-1 text-lg text-zinc-400`}>771445411</Text>
+          <TouchableOpacity>
+            <Feather name="trash-2" size={24} color="#a1a1aa" />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

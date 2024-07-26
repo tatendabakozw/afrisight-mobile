@@ -1,13 +1,17 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 type Props = {};
 
 const GigItem = (props: Props) => {
   return (
-    <View style={tw`rounded-3xl gap-2`}>
+    <TouchableOpacity
+      onPress={() => router.push("(modals)/gig-description")}
+      style={tw`rounded-3xl gap-2`}
+    >
       <View style={tw`flex flex-row items-center gap-4`}>
         <Image
           height={20}
@@ -51,7 +55,7 @@ const GigItem = (props: Props) => {
           $1.05
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
