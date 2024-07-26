@@ -3,6 +3,7 @@ import React, { ReactNode, useRef } from "react";
 import tw from "twrnc";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
+import { router } from "expo-router";
 
 type Props = { children?: ReactNode };
 
@@ -34,6 +35,7 @@ const TabsWithChat = ({ children }: Props) => {
         <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
           <TouchableOpacity
             activeOpacity={0.8}
+            onPress={() => router.push("(modals)/chat-modal")}
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
             style={tw`bg-[${Colors.light.primary}] p-4 rounded-full`}
