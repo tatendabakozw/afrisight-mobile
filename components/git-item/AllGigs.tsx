@@ -2,6 +2,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import GigItem from "./GigItem";
+import { gigs } from "@/utils/data";
 
 const AllGigs = () => {
   const items = [1, 2, 3, 4, 5, 6, 6, 6, 6, 6, 3, 3, 3, 3, 3, 3, 3];
@@ -11,9 +12,9 @@ const AllGigs = () => {
       contentContainerStyle={tw`gap-4  pb-8`} // Removed flex-1 from here
     >
       <View style={tw`gap-4 px-4 `}>
-        {items.map((item, index) => (
+        {gigs.map((item, index) => (
           <React.Fragment key={index}>
-            <GigItem />
+            <GigItem {...item} />
             {index < items.length - 1 && (
               <View style={tw`h-px bg-gray-200/50`} />
             )}

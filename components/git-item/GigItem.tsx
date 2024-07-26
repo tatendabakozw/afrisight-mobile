@@ -1,12 +1,17 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
-import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import { Entypo, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { GigItemProps } from "@/utils/types";
 
-type Props = {};
-
-const GigItem = (props: Props) => {
+const GigItem = (props: GigItemProps) => {
+  const truncateText = (text: string, length: number) => {
+    if (text.length <= length) {
+      return text;
+    }
+    return text.substring(0, length) + "...";
+  };
   return (
     <TouchableOpacity
       onPress={() => router.push("(modals)/gig-description")}
@@ -21,26 +26,35 @@ const GigItem = (props: Props) => {
         />
         <View style={tw`flex flex-col gap-1 flex-1`}>
           <View style={tw`flex flex-row items-center gap-4`}>
-            <Text style={tw`text-xl font-bold text-zinc-950`}>Store VSRG</Text>
+            <Text style={tw`text-xl font-bold text-zinc-950`}>
+              {truncateText(props.title, 15)}
+            </Text>
             <Text
               style={tw`px-2 py-1 bg-green-600/20 text-green-600 text-xs font-bold rounded-full`}
             >
-              Easy
+              {props.difficulty}
             </Text>
           </View>
           <View style={tw`flex flex-row items-center gap-0.5`}>
             <View style={tw`flex flex-row items-center gap-0.5`}>
-              <MaterialIcons name="access-time" size={16} color="#a1a1aa" />
-              <Text style={tw`text-xs text-zinc-400 font-bold`}>{5}m</Text>
+              <MaterialIcons name="access-time" size={12} color="#a1a1aa" />
+              <Text style={tw`text-xs text-zinc-400 `}>{props.duration}m</Text>
             </View>
             <Entypo name="dot-single" size={16} color="#a1a1aa" />
             <View style={tw`flex flex-row items-center gap-0.5`}>
               <MaterialIcons
                 name="location-searching"
-                size={16}
+                size={12}
                 color="#a1a1aa"
               />
-              <Text style={tw`text-xs text-zinc-400 font-bold`}>Harare</Text>
+              <Text style={tw`text-xs text-zinc-400`}>
+                {props.location ? props.location : "Any"}
+              </Text>
+            </View>
+            <Entypo name="dot-single" size={16} color="#a1a1aa" />
+            <View style={tw`flex flex-row items-center gap-0.5`}>
+              <FontAwesome name="dollar" size={12} color="#a1a1aa" />
+              <Text style={tw`text-xs text-zinc-400`}>{props.reward.type}</Text>
             </View>
           </View>
         </View>
@@ -52,7 +66,7 @@ const GigItem = (props: Props) => {
             },
           ]}
         >
-          $1.05
+          +{props.points}
         </Text>
       </View>
     </TouchableOpacity>

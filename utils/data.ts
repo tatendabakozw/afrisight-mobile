@@ -4,10 +4,11 @@ export const gigs = [
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
     type: "survey",
-    reward: "$25 gift card",
-    points: "250",
+    reward: { type: "gift card", slug: "gift-card", name: "$25 gift card" },
+    points: "49",
     location: "",
     image: "",
+    duration: 3,
     _id: "asd1012",
     difficulty: "level 1",
     requirements: [
@@ -20,17 +21,17 @@ export const gigs = [
     ],
     deadline: " July 28, 2024",
   },
-
   {
     title: "Do this checklist",
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
     type: "simplified-checklist",
-    reward: "$25 gift card",
+    reward: { type: "gift card", slug: "gift-card", name: "$25 gift card" },
     points: "250",
     location: "",
     image: "",
-    _id: "aaasd1012",
+    duration: 5,
+    _id: "aaa1999sd1012",
     difficulty: "level 1",
     requirements: [
       { title: "Must be over 25" },
@@ -47,11 +48,12 @@ export const gigs = [
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
     type: "file-upload",
-    reward: "$25 gift card",
-    points: "250",
+    reward: { type: "gift card", slug: "gift-card", name: "$25 gift card" },
+    points: "33",
     location: "",
     image: "",
-    _id: "aaasd1012",
+    duration: 10,
+    _id: "aaa12sd1012",
     difficulty: "level 1",
     requirements: [
       { title: "Must be over 25" },
