@@ -10,7 +10,7 @@ import Colors from "@/constants/Colors";
 import GoogleAuthButton from "@/components/buttons/GoogleAuthButton";
 import FacebookAuthButton from "@/components/buttons/FacebookAuthButton";
 import CheckBox from "@/components/inputs/CheckBox";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 
 const Login = () => {
   const insets = useSafeAreaInsets();
@@ -35,6 +35,7 @@ const Login = () => {
   const loginWithEmail = async () => {
     try {
       setLoading(true);
+      router.push("(tabs)");
       // TODO - auth logic
       setLoading(false);
     } catch (error) {

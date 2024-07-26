@@ -22,11 +22,11 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [show_password, setShowPassword] = useState(false);
   const [first_name, setFirstName] = useState("");
-  const [last_name, setlastName] = useState("");
+  const [last_name, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
-  const renderPasswordIcon = (showPassword: boolean) => {
+  const renderPasswordIcon = (showPassword) => {
     return showPassword ? (
       <Ionicons name="eye" size={24} color="#a1a1aa" />
     ) : (
@@ -47,14 +47,16 @@ const Register = () => {
       setLoading(false);
     }
   };
+
   return (
     <ScrollView
       contentContainerStyle={[
-        tw`gap-6 w-full px-6 pb-6 flex-1 h-full bg-white items-center justify-center gap-6`,
+        tw`gap-6 w-full px-6 pb-6 items-center justify-center`,
         {
           paddingTop: insets.top,
         },
       ]}
+      style={tw`flex-1 bg-white`}
     >
       <View style={tw`h-20`}>
         <LogoAlt />
@@ -67,7 +69,7 @@ const Register = () => {
       />
       <CustomInput
         value={last_name}
-        setValue={setlastName}
+        setValue={setLastName}
         placeholder="doe"
         label="Last Name"
       />
@@ -86,7 +88,6 @@ const Register = () => {
         placeholder="******"
         label="Password"
       />
-
       <PrimaryButton
         text="Sign Up"
         onPress={RegisterWithEmail}
@@ -99,7 +100,6 @@ const Register = () => {
       </View>
       <GoogleAuthButton />
       <FacebookAuthButton />
-
       <Text style={tw`text-zinc-700`}>
         Already Registered?{" "}
         <Link
