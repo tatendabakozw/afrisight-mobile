@@ -59,6 +59,10 @@ function RootLayoutNav() {
         name="gig-description"
         options={{ presentation: "modal", headerShown: false }}
       />
+      <Stack.Screen
+        name="notification"
+        options={{ presentation: "modal", headerShown: false }}
+      />
     </Stack>
   );
 }
