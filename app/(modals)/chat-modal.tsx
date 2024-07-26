@@ -18,9 +18,7 @@ const ChatModal = () => {
 
       <View style={tw`p-6 flex-1 h-full relative`}>
         <View style={tw`flex-1`}></View>
-        <View
-          style={tw`fixed w-full mx-auto bottom-0 flex-row gap-2 items-center`}
-        >
+        <View style={tw` w-full mx-auto bottom-0 flex-row gap-2 items-center`}>
           <TextInput
             placeholder="Type something..."
             style={tw`bg-white py-3 px-4 flex-1 rounded-full`}

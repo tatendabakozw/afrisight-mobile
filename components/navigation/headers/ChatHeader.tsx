@@ -3,9 +3,11 @@ import React from "react";
 import tw from "twrnc";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "expo-router";
 
 const ChatHeader = () => {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
   return (
     <View
       style={[
@@ -15,7 +17,11 @@ const ChatHeader = () => {
         },
       ]}
     >
-      <TouchableOpacity style={tw``}>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => navigation.goBack()}
+        style={tw``}
+      >
         <AntDesign name="arrowleft" size={24} color="#3f3f46" />
       </TouchableOpacity>
       <View style={tw`h-10 w-10 bg-zinc-200 rounded-full`} />
