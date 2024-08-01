@@ -13,7 +13,7 @@ const ChatHeader = () => {
       style={[
         tw`bg-white border-b border-zinc-200/50 pb-4 flex flex-row items-center gap-2 px-6`,
         {
-          paddingTop: insets.top,
+          paddingTop: insets.top + 6,
         },
       ]}
     >
@@ -26,7 +26,7 @@ const ChatHeader = () => {
       </TouchableOpacity>
       <View style={tw`h-10 w-10 bg-zinc-200 rounded-full`} />
       <View style={tw`flex flex-col`}>
-        <Text style={tw`text-zinc-950 font-semibold text-lg`}>Admin</Text>
+        <Text style={tw`text-zinc-950 font-semibold text-xl`}>Admin</Text>
         <Text style={tw`text-xs text-zinc-400`}>Active now</Text>
       </View>
     </View>
