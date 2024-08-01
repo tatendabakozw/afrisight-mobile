@@ -8,6 +8,7 @@ import PrimaryBorder from "@/components/borders/PrimaryBorder";
 import Heading from "@/components/heading/Heading";
 import SettingsItem from "@/components/settings-components/SettingsItem";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
+import { router } from "expo-router";
 
 const Settings = () => {
   const insets = useSafeAreaInsets();
@@ -34,6 +35,7 @@ const Settings = () => {
           </Text>
         </View>
         <TouchableOpacity
+          onPress={() => router.push("(modals)/settings-profile-modal")}
           style={tw`bg-white rounded-full p-2 border border-zinc-200/50`}
         >
           <Feather name="edit-2" size={16} color="black" />

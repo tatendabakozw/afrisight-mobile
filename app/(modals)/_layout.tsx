@@ -67,6 +67,10 @@ function RootLayoutNav() {
         name="chat-modal"
         options={{ presentation: "modal", headerShown: false }}
       />
+      <Stack.Screen
+        name="settings-profile-modal"
+        options={{ presentation: "modal", headerShown: false }}
+      />
     </Stack>
   );
 }
