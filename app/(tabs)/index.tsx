@@ -95,7 +95,7 @@ export default function Home() {
                 <RecentActivityComponent
                   date={item.date}
                   duration={item.duration}
-                  color={`bg-[${Colors.light.primary}]/10`} // Dynamically set background color based on index
+                  color={`bg-[${Colors.light.primary}]/5`} // Dynamically set background color based on index
                   name={item.name} // Example name, modify based on item data
                   amount={item.amount} // Example amount, modify based on item data
                   id={item.id} // Example id, modify based on item data

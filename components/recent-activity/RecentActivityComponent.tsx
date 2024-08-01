@@ -35,32 +35,22 @@ const RecentActivityComponent = ({
         <View style={tw`flex flex-col`}>
           <View style={tw`gap-2 p-4`}>
             <View style={tw`flex flex-row items-center justify-between`}>
-              <Text style={tw`text-zinc-500 text-xs font-semibold`}>
-                {name}
-              </Text>
-              <Text style={tw`text-zinc-500 text-xs font-semibold`}>
-                {status}
-              </Text>
+              <Text style={tw`text-zinc-400 text-xs`}>{name}</Text>
+              <Text style={tw`text-zinc-400 text-xs`}>{status}</Text>
             </View>
-            <Text style={tw`text-3xl text-zinc-950 font-bold`}>${amount}</Text>
+            <Text style={tw`text-4xl text-zinc-950 font-bold`}>${amount}</Text>
           </View>
           <View
             style={tw` bg-[${Colors.light.primary}] flex flex-row items-center py-2 px-4`}
           >
             <View style={tw`flex flex-row items-center gap-0.5`}>
-              <Ionicons name="timer-outline" size={16} color="#0f172a" />
-              <Text style={tw`text-xs text-zinc-950 font-bold`}>
-                {duration}m
-              </Text>
+              <Ionicons name="timer-outline" size={16} color="white" />
+              <Text style={tw`text-xs text-white font-bold`}>{duration}m</Text>
             </View>
             <Entypo name="dot-single" size={16} color="black" />
             <View style={tw`flex flex-row items-center gap-0.5`}>
-              <Ionicons
-                name="calendar-clear-outline"
-                size={16}
-                color="#0f172a"
-              />
-              <Text style={tw`text-xs text-zinc-950 font-bold`}>{date}</Text>
+              <Ionicons name="calendar-clear-outline" size={16} color="white" />
+              <Text style={tw`text-xs text-white font-bold`}>{date}</Text>
             </View>
           </View>
         </View>
