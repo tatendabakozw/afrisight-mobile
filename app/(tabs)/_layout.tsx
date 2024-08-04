@@ -18,7 +18,10 @@ import {
   WalletIconOutline,
   WalletIconSolid,
 } from "@/assets/svgs/nav-icons/WalletIcon";
-import { SettingsIconOutline } from "@/assets/svgs/nav-icons/SettingsIcon";
+import {
+  SettingsIconOutline,
+  SettingsIconSolid,
+} from "@/assets/svgs/nav-icons/SettingsIcon";
 import NavBar from "@/components/navigation/navbar/NavBar";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 
@@ -52,7 +55,11 @@ export default function TabLayout() {
               imageName = focused ? <WalletIconSolid /> : <WalletIconOutline />;
               break;
             case "settings":
-              imageName = focused ? <HomeIconSolid /> : <SettingsIconOutline />;
+              imageName = focused ? (
+                <SettingsIconSolid />
+              ) : (
+                <SettingsIconOutline />
+              );
               break;
             default:
               imageName = <HomeIconSolid />;
