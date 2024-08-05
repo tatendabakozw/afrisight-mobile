@@ -52,6 +52,12 @@ const Experience = (props: Props) => {
         placeholder="Field of study"
         setValue={setFieldOfStudy}
       />
+      <CustomInput
+        label="Year of graduation"
+        value={yearOfGraduation}
+        placeholder="Year of graduation"
+        setValue={setYearOfGraduation}
+      />
     </>
   );
 };
