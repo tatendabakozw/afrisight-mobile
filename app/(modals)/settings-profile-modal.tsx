@@ -57,7 +57,7 @@ const SettingsProfileModal = () => {
 
       {/* Progress bar */}
       <ProgressBar progress={progress} />
-      <View style={tw`flex flex-col gap-4 py-6`}>
+      <View style={tw`flex flex-col gap-6 py-8`}>
         {steps[currentStepIndex].step === 1 && <Personal />}
         {steps[currentStepIndex].step === 2 && <Experience />}
         {steps[currentStepIndex].step === 3 && <Ethnicity />}
