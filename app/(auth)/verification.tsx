@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState, useRef } from "react";
 import tw from "twrnc";
@@ -16,14 +17,18 @@ import Colors from "@/constants/Colors";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import PulsingView from "@/components/pulse-view/PulseView";
 import RegisterSuccessModal from "@/components/modals/RegisterSuccessModal";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import { useAuth, useSignUp } from "@clerk/clerk-expo";
 
 const Verification: React.FC = () => {
   const insets = useSafeAreaInsets();
+  const { emailAddress }: { emailAddress: string } = useLocalSearchParams();
   const [error, setError] = useState(false);
-  const [code, setCode] = useState<string[]>(["", "", "", "", ""]);
+  const [errorMessage, setErrorMessage] = useState("")
+  const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
   const inputs = useRef<(TextInput | null)[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (text: string, index: number) => {
     const newCode = [...code];
@@ -45,45 +50,71 @@ const Verification: React.FC = () => {
     }
   };
 
-  const verifyUser = () => {
-    if (code.includes("")) {
-      setError(true);
-    } else {
-      setModalVisible(true);
-      setTimeout(() => {
-        router.push("/(onboarding)");
-        setModalVisible(false);
-      }, 2000);
+
+  const { isLoaded, signUp, setActive, } = useSignUp()
+
+  const onPressVerify = async () => {
+    if (!isLoaded) {
+      return
     }
-  };
+
+    setLoading(true)
+
+    try {
+      const completeSignUp = await signUp.attemptEmailAddressVerification({
+        code: code.join(''),
+      })
+
+      if (completeSignUp.status === 'complete') {
+        await setActive({ session: completeSignUp.createdSessionId })
+        router.replace('/')
+      } else {
+        console.error(JSON.stringify(completeSignUp, null, 2))
+      }
+    } catch (err: any) {
+      // See https://clerk.com/docs/custom-flows/error-handling
+      // for more info on error handling
+      console.error(JSON.stringify(err, null, 2))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const resendOTP = async () => {
+    await signUp?.prepareEmailAddressVerification()
+  }
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={[tw`flex-1 bg-white`, { paddingTop: insets.top }]}
+      style={[tw`flex-1 bg-white justify-between h-full pb-3`, { paddingTop: 16 }]}
     >
-      <ScrollView contentContainerStyle={tw`flex-grow`}>
-        <View style={tw`gap-6 w-full px-6 py-8 items-center`}>
-          <PulsingView />
-          <Text style={[tw`text-zinc-950 text-2xl`, { fontWeight: "700" }]}>
-            Verification Code
+      <View style={tw`gap-4 w-full px-3 flex-1`}>
+        {/* <PulsingView /> */}
+        <Text>
+          Enter the 6-digit code that was sent to your email, <Text style={{ fontWeight: "600" }}>
+            {emailAddress}
           </Text>
-          <Text style={tw`text-lg text-zinc-500 font-medium text-center`}>
-            We have sent a 5-digit verification code to your email. Please take
-            a look and verify it.
-          </Text>
-          <View style={tw`flex flex-row justify-between w-full px-10`}>
+        </Text>
+        <View style={tw`flex flex-row`}>
+          <View style={tw`flex flex-row border border-zinc-400/50 rounded-[8px] h-[40px]`}>
             {code.map((digit, index) => (
               <TextInput
                 key={index}
                 ref={(el) => (inputs.current[index] = el)}
                 style={[
-                  tw`w-10 font-semibold text-lg h-10 rounded-lg text-center`,
-                  tw`border-2 text-lg`,
+                  tw`aspect-square text-center`,
                   error && code[index] === ""
                     ? tw`border-red-500`
                     : { borderColor: Colors.light.primary },
+                  {
+                    fontWeight: "400",
+                    outlineWidth: 2,
+                    outlineColor: "#121212",
+                    outlineStyle: "solid",
+                  }
                 ]}
+                placeholder="-"
                 keyboardType="number-pad"
                 maxLength={1}
                 onChangeText={(text) => handleChange(text, index)}
@@ -92,15 +123,30 @@ const Verification: React.FC = () => {
               />
             ))}
           </View>
-          <Text style={tw`font-semibold text-lg text-zinc-950`}>
-            example@email.com
+        </View>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={tw`text-zinc-950`}>
+            Haven't received a code?
           </Text>
+          <TouchableOpacity onPress={resendOTP}>
+            <Text style={{
+              textDecorationLine: "underline",
+              marginLeft: 4,
+              fontWeight: "600"
+            }}>
+              Send again
+            </Text>
+          </TouchableOpacity>
         </View>
-        <View style={tw`flex-1 justify-end px-6 pb-8`}>
-          <PrimaryButton text="Verify" onPress={verifyUser} error={error} />
-          <PrimaryButton text="Send Again" muted />
-        </View>
-      </ScrollView>
+      </View>
+      <View style={tw`justify-end px-3 flex-row`}>
+
+        <TouchableOpacity disabled={loading} onPress={onPressVerify} style={{ ...styles.primaryButton, opacity: loading ? 0.3 : 1 }}>
+          <Text style={{ fontWeight: "700", color: "#fff", }}>
+            Verify and continue
+          </Text>
+        </TouchableOpacity>
+      </View>
       <RegisterSuccessModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
@@ -111,4 +157,21 @@ const Verification: React.FC = () => {
 
 export default Verification;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  primaryButton: {
+    height: 54,
+    borderRadius: 8,
+    backgroundColor: Colors.light.primary,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%"
+
+  },
+  secondaryButton: {
+    ...tw`bg-transparent`,
+  },
+  disabledButton: {
+
+  },
+});

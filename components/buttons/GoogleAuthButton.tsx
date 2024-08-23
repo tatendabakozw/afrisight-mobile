@@ -8,13 +8,13 @@ type Props = {};
 const GoogleAuthButton = (props: Props) => {
   return (
     <View
-      style={tw`flex flex-row items-center w-full justify-between border border-zinc-300/50 rounded-full p-3`}
+      style={tw`flex flex-row items-center w-full justify-between bg-zinc-400/10 p-3 rounded-[8px] h-[54px] `}
     >
       <View style={tw` `}>
         <GoogleIcon />
       </View>
-      <Text style={tw`flex-1 text-center text-zinc-700`}>
-        Sign In with Google
+      <Text style={tw`flex-1 text-center text-zinc-700 font-bold`}>
+        Continue with Google
       </Text>
       <View style={tw` `}></View>
     </View>

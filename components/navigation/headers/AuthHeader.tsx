@@ -17,9 +17,10 @@ const CustomHeader = ({ navigation, back, options }: any) => {
   return (
     <View
       style={[
-        tw`flex flex-row justify-between w-full px-4 pb-6 bg-white`,
+        tw`flex flex-row gap-3 w-full px-3 bg-white border-zinc-400/30`,
+        options.headerShown && tw`border`,
         {
-          paddingTop: insets.top + 7,
+          paddingTop: insets.top + 16,
         },
       ]}
     >
@@ -27,22 +28,24 @@ const CustomHeader = ({ navigation, back, options }: any) => {
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => navigation.goBack()}
+          style={{ width: 32, height: 32, marginBottom: 8 }}
         >
-          <Ionicons name="chevron-back" size={24} color={`text-zinc-700`} />
+          <Ionicons name="arrow-back" size={20} color={`text-zinc-700`} />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
           activeOpacity={0.7}
+          style={{ width: 32, height: 32, marginBottom: 8 }}
           onPress={() => console.log("open menu")}
         >
-          <Ionicons name="menu-sharp" size={24} color={`text-zinc-700`} />
+          <Ionicons name="menu-sharp" size={20} color={`text-zinc-700`} />
         </TouchableOpacity>
       )}
       <Text
         style={{
-          marginLeft: back ? 20 : 0,
-          fontSize: 18,
-          color: Colors[colorScheme ?? "light"].text,
+          fontWeight: "700",
+          flex: 1,
+          fontSize: 16
         }}
       >
         {title}

@@ -72,15 +72,16 @@ const PrimaryButton = ({
         onLongPress={onLongPress}
         activeOpacity={0.7}
         onPress={onPress}
-        style={tw`${
-          error
+        style={{
+          ...tw`${error
             ? "bg-red-500 "
             : success
-            ? "bg-green-600 "
-            : muted
-            ? "bg-white "
-            : `bg-[${Colors.light.primary}] `
-        }  flex flex-row justify-between items-center w-full py-3 px-4 rounded-full`}
+              ? "bg-green-600 "
+              : muted
+                ? "bg-white "
+                : `bg-[${Colors.light.text}] `
+            }  flex flex-row justify-between items-center w-full py-3 px-4 rounded-full`, borderRadius: 8, height: 54
+        }}
       >
         {loading ? (
           <ActivityIndicator color="#fff" />
@@ -94,9 +95,8 @@ const PrimaryButton = ({
           <View style={tw`p-3 rounded-full`} />
         )}
         <Text
-          style={tw`${
-            muted ? "text-zinc-950 font-semibold " : "text-white "
-          } w-full text-center flex-1 text-lg`}
+          style={tw`${muted ? "text-zinc-950 " : "text-white "
+            } w-full text-center flex-1 font-bold`}
         >
           {loading ? "loading..." : text}
         </Text>

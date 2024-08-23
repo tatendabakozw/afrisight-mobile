@@ -1,10 +1,13 @@
 import React from "react";
-import { Stack } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import CustomHeader from "@/components/navigation/headers/AuthHeader";
 import Colors from "@/constants/Colors";
+import { useAuth } from "@clerk/clerk-expo";
 
 export default function TabLayout() {
+
+
   return (
     <Stack
       screenOptions={({ navigation, route }) => ({
@@ -13,17 +16,18 @@ export default function TabLayout() {
         headerShown: useClientOnlyValue(false, true),
       })}
     >
-      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen
-        name="register"
+        name="index"
         options={{
           title: "Register",
+          headerShown: false
         }}
       />
       <Stack.Screen
         name="verification"
         options={{
-          title: "Verify Indentity",
+          title: "Confirm your email address",
+
         }}
       />
       <Stack.Screen
@@ -38,6 +42,11 @@ export default function TabLayout() {
           title: "Reset Password",
         }}
       />
+      <Stack.Screen
+        name="profile"
+        options={{ title: "" }}
+      />
+
     </Stack>
   );
 }

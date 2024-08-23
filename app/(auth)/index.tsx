@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text } from "react-native";
-import React, { useState } from "react";
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
 import tw from "twrnc";
 import LogoAlt from "@/assets/svgs/LogoAlt";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -9,157 +9,161 @@ import { Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import GoogleAuthButton from "@/components/buttons/GoogleAuthButton";
 import FacebookAuthButton from "@/components/buttons/FacebookAuthButton";
-import CheckBox from "@/components/inputs/CheckBox";
-import { Link, router } from "expo-router";
-import { loginApiCall } from "../utils/helpers";
+import { Link, router, useNavigation, useRouter } from "expo-router";
+import { registerApiCall } from "../utils/helpers";
+import { useAuth, useSignIn, useSignUp } from "@clerk/clerk-expo";
+import { TextInput, Button, } from 'react-native'
+import Banner from "@/components/banner";
 
-const Login = () => {
+const Styles = StyleSheet.create({
+  input: {
+    borderRadius: 8,
+    height: 54,
+    borderColor: '#d0d0d0',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    padding: 10,
+    width: '100%',
+  },
+  button: {
+    backgroundColor: Colors.light.primary,
+    borderRadius: 8,
+    height: 54,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+
+  }
+})
+
+const Register = () => {
   const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(false);
-  const [show_password, setShowPassword] = useState(false);
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [isSelected, setSelection] = useState(false);
   const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [missingEmail, setMissingEmail] = useState(false);
-  const [missingPassword, setMissingPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const renderPasswordIcon = (showPassword: boolean) => {
-    return showPassword ? (
-      <Ionicons name="eye" size={24} color="#a1a1aa" />
-    ) : (
-      <Ionicons name="eye-off" size={24} color="#a1a1aa" />
-    );
-  };
+  const { isLoaded: isSignInLoaded, signIn } = useSignIn()
+  const { signOut } = useAuth()
+  const router = useRouter()
 
-  const toggleShowPassword = () => {
-    setShowPassword(!show_password);
-  };
+  const [emailAddress, setEmailAddress] = useState('')
+  const [password, setPassword] = useState("");
+  const [emailExists, setEmailExists] = useState(false)
 
-  const loginWithEmail = async () => {
+  const doesAUserWithThisEmailExist = async (email: string): Promise<boolean> => {
+    await signOut()
+    if (!isSignInLoaded) return false
+
     try {
-      setLoading(true);
-      setError(false);
-      setSuccess(false); // Ensure success is reset to false initially
-
-      const isEmailMissing = !email;
-      const isPasswordMissing = !password;
-
-      setMissingEmail(isEmailMissing);
-      setMissingPassword(isPasswordMissing);
-
-      if (isEmailMissing || isPasswordMissing) {
-        setLoading(false);
-        setError(true);
-        setSuccess(false);
-        return;
+      await signIn.create({
+        identifier: email,
+      })
+      return true
+    } catch (err: any) {
+      if (err.errors[0].code === "form_identifier_not_found") {
+        return false
       }
-
-      // Simulate a delay of 1.5 seconds for the login process
-      setTimeout(async () => {
-        try {
-          // Perform the API call here
-          const response = await loginApiCall(email, password); // Assuming loginApiCall is a function that handles your API call
-
-          if (response.success) {
-            setLoading(false);
-            setSuccess(true);
-
-            // After showing success for 1 second, navigate to the new route
-            setTimeout(() => {
-              router.push("(tabs)");
-            }, 1000);
-          } else {
-            // Handle login failure
-            setLoading(false);
-            setError(true);
-          }
-        } catch (apiError) {
-          // Handle API call error
-          setLoading(false);
-          setError(true);
-          setSuccess(false);
-        }
-      }, 1500);
-    } catch (error) {
-      setError(true);
-      setSuccess(false);
-      setLoading(false);
+      return true
     }
-  };
+  }
+
+  const onCheckIfUserExists = async () => {
+    const result = await doesAUserWithThisEmailExist(emailAddress)
+    setEmailExists(result)
+    if (!result) {
+      router.push({
+        pathname: "/(auth)/profile",
+        params: {
+          emailAddress
+        }
+      })
+    }
+  }
+
+  const continueToSignIn = async () => {
+    if (!isSignInLoaded) {
+      return
+    }
+
+    try {
+      setErrorMessage("")
+      await signIn.create({
+        identifier: emailAddress.replaceAll(' ', ''),
+        password,
+      })
+
+      router.push('/(tabs)')
+
+    } catch (err: any) {
+      console.error(JSON.stringify(err, null, 2))
+      setErrorMessage(err.errors[0].message)
+    }
+  }
 
   return (
-    <View
-      style={[
-        tw`gap-6 w-full px-6 py-8 h-full bg-white items-center justify-center`,
+    <ScrollView
+      contentContainerStyle={[
+        tw`gap-4 w-full px-6 pb-6 flex-col flex-1`,
         {
-          paddingTop: insets.top,
-        },
+          paddingTop: insets.top + 64
+        }
       ]}
+      style={tw`flex-1 bg-white`}
     >
-      <View style={tw`h-20`}>
-        <LogoAlt />
-      </View>
-      <CustomInput
-        value={email}
-        setValue={setEmail}
-        placeholder="example@gmail.com"
-        label="Email"
-        missing={missingEmail}
-      />
-      <CustomInput
-        icon={renderPasswordIcon(show_password)}
-        value={password}
-        setValue={setPassword}
-        onIconPress={toggleShowPassword}
-        isPassword={!show_password}
-        placeholder="******"
-        label="Password"
-        missing={missingPassword}
-      />
-      <View style={tw`flex flex-row items-center justify-between w-full`}>
-        <View style={tw`flex flex-row gap-2 items-center`}>
-          <CheckBox isChecked={isSelected} setIsChecked={setSelection} />
-          <Text style={tw`text-zinc-500 text-xs`}>Keep me signed in</Text>
+      <>
+        <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 24 }}>Login or sign up to CX Mapper</Text>
+
+        <View>
+          <TextInput
+            autoCapitalize="none"
+            value={emailAddress}
+            onChangeText={(email) => setEmailAddress(email.replace(/\s/g, ''))}
+            placeholder="Email address"
+            style={{ ...Styles.input, ...(emailExists && { borderBottomWidth: 0.5, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }) }}
+          />
+          {emailExists && <TextInput
+            autoCapitalize="none"
+            value={password}
+            secureTextEntry
+            onChangeText={(password) => setPassword(password)}
+            placeholder="Password"
+            style={{ ...Styles.input, ...(emailExists && { borderTopWidth: 0.5, borderTopLeftRadius: 0, borderTopRightRadius: 0 }) }}
+          />}
+
         </View>
 
-        <Link href={"/forgot-password"}>
-          <Text
-            style={tw`text-[${Colors.light.primary}] font-semibold text-xs`}
+        <View style={{ marginBottom: 8 }}>
+          {!emailExists && <TouchableOpacity
+            onPress={onCheckIfUserExists}
+            style={{ height: 54, width: "100%", borderRadius: 8, backgroundColor: Colors.light.primary, justifyContent: "center", alignItems: "center" }}
           >
-            Forgot password
-          </Text>
-        </Link>
-      </View>
-      <PrimaryButton
-        success={success}
-        text="Sign In"
-        error={error}
-        onPress={loginWithEmail}
-        loading={loading}
-      />
-      <View style={tw`flex flex-row items-center gap-2`}>
-        <View style={tw`flex-1 border-t border-zinc-300/50`} />
-        <Text style={tw`text-xs text-zinc-500/50`}>Or Sign in with</Text>
-        <View style={tw`flex-1 border-t border-zinc-300/50`} />
-      </View>
-      <GoogleAuthButton />
-      <FacebookAuthButton />
+            <Text style={{ fontWeight: "700", fontSize: 16, color: "#fff" }}>
+              Continue
+            </Text></TouchableOpacity>}
 
-      <Text style={tw`text-zinc-700`}>
-        Don't have an account?{" "}
-        <Link
-          href={"register"}
-          style={tw`font-semibold text-[${Colors.light.primary}]`}
-        >
-          Sign Up
-        </Link>
-      </Text>
-    </View>
+          {emailExists && <TouchableOpacity
+            onPress={continueToSignIn}
+            style={{ height: 54, width: "100%", borderRadius: 8, backgroundColor: Colors.light.primary, justifyContent: "center", alignItems: "center" }}
+          >
+            <Text style={{ fontWeight: "700", fontSize: 16, color: "#fff" }}>
+              Continue
+            </Text></TouchableOpacity>}
+
+        </View>
+        <View style={tw`flex flex-row items-center gap-2 mb-[8px]`}>
+          <View style={tw`flex-1 border-t border-zinc-300/50`} />
+          <Text style={tw`text-xs text-zinc-500/50`}>or</Text>
+          <View style={tw`flex-1 border-t border-zinc-300/50`} />
+        </View>
+        <GoogleAuthButton />
+        <FacebookAuthButton />
+        <Banner message="Something went wrong with your request" />
+
+      </>
+
+    </ScrollView>
   );
 };
 
-export default Login;
+export default Register;
 
-const styles = StyleSheet.create({});
