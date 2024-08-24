@@ -12,8 +12,7 @@ const GigSurvey = () => {
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+
       padding: 16,
       paddingTop: insets.top + 16
     }}>

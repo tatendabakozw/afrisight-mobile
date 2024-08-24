@@ -48,6 +48,10 @@ function RootLayoutNav() {
     <Stack>
       <Stack.Screen name="filter-modal" options={{ presentation: "modal" }} />
       <Stack.Screen
+        name="gig-modal"
+        options={{ presentation: "modal", headerShown: false }}
+      />
+      <Stack.Screen
         name="wallet-add-card"
         options={{ presentation: "modal", headerShown: false }}
       />
@@ -73,6 +77,10 @@ function RootLayoutNav() {
       />
       <Stack.Screen
         name="settings-profile-modal"
+        options={{ presentation: "modal", headerShown: false }}
+      />
+      <Stack.Screen
+        name="settings-wallet"
         options={{ presentation: "modal", headerShown: false }}
       />
     </Stack>
