@@ -1,5 +1,7 @@
 export interface GigItemProps {
   title: string;
+  name: string;
+  desc: string;
   description: string;
   type: string;
   reward: {
@@ -14,6 +16,8 @@ export interface GigItemProps {
   deadline?: string;
   difficulty?: string;
   duration: number;
+  price: number;
+  age: number;
 }
 
 export interface TokenCache {

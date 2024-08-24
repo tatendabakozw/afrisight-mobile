@@ -1,6 +1,5 @@
 import {
   StyleSheet,
-  Text,
   TextInput,
   View,
   NativeSyntheticEvent,
@@ -19,6 +18,8 @@ import PulsingView from "@/components/pulse-view/PulseView";
 import RegisterSuccessModal from "@/components/modals/RegisterSuccessModal";
 import { router, useLocalSearchParams } from "expo-router";
 import { useAuth, useSignUp } from "@clerk/clerk-expo";
+import Text from "@/components/ui/Text";
+import { Typography } from "@/constants/typography";
 
 const Verification: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -142,7 +143,7 @@ const Verification: React.FC = () => {
       <View style={tw`justify-end px-3 flex-row`}>
 
         <TouchableOpacity disabled={loading} onPress={onPressVerify} style={{ ...styles.primaryButton, opacity: loading ? 0.3 : 1 }}>
-          <Text style={{ fontWeight: "700", color: "#fff", }}>
+          <Text style={{ fontWeight: "700", color: "#fff", fontSize: Typography.buttonText }}>
             Verify and continue
           </Text>
         </TouchableOpacity>

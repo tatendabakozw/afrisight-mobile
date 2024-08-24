@@ -1,17 +1,31 @@
 import React from "react";
 import { Redirect, Stack } from "expo-router";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-import CustomHeader from "@/components/navigation/headers/AuthHeader";
+import OnboardingNavbar from "@/components/navigation/headers/OnboardingNavbar";
 import Colors from "@/constants/Colors";
 import { useAuth } from "@clerk/clerk-expo";
+import { View } from "react-native";
+import Text from "@/components/ui/Text";
 
 export default function TabLayout() {
+  const { isSignedIn, isLoaded } = useAuth()
 
+  if (!isLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    )
+  }
+
+  if (isSignedIn) {
+    return <Redirect href={'/(tabs)'} />
+  }
 
   return (
     <Stack
       screenOptions={({ navigation, route }) => ({
-        header: (props) => <CustomHeader {...props} />,
+        header: (props) => <OnboardingNavbar {...props} />,
         tabBarActiveTintColor: Colors.light.tint,
         headerShown: useClientOnlyValue(false, true),
       })}

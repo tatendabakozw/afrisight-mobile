@@ -1,5 +1,8 @@
+import { Fonts, Typography } from '@/constants/typography';
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import Text from './Text';
+import Colors from '@/constants/Colors';
 
 const PasswordInput = (props: {
     value: string;
@@ -25,6 +28,7 @@ const PasswordInput = (props: {
                 value={password}
                 onChangeText={setPassword}
                 autoCapitalize='none'
+
             />
             <TouchableOpacity onPress={toggleShowPassword} style={styles.showPasswordButton}>
                 <Text style={styles.showPasswordText}>{showPassword ? 'Hide' : 'Show'}</Text>
@@ -47,17 +51,18 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        fontSize: 16,
         paddingVertical: 5,
         paddingHorizontal: 10,
+        fontFamily: Fonts.Inter_400Regular,
+        fontSize: Typography.paragraph
     },
     showPasswordButton: {
         paddingHorizontal: 10,
     },
     showPasswordText: {
-        fontSize: 14,
-        color: '#121212',
-        fontWeight: "700"
+        color: Colors.design.highContrastText,
+        fontFamily: Fonts.Inter_600SemiBold,
+        fontSize: 13
     },
 });
 

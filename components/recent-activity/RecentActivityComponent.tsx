@@ -1,8 +1,10 @@
 import Colors from "@/constants/Colors";
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 import { Entypo, Ionicons } from "@expo/vector-icons";
+import Text from "../ui/Text";
+import { Fonts, Typography } from "@/constants/typography";
 
 interface Props {
   color: string;
@@ -33,25 +35,10 @@ const RecentActivityComponent = ({
     >
       <View style={[tw`${color}`, styles.card]}>
         <View style={tw`flex flex-col`}>
-          <View style={tw`gap-2 p-4`}>
-            <View style={tw`flex flex-row items-center justify-between`}>
-              <Text style={tw`text-zinc-400 text-xs`}>{name}</Text>
-              <Text style={tw`text-zinc-400 text-xs`}>{status}</Text>
-            </View>
-            <Text style={tw`text-4xl text-zinc-950 font-bold`}>${amount}</Text>
-          </View>
-          <View
-            style={tw` bg-[${Colors.light.primary}] flex flex-row items-center py-2 px-4`}
-          >
-            <View style={tw`flex flex-row items-center gap-0.5`}>
-              <Ionicons name="timer-outline" size={16} color="white" />
-              <Text style={tw`text-xs text-white font-bold`}>{duration}m</Text>
-            </View>
-            <Entypo name="dot-single" size={16} color="black" />
-            <View style={tw`flex flex-row items-center gap-0.5`}>
-              <Ionicons name="calendar-clear-outline" size={16} color="white" />
-              <Text style={tw`text-xs text-white font-bold`}>{date}</Text>
-            </View>
+          <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.subheading }}>${amount}</Text>
+          <View style={tw`flex flex-row items-center justify-between`}>
+            <Text>{name}</Text>
+            <Text>{status}</Text>
           </View>
         </View>
       </View>
@@ -65,9 +52,11 @@ const styles = StyleSheet.create({
   container: {},
   card: {
     width: 180,
-    borderRadius: 25,
+    borderRadius: 8,
     overflow: "hidden",
     position: "relative",
+    backgroundColor: Colors.design.interactiveSurface,
+    padding: 12
   },
   background: {
     ...StyleSheet.absoluteFillObject,

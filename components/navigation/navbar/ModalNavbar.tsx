@@ -46,9 +46,8 @@ const NavBar = ({ navigation, back, options, route }: any) => {
   return (
     <View
       style={[
-        tw`${
-          searchClicked ? `bg-white border-b border-zinc-200/50 ` : "bg-zinc-50"
-        } flex flex-col px-4 gap-6 pb-4`,
+        tw`${searchClicked ? `bg-white border-b border-zinc-200/50 ` : "bg-zinc-50"
+          } flex flex-col px-4 gap-6 pb-4`,
         {
           paddingTop: insets.top,
         },
@@ -94,7 +93,7 @@ const NavBar = ({ navigation, back, options, route }: any) => {
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => router.push("filter-modal")}
+            onPress={() => router.push("/filter-modal")}
             style={tw`flex flex-row items-center bg-white p-3 gap-4 rounded-full border border-zinc-200/50`}
           >
             <AntDesign name="filter" size={20} color="#3f3f46" />
@@ -109,11 +108,10 @@ const NavBar = ({ navigation, back, options, route }: any) => {
             <TouchableOpacity
               onPress={() => setSelectedOption(item)}
               activeOpacity={0.7}
-              style={tw`${
-                selected_option._id === item._id
+              style={tw`${selected_option._id === item._id
                   ? `bg-[${Colors.light.primary}] border-[${Colors.light.primary}] `
                   : "bg-white border-zinc-200/50 "
-              } px-4 py-2  rounded-full border`}
+                } px-4 py-2  rounded-full border`}
               key={item._id}
             >
               <Text style={tw`text-sm`}>{item.name}</Text>

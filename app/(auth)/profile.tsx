@@ -1,20 +1,18 @@
 import PasswordInput from "@/components/ui/PasswordInput";
 import { useSignUp } from "@clerk/clerk-expo";
-import {
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 import { Formik } from "formik";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import Colors from "@/constants/Colors";
+import Text from "@/components/ui/Text";
+import { Fonts, Typography } from "@/constants/typography";
+import useAxiosInstance from "../utils/axios";
 
 const CreateProfileDetails = () => {
     const { isLoaded, signUp, setActive } = useSignUp();
     const { emailAddress }: { emailAddress: string } = useLocalSearchParams();
     const router = useRouter();
+    const axiosInstance = useAxiosInstance()
 
     const onAgreeAndContinue = async (values: {
         emailAddress: string;
@@ -29,13 +27,20 @@ const CreateProfileDetails = () => {
                 emailAddress: values.emailAddress.replaceAll(" ", ""),
                 password: values.password,
 
-
+            }).then(res => {
+                console.log({ res })
+                return res
             });
-            created.update({
-                lastName: values.lastName,
-                firstName: values.firstName,
 
+            console.log({ created })
+
+            // TODO. Save the user info at the database
+            await axiosInstance.post("/profile", {
+                firstName: values.firstName,
+                lastName: values.lastName,
+                userId: created.id
             })
+
             await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
 
             router.push({
@@ -47,7 +52,7 @@ const CreateProfileDetails = () => {
         } catch (err: any) {
             // See https://clerk.com/docs/custom-flows/error-handling
             // for more info on error handling
-            console.error(JSON.stringify(err, null, 2));
+            // console.error(JSON.stringify(err, null, 2));
         }
     };
 
@@ -57,7 +62,7 @@ const CreateProfileDetails = () => {
                 flex: 1,
                 paddingHorizontal: 16,
                 backgroundColor: "#fff",
-                paddingTop: 8,
+                paddingTop: 40,
             }}
         >
             <Formik
@@ -94,7 +99,13 @@ const CreateProfileDetails = () => {
                     setFieldValue,
                 }) => (
                     <>
-                        <Text style={{ fontSize: 28, fontWeight: "700" }}>
+                        <Text
+                            style={{
+                                fontSize: Typography.largeHeading,
+                                marginBottom: 24,
+                                fontFamily: Fonts.Inter_600SemiBold,
+                            }}
+                        >
                             Finish signing up
                         </Text>
                         <View style={{ marginTop: 16, gap: 24 }}>
@@ -108,6 +119,8 @@ const CreateProfileDetails = () => {
                                         borderWidth: 1,
                                         borderStyle: "solid",
                                         padding: 10,
+                                        fontFamily: Fonts.Inter_400Regular,
+                                        fontSize: Typography.paragraph,
                                     }}
                                     placeholder="First name"
                                     onChangeText={handleChange("firstName")}
@@ -125,6 +138,8 @@ const CreateProfileDetails = () => {
                                         borderWidth: 1,
                                         borderStyle: "solid",
                                         padding: 10,
+                                        fontFamily: Fonts.Inter_400Regular,
+                                        fontSize: Typography.paragraph,
                                     }}
                                     placeholder="Last name"
                                     onChangeText={handleChange("lastName")}
@@ -143,14 +158,18 @@ const CreateProfileDetails = () => {
                                         borderWidth: 1,
                                         borderStyle: "solid",
                                         padding: 10,
-
+                                        fontFamily: Fonts.Inter_400Regular,
+                                        fontSize: Typography.paragraph,
                                     }}
                                     autoCapitalize="none"
                                     onChangeText={handleChange("emailAddress")}
                                     onBlur={handleBlur("emailAddress")}
                                     value={values.emailAddress}
                                 />
-                                <Text>Please provide a working email. You will need to verify the email address with an OTP.</Text>
+                                <Text style={{ color: Colors.design.text }}>
+                                    Please provide a working email. You will need to verify the
+                                    email address with an OTP.
+                                </Text>
                             </View>
                             <View style={{ gap: 12 }}>
                                 <Text style={{ fontWeight: "600" }}>Password</Text>
@@ -160,9 +179,26 @@ const CreateProfileDetails = () => {
                                 />
                             </View>
                             <View>
-                                <Text>
-                                    By selecting Agree and continue, I agree to CXMaper's Terms of
-                                    Service, and acknowledge the Privacy Policy.
+                                <Text style={{ color: Colors.design.text }}>
+                                    By selecting Agree and continue, I agree to CXMaper's{" "}
+                                    <Text
+                                        style={{
+                                            fontFamily: Fonts.Inter_600SemiBold,
+                                            color: Colors.design.highContrastText
+                                        }}
+                                    >
+                                        Terms of Service
+                                    </Text>
+                                    , and acknowledge the{" "}
+                                    <Text
+                                        style={{
+                                            fontFamily: Fonts.Inter_600SemiBold,
+                                            color: Colors.design.highContrastText
+
+                                        }}
+                                    >
+                                        Privacy Policy
+                                    </Text>
                                 </Text>
                             </View>
                             <TouchableOpacity
@@ -177,7 +213,11 @@ const CreateProfileDetails = () => {
                                 }}
                             >
                                 <Text
-                                    style={{ fontWeight: "700", fontSize: 16, color: "#fff" }}
+                                    style={{
+                                        fontFamily: Fonts.Inter_700Bold,
+                                        fontSize: Typography.buttonText,
+                                        color: "#fff",
+                                    }}
                                 >
                                     Agree and continue
                                 </Text>

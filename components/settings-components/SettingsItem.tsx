@@ -1,8 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import Colors from "@/constants/Colors";
-import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
+import { Entypo, Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import Text from "../ui/Text";
+import { Fonts } from "@/constants/typography";
 
 type Props = {
   icon_name: any;
@@ -14,29 +16,39 @@ type Props = {
 
 const SettingsItem = (props: Props) => {
   return (
-    <View style={tw`flex flex-row items-center gap-4 w-full`}>
+    <View style={[tw`flex flex-row items-center gap-3 w-full py-2 border-b`, {
+      borderColor: Colors.design.separator
+    }]}>
       <View
-        style={tw`flex h-12 w-12 rounded-full justify-center items-center bg-[${Colors.light.primary}]/10`}
+        style={{
+          height: 40,
+          width: 40,
+          borderRadius: 20,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
         {props.icon_from === "ionicons" ? (
           <Ionicons
             name={props.icon_name}
             size={24}
-            color={`${Colors.light.primary}`}
+            color={Colors.design.highContrastText}
           />
         ) : (
           <Feather
             name={props.icon_name}
             size={24}
-            color={`${Colors.light.primary}`}
+            color={Colors.design.highContrastText}
           />
         )}
       </View>
       <View style={tw`flex-1`}>
-        <Text style={tw`text-zinc-950 font-semibold`}>{props.heading}</Text>
-        <Text style={tw`text-zinc-400`}>{props.description}</Text>
+        <Text style={{
+          fontFamily: Fonts.Inter_500Medium,
+          color: Colors.design.highContrastText
+        }}>{props.heading}</Text>
       </View>
-      <Entypo name="chevron-right" size={24} color="#9ca3af" />
+      <Feather name="chevron-right" size={24} color={Colors.design.text} />
     </View>
   );
 };

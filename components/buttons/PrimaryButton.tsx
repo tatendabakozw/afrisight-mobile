@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   Animated,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -10,6 +9,7 @@ import React, { useEffect, useRef } from "react";
 import tw from "twrnc";
 import Colors from "@/constants/Colors";
 import { Feather } from "@expo/vector-icons";
+import Text from "../ui/Text";
 
 type Props = {
   text: string;
@@ -95,8 +95,8 @@ const PrimaryButton = ({
           <View style={tw`p-3 rounded-full`} />
         )}
         <Text
-          style={tw`${muted ? "text-zinc-950 " : "text-white "
-            } w-full text-center flex-1 font-bold`}
+          style={[tw`${muted ? "text-red-600 " : "text-white "
+            } w-full text-center flex-1`, { fontFamily: "Inter_700Bold", fontSize: 17 }]}
         >
           {loading ? "loading..." : text}
         </Text>

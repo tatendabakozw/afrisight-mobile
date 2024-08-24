@@ -4,7 +4,6 @@ import tw from "twrnc";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   LayoutAnimation,
@@ -14,6 +13,9 @@ import {
 } from "react-native";
 import Colors from "@/constants/Colors";
 import NotificationButton from "@/components/buttons/NotificationButton";
+import { useUser } from "@clerk/clerk-expo";
+import { Fonts, Typography } from "@/constants/typography";
+import Text from "@/components/ui/Text";
 
 // Enable LayoutAnimation on Android
 if (
@@ -23,14 +25,10 @@ if (
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const search_filters = [
-  { name: "All", _id: "all" },
-  { name: "Inprogress", _id: "inprogress" },
-  { name: "New", _id: "new" },
-  { name: "Saved", _id: "saved" },
-];
+
 
 const NavBar = ({ navigation, back, options, route }: any) => {
+  const { isLoaded, user, isSignedIn } = useUser();
   const insets = useSafeAreaInsets();
   const [searchClicked, setSearchClicked] = useState(false);
   const toggleSearch = () => {
@@ -40,76 +38,49 @@ const NavBar = ({ navigation, back, options, route }: any) => {
   const title =
     options.title !== undefined ? options.title : options.route.name;
 
-  const [selected_option, setSelectedOption] = useState(search_filters[0]);
   const currentRouteName = route.name;
+
 
   return (
     <View
       style={[
-        tw`${
-          searchClicked ? `bg-white border-b border-zinc-200/50 ` : "bg-zinc-50"
-        } flex flex-col px-4 gap-6 pb-4`,
+        tw`${searchClicked ? `bg-white border-b border-zinc-200/50 ` : "bg-white"
+          } flex flex-col px-4 gap-8`,
         {
-          paddingTop: insets.top,
+          paddingTop: insets.top + 16,
         },
       ]}
     >
-      {!searchClicked && (
-        <View style={tw`flex flex-row items-center`}>
-          <View style={tw`flex-1 gap-1`}>
-            <Text style={tw`text-zinc-400`}>Welcome, </Text>
-            <Text style={tw`text-zinc-950 text-3xl font-extrabold`}>
-              Kudai Mapuranga
-            </Text>
-          </View>
-          <NotificationButton />
-        </View>
-      )}
-      {searchClicked ? (
-        <View
-          style={tw`flex flex-row items-center bg-white px-3 gap-4 rounded-full`}
-        >
-          <AntDesign name="search1" size={20} color="#52525b" />
-          <TextInput
-            style={tw`p-3 rounded-full flex-1`}
-            placeholder="Search "
-          />
-          <TouchableOpacity activeOpacity={0.7} onPress={toggleSearch}>
-            <Feather name="x" size={24} color="#52525b" />
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <View style={tw`flex flex-row items-center gap-2`}>
-          <TouchableOpacity
-            onPress={toggleSearch}
-            activeOpacity={0.7}
-            style={tw`flex flex-row items-center bg-white p-3 flex-1 gap-4 rounded-full border border-zinc-200/50`}
-          >
-            <AntDesign name="search1" size={20} color="#52525b" />
-            <Text style={tw`rounded-full text-zinc-400`}>Search</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      <View>
+        {!searchClicked && (
+          <View style={{ marginBottom: 20 }}>
 
-      {/* filters */}
-      {currentRouteName === "gigs" && (
-        <View style={tw`flex flex-row items-center gap-4`}>
-          {search_filters.map((item) => (
-            <TouchableOpacity
-              onPress={() => setSelectedOption(item)}
-              activeOpacity={0.7}
-              style={tw`${
-                selected_option._id === item._id
-                  ? `bg-[${Colors.light.primary}] border-[${Colors.light.primary}] `
-                  : "bg-white border-zinc-200/50 "
-              } px-4 py-2  rounded-full border`}
-              key={item._id}
-            >
-              <Text style={tw`text-sm`}>{item.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
+            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 16 }}>
+                <TouchableOpacity style={{ height: 32, width: 32, borderRadius: 20, backgroundColor: Colors.design.brand, justifyContent: "center", alignItems: "center" }}>
+                  <Text style={{ color: Colors.design.white, fontSize: Typography.subheading, fontFamily: Fonts.Inter_700Bold }}>K</Text>
+
+                </TouchableOpacity>
+                <Text style={{ fontSize: Typography.heading, fontFamily: "Inter_600SemiBold", color: Colors.design.highContrastText }}>
+                  {title}
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row", gap: 12, justifyContent: "flex-end", alignItems: "center" }}>
+
+                <TouchableOpacity style={{ height: 40, width: 40, borderRadius: 20, alignItems: "center", justifyContent: "center" }}>
+                  <Feather name="search" size={24} style={{ color: Colors.design.mutedText }} />
+                </TouchableOpacity>
+
+
+
+              </View>
+            </View>
+          </View>
+        )}
+
+      </View>
+
+
     </View>
   );
 };

@@ -3,6 +3,7 @@ import React from "react";
 import { useNavigation } from "expo-router";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import tw from "twrnc";
+import Colors from "@/constants/Colors";
 
 const GigDescriptionHeader = () => {
   const navigation = useNavigation();
@@ -10,16 +11,18 @@ const GigDescriptionHeader = () => {
     <View style={tw`flex flex-row gap-4 py-2`}>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
-        style={tw`bg-zinc-100 rounded-full p-2`}
+        style={[tw`rounded-full p-2`, {
+          backgroundColor: Colors.design.interactiveCardSurface
+        }]}
       >
-        <Ionicons name="arrow-back-sharp" size={24} color="#71717a" />
+        <Feather name="x" size={24} color={Colors.design.text} />
       </TouchableOpacity>
       <View style={tw`flex-1`} />
-      <TouchableOpacity style={tw`bg-zinc-100 rounded-full p-2`}>
-        <Feather name="share-2" size={24} color="#71717a" />
-      </TouchableOpacity>
-      <TouchableOpacity style={tw`bg-zinc-100 rounded-full p-2`}>
-        <Feather name="bookmark" size={24} color="#71717a" />
+
+      <TouchableOpacity style={[tw`rounded-full p-2`, {
+        backgroundColor: Colors.design.interactiveCardSurface
+      }]}>
+        <Feather name="bookmark" size={24} color={Colors.design.text} />
       </TouchableOpacity>
     </View>
   );

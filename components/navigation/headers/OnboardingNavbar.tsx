@@ -6,8 +6,9 @@ import Colors from "@/constants/Colors";
 import tw from "twrnc";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
+import { Typography } from "@/constants/typography";
 
-const CustomHeader = ({ navigation, back, options }: any) => {
+const OnboardingNavbar = ({ navigation, back, options }: any) => {
   const insets = useSafeAreaInsets();
   const navigate = useNavigation();
   const colorScheme = useColorScheme();
@@ -18,9 +19,9 @@ const CustomHeader = ({ navigation, back, options }: any) => {
     <View
       style={[
         tw`flex flex-row gap-3 w-full px-3 bg-white border-zinc-400/30`,
-        options.headerShown && tw`border`,
         {
           paddingTop: insets.top + 16,
+          alignItems: "center"
         },
       ]}
     >
@@ -28,7 +29,15 @@ const CustomHeader = ({ navigation, back, options }: any) => {
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => navigation.goBack()}
-          style={{ width: 32, height: 32, marginBottom: 8 }}
+          style={{
+            width: 44,
+            height: 44,
+            marginBottom: 8,
+            backgroundColor: Colors.design.interactiveSurface,
+            borderRadius: 24,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           <Ionicons name="arrow-back" size={20} color={`text-zinc-700`} />
         </TouchableOpacity>
@@ -45,7 +54,7 @@ const CustomHeader = ({ navigation, back, options }: any) => {
         style={{
           fontWeight: "700",
           flex: 1,
-          fontSize: 16
+          fontSize: Typography.subheading,
         }}
       >
         {title}
@@ -57,6 +66,6 @@ const CustomHeader = ({ navigation, back, options }: any) => {
   );
 };
 
-export default CustomHeader;
+export default OnboardingNavbar;
 
 const styles = StyleSheet.create({});

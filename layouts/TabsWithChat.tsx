@@ -35,12 +35,12 @@ const TabsWithChat = ({ children }: Props) => {
         <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => router.push("(modals)/chat-modal")}
+            onPress={() => router.push("/(modals)/chat-modal")}
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
             style={tw`bg-[${Colors.light.primary}] p-4 rounded-full`}
           >
-            <Ionicons name="chatbox-outline" size={24} color="#09090b" />
+            <Ionicons name="chatbox-outline" size={24} color="white" />
           </TouchableOpacity>
         </Animated.View>
       </View>

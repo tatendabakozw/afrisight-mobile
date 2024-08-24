@@ -60,6 +60,10 @@ function RootLayoutNav() {
         options={{ presentation: "modal", headerShown: false }}
       />
       <Stack.Screen
+        name="gig-survey"
+        options={{ presentation: "modal", headerShown: false }}
+      />
+      <Stack.Screen
         name="notification"
         options={{ presentation: "modal", headerShown: false }}
       />

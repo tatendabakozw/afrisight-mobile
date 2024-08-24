@@ -1,6 +1,6 @@
-import React, { ReactNode } from "react";
-import { Tabs } from "expo-router";
-import { Platform, Text } from "react-native";
+import React, { ReactNode, useEffect } from "react";
+import { Redirect, Tabs } from "expo-router";
+import { Platform, } from "react-native";
 import Colors from "@/constants/Colors";
 import {
   HomeIconOutline,
@@ -24,6 +24,11 @@ import {
 } from "@/assets/svgs/nav-icons/SettingsIcon";
 import NavBar from "@/components/navigation/navbar/NavBar";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import { useAuth, useUser } from "@clerk/clerk-expo";
+import { useRoute } from "@react-navigation/native";
+import { useRouter } from "expo-router";
+import Text from "@/components/ui/Text";
+import { Fonts } from "@/constants/typography";
 
 interface IconProps {
   children?: ReactNode;
@@ -35,6 +40,11 @@ function TabBarIcon({ children }: IconProps) {
 }
 
 export default function TabLayout() {
+  const { isSignedIn } = useAuth()
+
+  if (!isSignedIn) {
+    return <Redirect href={'/(auth)'} />
+  }
   return (
     <Tabs
       screenOptions={({ route }) => ({
@@ -48,12 +58,12 @@ export default function TabLayout() {
             case "gigs":
               imageName = focused ? <GigsIconSolid /> : <GigsIconOutline />;
               break;
-            case "status":
-              imageName = focused ? <StatusIconSolid /> : <StatusIconOutline />;
-              break;
-            case "wallet":
-              imageName = focused ? <WalletIconSolid /> : <WalletIconOutline />;
-              break;
+            // case "status":
+            //   imageName = focused ? <StatusIconSolid /> : <StatusIconOutline />;
+            //   break;
+            // case "wallet":
+            //   imageName = focused ? <WalletIconSolid /> : <WalletIconOutline />;
+            //   break;
             case "settings":
               imageName = focused ? (
                 <SettingsIconSolid />
@@ -72,17 +82,17 @@ export default function TabLayout() {
           let label;
           switch (route.name) {
             case "index":
-              label = "Home";
+              label = "Discover";
               break;
             case "gigs":
               label = "Gigs";
               break;
-            case "status":
-              label = "Status";
-              break;
-            case "wallet":
-              label = "Wallet";
-              break;
+            // case "status":
+            //   label = "Status";
+            //   break;
+            // case "wallet":
+            //   label = "Wallet";
+            //   break;
             case "settings":
               label = "Settings";
               break;
@@ -96,16 +106,16 @@ export default function TabLayout() {
               style={{
                 fontSize: 13,
                 paddingBottom: 10,
-                color: focused ? Colors.light.primary : "#6E6D7A",
-                fontWeight: focused ? "bold" : "normal",
+                color: focused ? Colors.design.brand : "#6E6D7A",
+                fontFamily: focused ? Fonts.Inter_700Bold : Fonts.Inter_400Regular,
               }}
             >
               {label}
             </Text>
           );
         },
-        tabBarActiveTintColor: Colors.light.primary,
-        tabBarInactiveTintColor: "#94a3b8",
+        tabBarActiveTintColor: Colors.design.brand,
+        tabBarInactiveTintColor: Colors.design.brand,
 
         headerShown: useClientOnlyValue(false, true),
         header: (props) => <NavBar {...props} route={route} />,
@@ -124,13 +134,13 @@ export default function TabLayout() {
         tabBarShowLabel: true,
       })}
     >
-      <Tabs.Screen name="index" options={{ title: "Home" }} />
+      <Tabs.Screen name="index" options={{ title: "Discover" }} />
       <Tabs.Screen name="gigs" options={{ title: "Gigs" }} />
-      <Tabs.Screen name="status" options={{ title: "Status" }} />
+      {/* <Tabs.Screen name="status" options={{ title: "Status" }} />
       <Tabs.Screen
         name="wallet"
         options={{ title: "Wallet", headerShown: false }}
-      />
+      /> */}
 
       <Tabs.Screen
         name="settings"

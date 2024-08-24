@@ -1,10 +1,12 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
-import { Entypo, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { GigItemProps } from "@/utils/types";
+import Colors from "@/constants/Colors";
 import { truncateText } from "@/app/utils/text-moderators";
+import Text from "../ui/Text";
+import { Fonts, Typography } from "@/constants/typography";
 
 const GigItem = (props: GigItemProps) => {
   const router = useRouter();
@@ -12,64 +14,66 @@ const GigItem = (props: GigItemProps) => {
     <TouchableOpacity
       onPress={() =>
         router.push({
-          pathname: "(modals)/gig-description",
+          pathname: "/(modals)/gig-description",
           params: { gig_id: props._id, gig_type: props.type },
         })
       }
-      style={tw`rounded-3xl gap-2`}
+      style={{
+        paddingVertical: 24,
+        borderBottomWidth: 0.5,
+        borderColor: Colors.design.separator,
+        paddingHorizontal: 16
+
+      }}
     >
-      <View style={tw`flex flex-row items-center gap-4`}>
-        <Image
-          height={20}
-          width={20}
-          style={tw`h-16 w-16 bg-red-100 rounded-2xl`}
-          source={require("../../assets/images/home-assets/profile-complete.jpg")}
-        />
-        <View style={tw`flex flex-col gap-1 flex-1`}>
-          <View style={tw`flex flex-row items-center gap-4`}>
-            <Text style={tw`text-xl font-bold text-zinc-950`}>
-              {truncateText(props.title, 15)}
-            </Text>
-            <Text
-              style={tw`px-2 py-1 bg-green-600/20 text-green-600 text-xs font-bold rounded-full`}
-            >
-              {props.difficulty}
-            </Text>
-          </View>
-          <View style={tw`flex flex-row items-center gap-0.5`}>
-            <View style={tw`flex flex-row items-center gap-0.5`}>
-              <MaterialIcons name="access-time" size={12} color="#a1a1aa" />
-              <Text style={tw`text-xs text-zinc-400 `}>{props.duration}m</Text>
-            </View>
-            <Entypo name="dot-single" size={16} color="#a1a1aa" />
-            <View style={tw`flex flex-row items-center gap-0.5`}>
-              <MaterialIcons
-                name="location-searching"
-                size={12}
-                color="#a1a1aa"
-              />
-              <Text style={tw`text-xs text-zinc-400`}>
-                {props.location ? props.location : "Any"}
-              </Text>
-            </View>
-            <Entypo name="dot-single" size={16} color="#a1a1aa" />
-            <View style={tw`flex flex-row items-center gap-0.5`}>
-              <FontAwesome name="dollar" size={12} color="#a1a1aa" />
-              <Text style={tw`text-xs text-zinc-400`}>{props.reward.type}</Text>
-            </View>
-          </View>
+      <View style={{ flexDirection: "row", marginBottom: 16, alignItems: "center", justifyContent: "space-between", gap: 24, flexShrink: 1 }}>
+        <View>
+          <Text style={{ color: Colors.design.mutedText, fontFamily: Fonts.Inter_400Regular, fontSize: 13 }}>Created {props.age} days ago</Text>
+          <Text
+            style={{
+              fontFamily: Fonts.Inter_500Medium,
+              fontSize: Typography.buttonText,
+              color: Colors.design.highContrastText,
+              maxWidth: 300
+            }}
+          >
+            {props.name}
+          </Text>
         </View>
-        <Text
-          style={[
-            tw`text-xl text-zinc-950`,
-            {
-              fontWeight: "900",
-            },
-          ]}
-        >
-          +{props.points}
-        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <TouchableOpacity style={{ height: 40, width: 40, borderRadius: 20, alignItems: "center", justifyContent: "center" }}>
+            <MaterialIcons name="bookmark" size={24} style={{ color: Colors.design.interactiveSurface }} />
+          </TouchableOpacity>
+
+        </View>
       </View>
+      <Text style={{ color: Colors.design.text, marginBottom: 12 }}>
+        {truncateText(props.desc, 100)}
+      </Text>
+      <View style={{ flexDirection: "row", gap: 8 }}>
+        <View style={{ flexDirection: "row", gap: 4 }}>
+
+          <Text style={{ color: Colors.design.text }}>
+            <Text
+              style={{
+                fontFamily: Fonts.Inter_500Medium,
+                color: Colors.design.highContrastText,
+              }}
+            >
+              {props.price}
+            </Text>{" "}
+            points
+          </Text>
+        </View>
+        <Text style={{ color: Colors.design.mutedText }}>&bull;</Text>
+        <Text style={{ color: Colors.design.text, fontFamily: Fonts.Inter_400Regular }}>{props.location}</Text>
+
+      </View>
+      {/* <View style={{ flexDirection: "row" }}>
+      <Text style={{ fontFamily: Fonts.Inter_700Bold, color: Colors.design.accent }}>
+        Trending
+      </Text>
+    </View> */}
     </TouchableOpacity>
   );
 };

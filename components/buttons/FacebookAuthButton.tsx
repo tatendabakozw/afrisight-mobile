@@ -2,6 +2,8 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import FacecbookIcon from "@/assets/svgs/FacebookIcon";
+import { Fonts, Typography } from "@/constants/typography";
+import Colors from "@/constants/Colors";
 
 type Props = {};
 
@@ -13,7 +15,11 @@ const FacebookAuthButton = (props: Props) => {
       <View style={{}}>
         <FacecbookIcon />
       </View>
-      <Text style={tw`flex-1 text-center font-bold text-white`}>
+      <Text style={{
+        fontFamily: Fonts.Inter_700Bold,
+        color: Colors.design.white,
+        fontSize: Typography.buttonText
+      }}>
         Continue with Facebook
       </Text>
       <View style={tw` `}></View>

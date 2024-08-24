@@ -1,7 +1,10 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import GoogleIcon from "@/assets/svgs/GoogleIcon";
+import Text from "../ui/Text";
+import { Fonts, Typography } from "@/constants/typography";
+import Colors from "@/constants/Colors";
 
 type Props = {};
 
@@ -13,7 +16,11 @@ const GoogleAuthButton = (props: Props) => {
       <View style={tw` `}>
         <GoogleIcon />
       </View>
-      <Text style={tw`flex-1 text-center text-zinc-700 font-bold`}>
+      <Text style={{
+        fontFamily: Fonts.Inter_700Bold,
+        color: Colors.design.highContrastText,
+        fontSize: Typography.buttonText
+      }}>
         Continue with Google
       </Text>
       <View style={tw` `}></View>
