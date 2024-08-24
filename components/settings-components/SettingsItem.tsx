@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import Colors from "@/constants/Colors";
 import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 type Props = {
   icon_name: any;
@@ -14,7 +15,10 @@ type Props = {
 
 const SettingsItem = (props: Props) => {
   return (
-    <View style={tw`flex flex-row items-center gap-4 w-full`}>
+    <TouchableOpacity
+      onPress={() => router.push("(modals)/settings-wallet")}
+      style={tw`flex flex-row items-center gap-4 w-full`}
+    >
       <View
         style={tw`flex h-12 w-12 rounded-full justify-center items-center bg-[${Colors.light.primary}]/10`}
       >
@@ -37,7 +41,7 @@ const SettingsItem = (props: Props) => {
         <Text style={tw`text-zinc-400`}>{props.description}</Text>
       </View>
       <Entypo name="chevron-right" size={24} color="#9ca3af" />
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -4,16 +4,22 @@ import tw from "twrnc";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import GigDescriptionHeader from "@/components/navigation/headers/GigDescriptionHeader";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import { useFetch } from "@/hooks/useFetch";
+import { apiUrl } from "@/utils/apiUrl";
 
 const GigDescription = () => {
   const insets = useSafeAreaInsets();
-  const { gig_type, gig_id } = useLocalSearchParams();
-  console.log(gig_type);
+  const { gig_id } = useLocalSearchParams();
+
+  const response = useFetch(`${apiUrl}/gig/${gig_id}`);
+
+  console.log("response from single id: ", response.data);
+
   return (
     <ScrollView
       contentContainerStyle={[
-        tw`bg-zinc-50 px-4 w-full items-center gap-4 pb-4`,
+        tw`bg-zinc-50 px-4 w-full h-full items-center gap-4 pb-4`,
         {
           paddingTop: insets.top,
         },
@@ -103,7 +109,26 @@ const GigDescription = () => {
         </Text>
       </View>
       <View style={tw`py-2`} />
-      <PrimaryButton text="Apply" />
+      {!response.data.surveyLink ? (
+        <PrimaryButton
+          onPress={() =>
+            router.push({
+              pathname: "(modals)/settings-profile-modal",
+            })
+          }
+          text="Start Now"
+        />
+      ) : (
+        <PrimaryButton
+          onPress={() =>
+            router.push({
+              pathname: "(modals)/gig-modal",
+              params: { surveyLink: response.data.surveyLink },
+            })
+          }
+          text="Start Now"
+        />
+      )}
     </ScrollView>
   );
 };

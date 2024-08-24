@@ -3,8 +3,8 @@ import React from "react";
 import tw from "twrnc";
 import { Entypo, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { GigItemProps } from "@/utils/types";
 import { truncateText } from "@/app/utils/text-moderators";
+import { GigItemProps } from "@/utils/types";
 
 const GigItem = (props: GigItemProps) => {
   const router = useRouter();

@@ -15,7 +15,7 @@ const Settings = () => {
   return (
     <View
       style={[
-        tw`flex flex-col gap-6 bg-zinc-50 h-full px-6`,
+        tw`flex flex-col gap-6 bg-zinc-50 h-full px-6 py-6`,
         { paddingTop: insets.top },
       ]}
     >
@@ -51,7 +51,7 @@ const Settings = () => {
           location=""
         />
 
-        <PrimaryBorder />
+        {/* <PrimaryBorder />
         <SettingsItem
           icon_name={"bell"}
           heading="Notifications"
@@ -65,7 +65,7 @@ const Settings = () => {
           heading="Language Settings"
           description="Change Language here"
           location=""
-        />
+        /> */}
         <PrimaryBorder darker />
         <Heading text="Security Settings" />
         <SettingsItem
@@ -74,16 +74,17 @@ const Settings = () => {
           description="Manage your password"
           location=""
         />
-        <SettingsItem
+        {/* <SettingsItem
           icon_name={"clipboard"}
           heading="Privacy Policy"
           description="You can review our policy"
           location=""
-        />
+        /> */}
       </View>
-      <View style={tw`py-4`} />
+      <View style={tw`py-4 flex-1`} />
       <PrimaryButton
         icon={<MaterialIcons name="logout" size={20} color="white" />}
+        onPress={() => router.push("/gigs")}
         text="Logout"
       />
     </View>
