@@ -19,7 +19,7 @@ const countryCodes = [
 
 export default function AuthScreen() {
   const [isSignUp, setIsSignUp] = useState(true);
-  const [isEmailLogin, setIsEmailLogin] = useState(false);
+  const [isEmailLogin, setIsEmailLogin] = useState(true);
   const [countryCode, setCountryCode] = useState("+263");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -202,7 +202,7 @@ export default function AuthScreen() {
         <Text style={styles.dividerText}>or</Text>
         <View style={styles.dividerLine} />
       </View>
-
+      {/* 
       {isEmailLogin ? (
         <TouchableOpacity
           style={styles.socialButton}
@@ -219,7 +219,7 @@ export default function AuthScreen() {
           <Feather name="mail" size={24} color="black" />
           <Text style={styles.socialButtonText}>Continue with Email</Text>
         </TouchableOpacity>
-      )}
+      )} */}
       <TouchableOpacity style={styles.socialButton} onPress={handleGoogleAuth}>
         <Ionicons name="logo-google" size={24} color="black" />
         <Text style={styles.socialButtonText}>Continue with Google</Text>

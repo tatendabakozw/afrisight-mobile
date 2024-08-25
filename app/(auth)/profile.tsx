@@ -322,8 +322,7 @@ const VerificationModal = (props: {
     return (
         <AnimatedModal fullHeight isOpen={props.isOpen} onClose={props.onClose}>
             <KeyboardAvoidingView
-                behavior={"height"}
-
+                behavior="padding" enabled keyboardVerticalOffset={64}
                 style={[tw`bg-white`, { flex: 1, }]}
             >
                 <View style={{ flex: 1 }}>
@@ -332,7 +331,7 @@ const VerificationModal = (props: {
                     </Text>
                     <View style={tw`gap-4 w-full `}>
                         <Text style={{ fontFamily: Fonts.Inter_400Regular, color: Colors.design.highContrastText }}>
-                            Enter the verification code we sent to {emailAddress}
+                            Enter the code we sent to {emailAddress}
 
                         </Text>
                         <View style={[tw`flex flex-row h-[40px] gap-2`, { marginBottom: 20 }]}>

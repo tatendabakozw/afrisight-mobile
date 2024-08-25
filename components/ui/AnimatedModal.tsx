@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import Modal from 'react-native-modal';
 import { View, StyleSheet, Dimensions, TouchableOpacity, useAnimatedValue, StatusBar } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing, withSpring } from 'react-native-reanimated';
 import { Feather } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
-import { interpolate } from 'react-native-reanimated';
+import { interpolate, Extrapolation } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -19,44 +19,53 @@ interface AnimatedModalProps {
 const AnimatedModal: React.FC<AnimatedModalProps> = ({ isOpen: isVisible, onClose, children, fullHeight }) => {
     const translateY = useSharedValue(SCREEN_HEIGHT);
     const scale = useSharedValue(0.9);
-    const insets = useSafeAreaInsets();
+    const opacity = useSharedValue(0);
 
-
-    const animatedStyle = useAnimatedStyle(() => {
-        return {
-            transform: [
-                { translateY: translateY.value },
-                { scale: interpolate(translateY.value, [SCREEN_HEIGHT, 0], [0.9, 1]) },
-            ],
-        };
-    });
+    const springConfig = {
+        damping: 50,
+        mass: 1,
+        stiffness: 300,
+        overshootClamping: false,
+        restSpeedThreshold: 0.1,
+        restDisplacementThreshold: 0.1,
+    };
 
     useEffect(() => {
         if (isVisible) {
-            translateY.value = withTiming(0, {
-                duration: 300,
-                easing: Easing.out(Easing.exp),
-            });
-            scale.value = withTiming(1, {
-                duration: 300,
-                easing: Easing.out(Easing.exp),
-            });
+            translateY.value = withSpring(0, springConfig);
+            opacity.value = withSpring(1, springConfig);
         } else {
-            translateY.value = withTiming(SCREEN_HEIGHT, {
-                duration: 300,
-                easing: Easing.in(Easing.exp),
-            });
-            scale.value = withTiming(0.9, {
-                duration: 300,
-                easing: Easing.in(Easing.exp),
-            });
+            translateY.value = withSpring(SCREEN_HEIGHT, springConfig);
+            opacity.value = withSpring(0, springConfig);
         }
     }, [isVisible]);
 
+    const animatedStyle = useAnimatedStyle(() => {
+        const scale = interpolate(
+            translateY.value,
+            [SCREEN_HEIGHT, 0],
+            [0.8, 1],
+            Extrapolation.CLAMP
+        );
 
-    useEffect(() => {
+        return {
+            transform: [
+                { translateY: translateY.value },
+            ],
+            opacity: opacity.value,
+        };
+    });
 
-    }, [isVisible]);
+    const backdropStyle = useAnimatedStyle(() => {
+        return {
+            opacity: interpolate(
+                opacity.value,
+                [0, 1],
+                [0, 0.5],
+                Extrapolation.CLAMP
+            ),
+        };
+    });
 
     return (
         <Modal
@@ -69,6 +78,8 @@ const AnimatedModal: React.FC<AnimatedModalProps> = ({ isOpen: isVisible, onClos
             animationOut="fadeOut"
             statusBarTranslucent={fullHeight}
         >
+
+            <Animated.View style={[styles.backdrop, backdropStyle]} />
 
             <StatusBar
                 backgroundColor={'transparent'}
@@ -91,6 +102,10 @@ const styles = StyleSheet.create({
     modal: {
         margin: 0,
         justifyContent: 'flex-end',
+    },
+    backdrop: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'black',
     },
     fullHeightModal: {
         margin: 0,
