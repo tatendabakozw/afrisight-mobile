@@ -10,14 +10,12 @@ type Props = {};
 const FacebookAuthButton = (props: Props) => {
   return (
     <View
-      style={tw`flex flex-row items-center w-full justify-between bg-[#588AFA] rounded-[8px] h-[54px] p-3`}
+      style={tw`flex flex-row items-center w-full justify-between bg-zinc-400/10 p-3 rounded-[8px] h-[54px] `}
     >
-      <View style={{}}>
-        <FacecbookIcon />
-      </View>
+
       <Text style={{
         fontFamily: Fonts.Inter_700Bold,
-        color: Colors.design.white,
+        color: Colors.design.highContrastText,
         fontSize: Typography.buttonText
       }}>
         Continue with Facebook

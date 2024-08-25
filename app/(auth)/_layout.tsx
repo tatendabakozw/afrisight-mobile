@@ -33,9 +33,13 @@ export default function TabLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: "Register",
+          title: "Enter your phone number",
           headerShown: false
         }}
+      />
+      <Stack.Screen
+        name="password"
+        options={{ title: "Sign in to your account", }}
       />
       <Stack.Screen
         name="verification"

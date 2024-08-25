@@ -1,22 +1,35 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import tw from "twrnc";
+import { Fonts, Typography } from "@/constants/typography";
+import Colors from "@/constants/Colors";
+import Text from "../ui/Text";
+import TextInput from "../ui/TextInput";
 
 type Props = {
   question: string;
+  value: string;
+  onChange: (value: string) => void;
 };
-
 const ShortAnswer = (props: Props) => {
   const [text, setText] = useState("");
 
   return (
-    <View style={tw`flex flex-col gap-2`}>
-      <Text style={tw`text-zinc-700`}>{props.question} (Optional)</Text>
+    <View style={{ paddingHorizontal: 16 }}>
+      <Text style={{
+        fontFamily: Fonts.Inter_600SemiBold,
+        color: Colors.design.highContrastText,
+        fontSize: Typography.buttonText,
+        marginBottom: 8
+
+      }}>{props.question}</Text>
       <TextInput
-        style={tw`border border-zinc-300/50 rounded-lg p-2 bg-zinc-100`}
+        style={[tw`border rounded-lg p-2`, {
+          borderColor: Colors.design.separator,
+          backgroundColor: Colors.design.white,
+        }]}
         value={text}
         onChangeText={setText}
-        placeholder="Enter your text here..."
       />
     </View>
   );

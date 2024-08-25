@@ -5,17 +5,25 @@ import GoogleIcon from "@/assets/svgs/GoogleIcon";
 import Text from "../ui/Text";
 import { Fonts, Typography } from "@/constants/typography";
 import Colors from "@/constants/Colors";
+import { useSignIn } from "@clerk/clerk-expo";
+import { useRouter } from "expo-router";
 
 type Props = {};
 
 const GoogleAuthButton = (props: Props) => {
+  const { signIn, isLoaded } = useSignIn();
+  const router = useRouter();
+
+  if (!isLoaded) {
+    return null;
+  }
+
+
   return (
     <View
       style={tw`flex flex-row items-center w-full justify-between bg-zinc-400/10 p-3 rounded-[8px] h-[54px] `}
     >
-      <View style={tw` `}>
-        <GoogleIcon />
-      </View>
+
       <Text style={{
         fontFamily: Fonts.Inter_700Bold,
         color: Colors.design.highContrastText,

@@ -22,29 +22,17 @@ const ProgressBar = ({ progress }: Props) => {
   }, [progress, animatedWidth]);
 
   return (
-    <View style={tw`w-full h-2 bg-zinc-100 rounded-full`}>
+    <View style={tw`flex-1 h-2 bg-zinc-100 rounded-full`}>
       <Animated.View
         style={[
-          tw`bg-[${Colors.light.primary}] h-full rounded-full`,
-          { width: animatedWidth },
+          tw`bg-[${Colors.design.accent}] h-full rounded-full`,
+          { width: `${progress}%` },
         ]}
       />
-      <Animated.View
-        style={[
-          tw`absolute w-4 h-4 -top-1 bg-[${Colors.light.primary}] rounded-full`,
-          {
-            transform: [
-              {
-                translateX: Animated.add(animatedWidth, new Animated.Value(-8)),
-              },
-            ],
-          },
-        ]}
-      />
+
     </View>
   );
 };
 
 export default ProgressBar;
 
-const styles = StyleSheet.create({});

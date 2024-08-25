@@ -6,6 +6,7 @@ import {
   ImageBackground,
   FlatList,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import tw from "twrnc";
@@ -66,28 +67,45 @@ export default function Home() {
   const { userId } = useAuth()
   const [selected_option, setSelectedOption] = useState(search_filters[0]);
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onFetchData = () => {
+    axiosInstance
+      .get("/gigs")
+      .then((res) => {
+        setGigs(res.data.gigs);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const onRefresh = async () => {
+    console.log("Refreshing");
+    setRefreshing(true);
+    await onFetchData();
+    setRefreshing(false);
+  };
+
   useEffect(() => {
-    axiosInstance.get("/gigs").then(res => {
-      setGigs(res.data.gigs)
-    }).catch(err => {
-      console.log(err)
-    })
-
-
-  }, [])
+    onFetchData();
+  }, []);
 
 
 
   return (
     <TabsWithChat>
       <ScrollView
-        style={{
-          flex: 1, backgroundColor: "#fff", paddingTop: 16
-        }}
-        contentContainerStyle={{
 
-          paddingBottom: 64
+        style={{ flex: 1, backgroundColor: Colors.design.white }}
+        contentContainerStyle={{
         }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       >
 
         <ScrollView contentContainerStyle={{

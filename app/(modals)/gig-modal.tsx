@@ -1,10 +1,16 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { Fragment, useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { Fragment, useMemo, useState } from "react";
 import tw from "twrnc";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import GigDescriptionHeader from "@/components/navigation/headers/GigDescriptionHeader";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import FilePicker from "@/components/survey-components/FilePicker";
 import Paragraph from "@/components/survey-components/Paragraph";
 import ShortAnswer from "@/components/survey-components/ShortAnswer";
@@ -13,35 +19,32 @@ import Option from "@/components/survey-components/Option";
 import InfoArea from "@/components/survey-components/InfoArea";
 import useSingleForm from "@/hooks/useSingleForm";
 import { SectionType } from "@/utils/types";
+import Colors from "@/constants/Colors";
+import { Feather } from "@expo/vector-icons";
+import { Fonts, Typography } from "@/constants/typography";
+import { getSurveyComponent } from "@/components/survey-components";
+import { useRoute } from "@react-navigation/native";
+import ProgressBar from "@/components/progress-bar/ProgressBar";
 
 const ITEMS_PER_PAGE = 3;
 
 const GigModals = () => {
   const insets = useSafeAreaInsets();
   const { gig_id, surveyLink } = useLocalSearchParams();
-
-  console.log("surveyLink", surveyLink);
-
-  // Check if surveyLink is undefined or an array and handle accordingly
-  const validSurveyLink =
-    typeof surveyLink === "string" ? surveyLink : undefined;
-
+  const router = useRouter();
+  const validSurveyLink = typeof surveyLink === "string" ? surveyLink : "";
   const { form, loading, error } = useSingleForm(validSurveyLink || "");
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const [formData, setFormData] = useState<{ [key: string]: any }>({});
+  const currentSection = useMemo(() => form?.form.sections[currentSectionIndex], [
+    currentSectionIndex, form
+  ]);
 
   if (loading) {
     return (
       <View style={tw`flex-1 w-full items-center justify-center bg-white`}>
         <Text>Loading...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={tw`flex-1 w-full items-center justify-center bg-white`}>
-        <Text>Error: {error}</Text>
       </View>
     );
   }
@@ -54,80 +57,165 @@ const GigModals = () => {
     );
   }
 
-  console.log("form from firebase ", form?.form?.sections);
+  const sections = form.form.sections;
+  const progress = ((currentSectionIndex + 1) / sections.length) * 100;
 
-  const totalSections = form.form.sections.length;
-  const totalPages = Math.ceil(totalSections / ITEMS_PER_PAGE);
 
-  const showInputArea = (section: SectionType) => {
-    switch (section.type._id) {
-      case "short-answer":
-        return <ShortAnswer question={section.value} />;
-      case "date":
-        return <DatePicker question={section.value} />;
-      case "multiple-choice":
-        return <Option options={section.options} question={section.value} />;
-      case "text-area":
-        return <InfoArea />;
-      case "paragraph":
-        return <Paragraph question={section.value} />;
-      case "file-upload":
-        return <FilePicker />;
-      default:
-        return <ShortAnswer question={section.value} />;
+  const handleNext = () => {
+    let nextIndex = currentSectionIndex;
+    do {
+      nextIndex++;
+    } while (
+      nextIndex < sections.length &&
+      ["short-answer", "date", "rating"].includes(sections[nextIndex].type._id)
+    );
+
+    if (nextIndex < sections.length) {
+      setCurrentSectionIndex(nextIndex);
+    } else {
+      onSubmit();
+    }
+  };
+  const handlePrevious = () => {
+    if (currentSectionIndex > 0) {
+      let prevIndex = currentSectionIndex - 1;
+      while (
+        prevIndex > 0 &&
+        ["short-answer", "date", "rating"].includes(sections[prevIndex].type._id)
+      ) {
+        prevIndex--;
+      }
+      setCurrentSectionIndex(prevIndex);
     }
   };
 
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentSections = form.form.sections.slice(startIndex, endIndex);
+
+  const onSubmit = () => {
+    console.log("Form submitted:", formData);
+    router.push("/(modals)/gig-submission");
+  };
+
+  const updateFormData = (key: string, value: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [key]: value,
+    }));
+  };
+
+  const renderCurrentSection = () => {
+    let currentSections = [];
+    let i = currentSectionIndex;
+
+    // Group consecutive short-answer, date, and rating sections
+    while (i < sections.length) {
+      const section = sections[i];
+      if (["short-answer", "date", "rating"].includes(section.type._id)) {
+        currentSections.push(section);
+        i++;
+      } else {
+        break;
+      }
+    }
+
+    // If no groupable sections were found, render the current section
+    if (currentSections.length === 0) {
+      currentSections.push(sections[currentSectionIndex]);
+    }
+
+    return (
+      currentSections.map((section) => {
+        const Component = getSurveyComponent(section.type._id);
+        return (
+          <Component
+            key={section.id}
+            question={section.value}
+            options={section.options}
+            value={formData[section.id] || ''}
+            onChange={(value) => updateFormData(section.id as unknown as string, value)}
+          />
+        );
+      })
+    );
+  };
+
+
 
   return (
     <View
       style={[
-        tw`flex-1 bg-zinc-50`,
+        tw`flex-1`,
         {
           paddingTop: insets.top,
+          backgroundColor: Colors.design.white,
         },
       ]}
     >
-      <View style={tw`px-4`}>
-        <GigDescriptionHeader />
-      </View>
-      <ScrollView
-        contentContainerStyle={[
-          tw`items-center gap-4 pb-4 p-4`,
-          { paddingTop: insets.top },
-        ]}
-      >
-        <View style={tw`flex-col gap-6 w-full`}>
-          {currentSections.map((item: SectionType, index: number) => (
-            <View key={item.id}>
-              <Fragment>{showInputArea(item)}</Fragment>
-              {/* Add a border after each section except the last one */}
-              {index < currentSections.length - 1 && (
-                <View style={tw`border-b border-zinc-300/50 my-6`} />
-              )}
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 24, paddingTop: 16, paddingRight: 16, justifyContent: 'space-between' }}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={{
+            padding: 8,
+            borderRadius: 20,
+          }}
+        >
+          <Feather name="chevron-left" size={32} color={Colors.design.highContrastText} />
+        </TouchableOpacity>
+        <ProgressBar progress={progress} />
 
+        <View style={{ paddingHorizontal: 8, paddingVertical: 4, backgroundColor: Colors.design.accent, alignItems: "center", justifyContent: "center", borderRadius: 8 }}>
+          <Text style={{ fontFamily: Fonts.Inter_700Bold, color: Colors.design.white }}>
+            32 XP
+          </Text>
+        </View>
+      </View>
+
+      <ScrollView style={{ flex: 1, paddingVertical: 32, }} contentContainerStyle={{ gap: 24 }}>
+        <View
+          style={{
+            gap: 4,
+            paddingBottom: 4,
+            borderColor: Colors.design.separator,
+            backgroundColor: Colors.design.white,
+            paddingHorizontal: 16,
+          }}
+        >
+
+          {form && (
+            <>
+              <Text
+                style={{
+                  fontSize: Typography.largeHeading,
+                  color: Colors.design.highContrastText,
+                  fontFamily: Fonts.Inter_700Bold,
+                }}
+              >
+                {form.form.name}
+              </Text>
+              <Text style={{
+                fontSize: Typography.buttonText,
+                color: Colors.design.text,
+              }}>
+                {form.form.description}
+              </Text>
+            </>
+          )}
+
+
+        </View>
+        {renderCurrentSection()}
+      </ScrollView>
       <View
-        style={tw`flex-row justify-between w-full p-4 border-t border-zinc-300/50`}
+        style={[tw`flex-row justify-between w-full mb-4 gap-4`, { padding: 16, borderTopWidth: 1, borderTopColor: Colors.design.separator }]}
       >
-        {currentPage > 1 && (
-          <PrimaryButton
-            onPress={() => setCurrentPage(currentPage - 1)}
-            text="Previous"
-          />
+        {currentSectionIndex > 0 && (
+          <PrimaryButton onPress={handlePrevious} text="Previous" />
         )}
-        {currentPage < totalPages && (
-          <PrimaryButton
-            onPress={() => setCurrentPage(currentPage + 1)}
-            text="Next"
-          />
-        )}
+        <PrimaryButton
+          onPress={handleNext}
+          text={
+            currentSectionIndex === sections.length - 1 ? "Submit" : "Next"
+          }
+        />
       </View>
     </View>
   );

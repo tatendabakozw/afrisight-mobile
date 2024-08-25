@@ -30,7 +30,12 @@ const GigDescription = () => {
   }, [gig_id]);
 
   const navigateToFormPage = () => {
-    router.push("/(modals)/gig-survey");
+    router.push({
+      pathname: "/(modals)/gig-modal",
+      params: {
+        surveyLink: gig.surveyLink,
+      }
+    });
   };
 
   return (

@@ -5,7 +5,7 @@ function useAxiosInstance() {
   const { getToken } = useAuth();
 
   const axiosInstance = axios.create({
-    baseURL: "http://192.168.194.101:5500/mobile/v1", // Replace with your API base URL
+    baseURL: "http://192.168.158.101:5500/mobile/v1", // Replace with your API base URL
     headers: {
       "Content-Type": "application/json",
     },

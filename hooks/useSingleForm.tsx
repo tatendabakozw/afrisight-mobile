@@ -8,7 +8,6 @@ const useSingleForm = (formId: string) => {
   const [form, setForm] = useState<FormType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  console.log("Firestore db instance:", formId);
 
   const getFormById = async () => {
     try {

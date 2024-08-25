@@ -67,7 +67,7 @@ const PrimaryButton = ({
   }, [error]);
 
   return (
-    <Animated.View style={{ transform: [{ translateX: shakeAnim }] }}>
+    <Animated.View style={{ transform: [{ translateX: shakeAnim }], flex: 1 }}>
       <TouchableOpacity
         onLongPress={onLongPress}
         activeOpacity={0.7}

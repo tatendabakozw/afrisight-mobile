@@ -1,11 +1,15 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import Colors from "@/constants/Colors";
 import Feather from "@expo/vector-icons/Feather";
 import tw from "twrnc";
+import { Fonts, Typography } from "@/constants/typography";
+import Text from "../ui/Text";
 
-type Props = {};
+type Props = {
+  question: string;
+};
 
 const FilePicker = (props: Props) => {
   const [image, setImage] = useState<any>(null);
@@ -32,22 +36,48 @@ const FilePicker = (props: Props) => {
       setImage(result.assets[0].uri); // Update state with selected image URI
     }
   };
+
+  const renderImagePreview = () => {
+    if (image) {
+      return <Image source={{ uri: image }} style={styles.imagePreview} />;
+    }
+    return null;
+  };
+
   return (
-    <View style={tw`flex flex-col gap-2`}>
-      <Text style={tw`text-zinc-700`}>Click Box Below to upload image</Text>
+    <View style={{ paddingHorizontal: 16 }}>
+      <Text style={{
+        fontFamily: Fonts.Inter_600SemiBold,
+        color: Colors.design.highContrastText,
+        fontSize: Typography.buttonText,
+        marginBottom: 8
+
+      }}>{props.question}</Text>
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={pickImage}
-        style={tw`border-2 border-dashed border-[${Colors.light.primary}] gap-4 bg-[${Colors.light.primary}]/10 rounded-xl p-8 flex-col items-center`}
+        style={[tw`border-dashed border-zinc-400/30 gap-4 flex-col items-center`, {
+          borderColor: Colors.light.primary,
+          backgroundColor: Colors.design.white,
+          borderRadius: 16,
+          padding: 2,
+          borderWidth: 2
+        }]}
       >
-        <View style={tw`bg-white p-4 rounded-full `}>
-          <Feather name="upload" size={28} color={Colors.light.primary} />
-        </View>
-        <Text style={tw`text-3xl font-bold text-zinc-950`}>Upload Image</Text>
-        <Text style={tw`text-lg text-center text-zinc-700`}>
-          Please click this big button to upload an image from your gallery or
-          to take a picture using your camera
-        </Text>
+        {!image && <View style={{ padding: 16, flexDirection: "column", gap: 8 }}>
+          <View style={tw`bg-white p-4 rounded-full `}>
+            <Feather name="image" size={24} color={Colors.design.accent} />
+          </View>
+          <Text style={[tw`font-bold text-zinc-950`, {
+            fontSize: Typography.buttonText
+          }]}>Upload Image</Text>
+          <Text style={[tw`text-center`,]}>
+            Please click this big button to upload an image from your gallery or
+            to take a picture using your camera
+          </Text>
+        </View>}
+        {image && renderImagePreview()}
+
       </TouchableOpacity>
     </View>
   );
@@ -55,4 +85,10 @@ const FilePicker = (props: Props) => {
 
 export default FilePicker;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  imagePreview: {
+    width: "100%",
+    height: 300,
+    borderRadius: 16,
+  }
+});

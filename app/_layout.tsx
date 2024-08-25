@@ -13,7 +13,7 @@ import * as SecureStore from 'expo-secure-store'
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/components/useColorScheme";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const tokenCache = {
   async getToken(key: string) {

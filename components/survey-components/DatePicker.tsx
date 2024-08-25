@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   Platform,
   TouchableOpacity,
@@ -11,6 +10,9 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import tw from "twrnc";
 import Feather from "@expo/vector-icons/Feather";
+import { Fonts, Typography } from "@/constants/typography";
+import Colors from "@/constants/Colors";
+import Text from "../ui/Text";
 
 interface DatePickerProps {
   question: string;
@@ -31,18 +33,26 @@ const DatePicker: React.FC<DatePickerProps> = (props: DatePickerProps) => {
   };
 
   return (
-    <View style={tw`flex flex-col gap-2`}>
-      <Text style={tw`text-zinc-700`}>{props.question} (Optional)</Text>
+    <View style={{ paddingHorizontal: 16 }}>
+      <Text style={{
+        fontFamily: Fonts.Inter_600SemiBold,
+        color: Colors.design.highContrastText,
+        fontSize: Typography.buttonText,
+        marginBottom: 8
 
+      }}>{props.question}</Text>
       <TouchableOpacity
         onPress={showDatepicker}
         activeOpacity={0.7}
         style={tw`flex flex-row gap-2 w-full p-2 border border-zinc-300/50 items-center bg-zinc-100 rounded-xl`}
       >
         <Feather name="calendar" size={24} color="black" />
-        <Text style={tw`text-zinc-700`}>Click to select a date</Text>
+        <Text style={[{
+          fontFamily: Fonts.Inter_500Medium,
+
+        }]}>{date.toDateString()}</Text>
       </TouchableOpacity>
-      <Text style={tw`text-zinc-700 text-lg`}>{date.toDateString()}</Text>
+
       {show && (
         <DateTimePicker
           testID="dateTimePicker"

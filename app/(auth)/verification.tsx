@@ -19,7 +19,7 @@ import RegisterSuccessModal from "@/components/modals/RegisterSuccessModal";
 import { router, useLocalSearchParams } from "expo-router";
 import { useAuth, useSignUp } from "@clerk/clerk-expo";
 import Text from "@/components/ui/Text";
-import { Typography } from "@/constants/typography";
+import { Fonts, Typography } from "@/constants/typography";
 
 const Verification: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -88,53 +88,48 @@ const Verification: React.FC = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={[tw`flex-1 bg-white justify-between h-full pb-3`, { paddingTop: 16 }]}
+      style={[tw`flex-1 bg-white justify-between h-full pb-3`, { padding: 16 }]}
     >
-      <View style={tw`gap-4 w-full px-3 flex-1`}>
-        {/* <PulsingView /> */}
-        <Text>
-          Enter the 6-digit code that was sent to your email, <Text style={{ fontWeight: "600" }}>
-            {emailAddress}
-          </Text>
+      <Text style={{ fontSize: Typography.heading, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText, marginBottom: 10 }}>
+        Enter your verification code
+      </Text>
+      <View style={tw`gap-4 w-full flex-1`}>
+        <Text style={{ fontFamily: Fonts.Inter_400Regular, color: Colors.design.highContrastText }}>
+          Enter the verification code we sent to {emailAddress}
+
         </Text>
-        <View style={tw`flex flex-row`}>
-          <View style={tw`flex flex-row border border-zinc-400/50 rounded-[8px] h-[40px]`}>
-            {code.map((digit, index) => (
-              <TextInput
-                key={index}
-                ref={(el) => (inputs.current[index] = el)}
-                style={[
-                  tw`aspect-square text-center`,
-                  error && code[index] === ""
-                    ? tw`border-red-500`
-                    : { borderColor: Colors.light.primary },
-                  {
-                    fontWeight: "400",
-                    outlineWidth: 2,
-                    outlineColor: "#121212",
-                    outlineStyle: "solid",
-                  }
-                ]}
-                placeholder="-"
-                keyboardType="number-pad"
-                maxLength={1}
-                onChangeText={(text) => handleChange(text, index)}
-                onKeyPress={(event) => handleKeyPress(event, index)}
-                value={digit}
-              />
-            ))}
-          </View>
+        <View style={[tw`flex flex-row h-[40px] gap-2`, { marginBottom: 20 }]}>
+          {code.map((digit, index) => (
+            <TextInput
+              key={index}
+              ref={(el) => (inputs.current[index] = el)}
+              style={[
+                tw`aspect-square text-center border border-zinc-400/50 rounded-[8px]`,
+                error && code[index] === ""
+                  ? tw`border-red-500`
+                  : { borderColor: Colors.design.separator },
+                {
+                  fontWeight: "400",
+                  outlineWidth: 2,
+                  outlineColor: "#121212",
+                  outlineStyle: "solid",
+                }
+              ]}
+              placeholder="-"
+              keyboardType="number-pad"
+              maxLength={1}
+              onChangeText={(text) => handleChange(text, index)}
+              onKeyPress={(event) => handleKeyPress(event, index)}
+              value={digit}
+            />
+          ))}
         </View>
         <View style={{ flexDirection: "row" }}>
-          <Text style={tw`text-zinc-950`}>
-            Haven't received a code?
+          <Text style={{ fontFamily: Fonts.Inter_400Regular, color: Colors.design.highContrastText }}>
+            Haven't received a code?{" "}
           </Text>
           <TouchableOpacity onPress={resendOTP}>
-            <Text style={{
-              textDecorationLine: "underline",
-              marginLeft: 4,
-              fontWeight: "600"
-            }}>
+            <Text style={{ fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText, textDecorationLine: "underline" }}>
               Send again
             </Text>
           </TouchableOpacity>
@@ -143,7 +138,7 @@ const Verification: React.FC = () => {
       <View style={tw`justify-end px-3 flex-row`}>
 
         <TouchableOpacity disabled={loading} onPress={onPressVerify} style={{ ...styles.primaryButton, opacity: loading ? 0.3 : 1 }}>
-          <Text style={{ fontWeight: "700", color: "#fff", fontSize: Typography.buttonText }}>
+          <Text style={{ color: Colors.design.white, fontSize: Typography.buttonText, fontFamily: Fonts.Inter_600SemiBold }}>
             Verify and continue
           </Text>
         </TouchableOpacity>
@@ -162,7 +157,7 @@ const styles = StyleSheet.create({
   primaryButton: {
     height: 54,
     borderRadius: 8,
-    backgroundColor: Colors.light.primary,
+    backgroundColor: Colors.design.accent,
     paddingHorizontal: 20,
     alignItems: "center",
     justifyContent: "center",

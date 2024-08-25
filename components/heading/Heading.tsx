@@ -11,7 +11,7 @@ interface Props {
 
 const Heading = (props: Props) => {
   return <Text style={{
-    fontFamily: Fonts.Inter_600SemiBold,
+    fontFamily: Fonts.Inter_700Bold,
     fontSize: Typography.subheading,
     color: Colors.design.highContrastText
   }}>{props.text}</Text>;

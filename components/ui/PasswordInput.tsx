@@ -1,8 +1,9 @@
 import { Fonts, Typography } from '@/constants/typography';
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Text from './Text';
 import Colors from '@/constants/Colors';
+import TextInput from './TextInput';
 
 const PasswordInput = (props: {
     value: string;
@@ -22,6 +23,7 @@ const PasswordInput = (props: {
     return (
         <View style={styles.container}>
             <TextInput
+                withEmbeddedLabel
                 style={styles.input}
                 secureTextEntry={!showPassword}
                 placeholder="Enter your password"
@@ -39,25 +41,24 @@ const PasswordInput = (props: {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderBottomWidth: 1,
         height: 54,
         borderRadius: 8,
-        borderColor: "#d0d0d0",
-        borderWidth: 1,
-        borderStyle: "solid",
-        padding: 10,
     },
     input: {
-        flex: 1,
         paddingVertical: 5,
         paddingHorizontal: 10,
         fontFamily: Fonts.Inter_400Regular,
-        fontSize: Typography.paragraph
+        fontSize: Typography.paragraph,
     },
     showPasswordButton: {
         paddingHorizontal: 10,
+        position: "absolute",
+        top: 0,
+        right: 0,
+        height: 54,
+        alignItems: "center",
+        justifyContent: "center"
+
     },
     showPasswordText: {
         color: Colors.design.highContrastText,

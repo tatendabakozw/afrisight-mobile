@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useColorScheme } from "@/components/useColorScheme";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -7,6 +7,7 @@ import tw from "twrnc";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
 import { Typography } from "@/constants/typography";
+import Text from "@/components/ui/Text";
 
 const OnboardingNavbar = ({ navigation, back, options }: any) => {
   const insets = useSafeAreaInsets();
@@ -18,47 +19,31 @@ const OnboardingNavbar = ({ navigation, back, options }: any) => {
   return (
     <View
       style={[
-        tw`flex flex-row gap-3 w-full px-3 bg-white border-zinc-400/30`,
+        tw`flex-row w-full bg-white`,
         {
-          paddingTop: insets.top + 16,
-          alignItems: "center"
+          alignItems: "center",
+          gap: 16,
+          paddingBottom: 16,
+          paddingHorizontal: 16
         },
       ]}
     >
-      {back ? (
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => navigation.goBack()}
-          style={{
-            width: 44,
-            height: 44,
-            marginBottom: 8,
-            backgroundColor: Colors.design.interactiveSurface,
-            borderRadius: 24,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Ionicons name="arrow-back" size={20} color={`text-zinc-700`} />
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={{ width: 32, height: 32, marginBottom: 8 }}
-          onPress={() => console.log("open menu")}
-        >
-          <Ionicons name="menu-sharp" size={20} color={`text-zinc-700`} />
-        </TouchableOpacity>
-      )}
-      <Text
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => navigation.goBack()}
         style={{
-          fontWeight: "700",
-          flex: 1,
-          fontSize: Typography.subheading,
+          width: 32,
+          height: 32,
+          borderRadius: 24,
+          justifyContent: "center",
+          alignItems: "center",
+
         }}
       >
-        {title}
-      </Text>
+        <Ionicons name="arrow-back" size={20} color={Colors.design.highContrastText} />
+      </TouchableOpacity>
+
+
       {/* <TouchableOpacity activeOpacity={0.7}>
         <Entypo name="dots-two-vertical" size={24} color={`text-zinc-700`} />
       </TouchableOpacity> */}
