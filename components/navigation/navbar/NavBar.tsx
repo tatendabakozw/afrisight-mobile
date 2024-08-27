@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import Colors from "@/constants/Colors";
 import NotificationButton from "@/components/buttons/NotificationButton";
-import { useUser } from "@clerk/clerk-expo";
 import { Fonts, Typography } from "@/constants/typography";
 import Text from "@/components/ui/Text";
 
@@ -28,7 +27,6 @@ if (
 
 
 const NavBar = ({ navigation, back, options, route }: any) => {
-  const { isLoaded, user, isSignedIn } = useUser();
   const insets = useSafeAreaInsets();
   const [searchClicked, setSearchClicked] = useState(false);
   const toggleSearch = () => {

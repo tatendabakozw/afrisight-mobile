@@ -1,12 +1,10 @@
 import PasswordInput from "@/components/ui/PasswordInput";
-import { useSignUp } from "@clerk/clerk-expo";
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TextInput as BaseTextInput, TouchableOpacity, View, NativeSyntheticEvent, TextInputKeyPressEventData } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TextInput as BaseTextInput, TouchableOpacity, View, NativeSyntheticEvent, TextInputKeyPressEventData, ActivityIndicator } from "react-native";
 import { Formik, FormikHelpers } from "formik";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams, useRouter } from "expo-router";
 import Colors from "@/constants/Colors";
 import Text from "@/components/ui/Text";
 import { Fonts, Typography } from "@/constants/typography";
-import useAxiosInstance from "../utils/axios";
 import TextInput from "@/components/ui/TextInput";
 import AnimatedLoader from "@/components/ui/AnimatedLoader";
 import * as Yup from "yup"
@@ -16,13 +14,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import tw from "twrnc";
 import AnimatedModal from "@/components/ui/AnimatedModal";
 import useDisclosure from "@/hooks/useDisclosure";
+import { axiosInstance } from "../utils/axios";
+import { AUTH_ROUTES } from "@/constants/routers";
+import { useAuth } from "@/services/auth/hooks";
 
 const CreateProfileDetails = () => {
-    const { isLoaded, signUp, setActive } = useSignUp();
     const { emailAddress }: { emailAddress: string } = useLocalSearchParams();
     const { isOpen, onOpen, onClose } = useDisclosure()
     const router = useRouter();
-    const axiosInstance = useAxiosInstance()
 
     const onAgreeAndContinue = async (values: {
         emailAddress: string;
@@ -30,40 +29,30 @@ const CreateProfileDetails = () => {
         password: string;
         lastName: string;
     }, helpers: FormikHelpers<any>) => {
-        if (!isLoaded) return;
 
         try {
-            const created = await signUp.create({
-                emailAddress: values.emailAddress.replaceAll(" ", ""),
-                password: values.password,
+            await axiosInstance.post(AUTH_ROUTES.EMAIL_REGISTRATION, {
+                email: values.emailAddress,
+                ...values,
+                role: "PARTICIPANT"
             })
-
-
-            // TODO. Save the user info at the database
-            await axiosInstance.post("/profile", {
-                firstName: values.firstName,
-                lastName: values.lastName,
-                userId: created.id
-            })
-
-            await signUp.prepareEmailAddressVerification({ strategy: "email_code" }).then(() => helpers.setSubmitting(false));
-
-
+            helpers.setSubmitting(false)
             onOpen();
         } catch (err: any) {
             // See https://clerk.com/docs/custom-flows/error-handling
             // for more info on error handling
             // console.error(JSON.stringify(err, null, 2));
+        } finally {
+            helpers.setSubmitting(false)
         }
     };
 
     const closeVerificationModal = () => {
+
         onClose()
     }
 
-    useEffect(() => {
-        onOpen()
-    }, [])
+
 
     return (
         <ScrollView
@@ -76,7 +65,6 @@ const CreateProfileDetails = () => {
                 paddingBottom: 24
             }}
         >
-            <VerificationModal isOpen={isOpen} onClose={closeVerificationModal} />
             <Formik
                 initialValues={{
                     emailAddress,
@@ -108,6 +96,8 @@ const CreateProfileDetails = () => {
                     console.log({ dirty, isValid })
                     return (
                         <>
+                            <VerificationModal emailAddress={values.emailAddress} isOpen={isOpen} onClose={closeVerificationModal} mode="email" />
+
                             <Text
                                 style={{
                                     fontSize: Typography.largeHeading,
@@ -223,7 +213,7 @@ const CreateProfileDetails = () => {
                                     }}
                                     disabled={!dirty || !isValid || isSubmitting}
                                 >
-                                    {!isSubmitting ? <Text
+                                    {!isSubmitting && <Text
                                         style={{
                                             fontFamily: Fonts.Inter_700Bold,
                                             fontSize: Typography.buttonText,
@@ -231,9 +221,8 @@ const CreateProfileDetails = () => {
                                         }}
                                     >
                                         Agree and continue
-                                    </Text> : <AnimatedLoader color={Colors.design.white} />
-                                    }
-
+                                    </Text>}
+                                    {isSubmitting && <ActivityIndicator size={24} color={Colors.design.white} />}
                                 </TouchableOpacity>
                             </View>
                         </>
@@ -247,10 +236,11 @@ const CreateProfileDetails = () => {
 const VerificationModal = (props: {
     isOpen: boolean,
     onClose: () => void
+    mode: "email" | "phone",
+    emailAddress: string
 }) => {
-    const router = useRouter()
+    const auth = useAuth()
     const insets = useSafeAreaInsets();
-    const { emailAddress }: { emailAddress: string } = useLocalSearchParams();
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("")
     const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
@@ -282,26 +272,22 @@ const VerificationModal = (props: {
     };
 
 
-    const { isLoaded, signUp, setActive, } = useSignUp()
 
     const onPressVerify = async () => {
-        if (!isLoaded) {
-            return
-        }
-
         setLoading(true)
 
         try {
-            const completeSignUp = await signUp.attemptEmailAddressVerification({
-                code: code.join(''),
-            })
+            if (props.mode === "email") {
+                const result = await axiosInstance.post(AUTH_ROUTES.VERIFY_EMAIL, {
+                    otp: code.join(""),
+                    email: props.emailAddress
+                })
 
-            if (completeSignUp.status === 'complete') {
-                await setActive({ session: completeSignUp.createdSessionId })
-                router.replace('/(tabs)')
-            } else {
-                console.error(JSON.stringify(completeSignUp, null, 2))
+                const { data } = result
+                await auth.signIn({ accessToken: data.accessToken, refreshToken: data.refreshToken })
+                router.push("/(tabs)")
             }
+
         } catch (err: any) {
             // See https://clerk.com/docs/custom-flows/error-handling
             // for more info on error handling
@@ -312,7 +298,7 @@ const VerificationModal = (props: {
     }
 
     const resendOTP = async () => {
-        await signUp?.prepareEmailAddressVerification()
+
     }
 
     const onClose = () => {
@@ -331,7 +317,7 @@ const VerificationModal = (props: {
                     </Text>
                     <View style={tw`gap-4 w-full `}>
                         <Text style={{ fontFamily: Fonts.Inter_400Regular, color: Colors.design.highContrastText }}>
-                            Enter the code we sent to {emailAddress}
+                            Enter the code we sent to {props.emailAddress}
 
                         </Text>
                         <View style={[tw`flex flex-row h-[40px] gap-2`, { marginBottom: 20 }]}>
@@ -372,10 +358,11 @@ const VerificationModal = (props: {
                         </View>
                     </View>
                 </View>
-                {isValid && <TouchableOpacity disabled={loading} onPress={onPressVerify} style={{ ...styles.primaryButton, opacity: loading ? 0.3 : 1 }}>
-                    <Text style={{ color: Colors.design.white, fontSize: Typography.buttonText, fontFamily: Fonts.Inter_600SemiBold }}>
+                {isValid && <TouchableOpacity disabled={loading} onPress={onPressVerify} style={{ ...styles.primaryButton, }}>
+                    {!loading && <Text style={{ color: Colors.design.white, fontSize: Typography.buttonText, fontFamily: Fonts.Inter_600SemiBold }}>
                         Verify and continue
-                    </Text>
+                    </Text>}
+                    {loading && <ActivityIndicator size={24} color={Colors.design.white} />}
                 </TouchableOpacity>}
                 <RegisterSuccessModal
                     modalVisible={modalVisible}

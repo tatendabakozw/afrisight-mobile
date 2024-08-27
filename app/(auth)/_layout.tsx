@@ -1,27 +1,9 @@
-import React from "react";
-import { Redirect, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import OnboardingNavbar from "@/components/navigation/headers/OnboardingNavbar";
 import Colors from "@/constants/Colors";
-import { useAuth } from "@clerk/clerk-expo";
-import { View } from "react-native";
-import Text from "@/components/ui/Text";
 
 export default function TabLayout() {
-  const { isSignedIn, isLoaded } = useAuth()
-
-  if (!isLoaded) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Loading...</Text>
-      </View>
-    )
-  }
-
-  if (isSignedIn) {
-    return <Redirect href={'/(tabs)'} />
-  }
-
   return (
     <Stack
       screenOptions={({ navigation, route }) => ({
@@ -42,13 +24,6 @@ export default function TabLayout() {
         options={{ title: "Sign in to your account", }}
       />
       <Stack.Screen
-        name="verification"
-        options={{
-          title: "Confirm your email address",
-
-        }}
-      />
-      <Stack.Screen
         name="forgot-password"
         options={{
           title: "Forgot Password",
@@ -61,7 +36,7 @@ export default function TabLayout() {
         }}
       />
       <Stack.Screen
-        name="profile"
+        name="register"
         options={{ title: "" }}
       />
 

@@ -1,53 +1,19 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
-import { Inter_300Light, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, Inter_900Black, useFonts } from '@expo-google-fonts/inter';
+  Inter_300Light,
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  useFonts,
+} from '@expo-google-fonts/inter';
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { ClerkProvider, ClerkLoaded, useAuth } from '@clerk/clerk-expo'
-import * as SecureStore from 'expo-secure-store'
 import "react-native-reanimated";
 
-import { useColorScheme } from "@/components/useColorScheme";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const tokenCache = {
-  async getToken(key: string) {
-    try {
-      const item = await SecureStore.getItemAsync(key)
-      if (item) {
-        console.log(`${key} was used 🔐 \n`)
-      } else {
-        console.log('No values stored under key: ' + key)
-      }
-      return item
-    } catch (error) {
-      console.error('SecureStore get item error: ', error)
-      await SecureStore.deleteItemAsync(key)
-      return null
-    }
-  },
-  async saveToken(key: string, value: string) {
-    try {
-      return SecureStore.setItemAsync(key, value)
-    } catch (err) {
-      return
-    }
-  },
-}
-
-const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
-
-if (!publishableKey) {
-  throw new Error(
-    'Missing Publishable Key. Please set EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env',
-  )
-}
-
+import { AuthProvider } from "@/services/auth";
 
 
 export {
@@ -96,7 +62,7 @@ export default function RootLayout() {
 function RootLayoutNav() {
 
   return (
-    <ClerkProvider tokenCache={tokenCache} publishableKey={publishableKey}>
+    <AuthProvider>
       <SafeAreaView style={{ flex: 1 }}>
         <Stack>
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
@@ -108,7 +74,7 @@ function RootLayoutNav() {
           <Stack.Screen name="filter-modal" options={{ presentation: "modal" }} />
         </Stack>
       </SafeAreaView>
-    </ClerkProvider>
+    </AuthProvider>
 
   );
 }

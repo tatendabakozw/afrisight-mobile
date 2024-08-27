@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "mobile",
-    "slug": "mobile",
+    "slug": "cxmappers",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -27,11 +27,7 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      "expo-secure-store",
-      "expo-font"
-    ],
+    "plugins": ["expo-router", "expo-secure-store", "expo-font"],
     "experiments": {
       "typedRoutes": true
     },
@@ -40,8 +36,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "c8c84711-6dd4-4859-96ac-76e8ba5f85c0"
+        "projectId": "408e7e4f-5e2b-41b7-a467-e18948380f15"
       }
-    }
+    },
+    "owner": "atipamara"
   }
 }

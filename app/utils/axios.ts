@@ -1,34 +1,57 @@
-import { useAuth } from "@clerk/clerk-expo";
+import * as SecureStore from "expo-secure-store";
 import axios from "axios";
+import { router } from "expo-router";
+import { AUTH_ROUTES } from "@/constants/routers";
 
-function useAxiosInstance() {
-  const { getToken } = useAuth();
+export const axiosInstance = axios.create({
+  baseURL: "http://192.168.151.101:5500/v2",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-  const axiosInstance = axios.create({
-    baseURL: "http://192.168.158.101:5500/mobile/v1", // Replace with your API base URL
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  // Add a request interceptor to include the Clerk token
-  axiosInstance.interceptors.request.use(
-    async (config) => {
-      const token = await getToken(); // Optional: specify the token template
-      console.log({ token });
-      // TODO: Implement proper authentication
-
-      if (token) {
-      }
-      config.headers["Authorization"] = `Bearer ${token}`;
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    const accessToken = await SecureStore.getItemAsync("accessToken");
+    if (accessToken) {
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
-  );
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-  return axiosInstance;
-}
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-export default useAxiosInstance;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshToken = await SecureStore.getItemAsync("refreshToken");
+        const response = await axios.post(AUTH_ROUTES.REFRESH_TOKEN, {
+          refreshToken,
+        });
+
+        const { accessToken, refreshToken: newRefreshToken } = response.data;
+
+        await SecureStore.setItemAsync("accessToken", accessToken);
+        await SecureStore.setItemAsync("refreshToken", newRefreshToken);
+
+        axiosInstance.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        await SecureStore.deleteItemAsync("accessToken");
+        await SecureStore.deleteItemAsync("refreshToken");
+        router.replace("/(auth)");
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);

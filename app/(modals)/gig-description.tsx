@@ -14,20 +14,14 @@ import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import Text from "@/components/ui/Text";
 import { Fonts, Typography } from "@/constants/typography";
 import Colors from "@/constants/Colors";
-import useAxiosInstance from "../utils/axios";
 
 const GigDescription = () => {
   const insets = useSafeAreaInsets();
   const { gig_type, gig_id } = useLocalSearchParams();
   const [gig, setGig] = useState<any>({});
-  const instance = useAxiosInstance();
   const router = useRouter();
 
-  useEffect(() => {
-    instance.get(`/gigs/${gig_id}`).then((res) => {
-      setGig(res.data);
-    });
-  }, [gig_id]);
+
 
   const navigateToFormPage = () => {
     router.push({

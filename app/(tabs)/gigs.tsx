@@ -6,7 +6,6 @@ import TabsWithChat from "@/layouts/TabsWithChat";
 import Colors from "@/constants/Colors";
 import Text from "@/components/ui/Text";
 import { Fonts, Typography } from "@/constants/typography";
-import useAxiosInstance from "../utils/axios";
 import AnimatedRefreshControl from "@/components/util/refresh-control";
 
 const search_filters = [
@@ -19,18 +18,10 @@ const search_filters = [
 const Gigs = () => {
   const [selected_option, setSelectedOption] = useState(search_filters[0]);
   const [gigs, setGigs] = useState([]);
-  const axiosInstance = useAxiosInstance();
   const [refreshing, setRefreshing] = useState(false);
 
   const onFetchData = () => {
-    axiosInstance
-      .get("/gigs")
-      .then((res) => {
-        setGigs(res.data.gigs);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
   };
 
   const onRefresh = async () => {

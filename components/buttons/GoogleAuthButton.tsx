@@ -5,19 +5,12 @@ import GoogleIcon from "@/assets/svgs/GoogleIcon";
 import Text from "../ui/Text";
 import { Fonts, Typography } from "@/constants/typography";
 import Colors from "@/constants/Colors";
-import { useSignIn } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 
 type Props = {};
 
 const GoogleAuthButton = (props: Props) => {
-  const { signIn, isLoaded } = useSignIn();
   const router = useRouter();
-
-  if (!isLoaded) {
-    return null;
-  }
-
 
   return (
     <View

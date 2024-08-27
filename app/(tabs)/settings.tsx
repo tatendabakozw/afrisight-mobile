@@ -9,28 +9,19 @@ import SettingsItem from "@/components/settings-components/SettingsItem";
 import { router } from "expo-router";
 import Text from "@/components/ui/Text";
 import { Fonts, Typography } from "@/constants/typography";
-import { useAuth, useUser } from "@clerk/clerk-expo";
-import useAxiosInstance from "../utils/axios";
+import { useAuth } from "@/services/auth/hooks";
 
 const Settings = () => {
   const [profile, setProfile] = useState<{
     firstName: string;
     lastName: string;
   } | null>(null);
-  const { user } = useUser();
   const insets = useSafeAreaInsets();
-  const { signOut } = useAuth();
-  const instance = useAxiosInstance();
+  const { signOut } = useAuth()
 
   const onSignOut = async () => {
-    await signOut();
+    await signOut()
   };
-
-  useEffect(() => {
-    if (user) {
-      instance.get(`/profile/${user?.id}`).then((res) => setProfile(res.data));
-    }
-  }, [user]);
 
   return (
     <ScrollView
@@ -78,11 +69,11 @@ const Settings = () => {
               {profile.firstName} {profile.lastName}
             </Text>
           )}
-          {user && (
+          {/* {user && (
             <Text style={tw`text-[${Colors.light.primary}]`}>
               {user.emailAddresses[0].emailAddress}
             </Text>
-          )}
+          )} */}
         </View>
         <TouchableOpacity
           onPress={() => router.push("/(modals)/settings-profile-modal")}

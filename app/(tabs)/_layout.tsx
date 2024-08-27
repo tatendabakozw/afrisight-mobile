@@ -24,7 +24,6 @@ import {
 } from "@/assets/svgs/nav-icons/SettingsIcon";
 import NavBar from "@/components/navigation/navbar/NavBar";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-import { useAuth, useUser } from "@clerk/clerk-expo";
 import { useRoute } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import Text from "@/components/ui/Text";
@@ -40,11 +39,8 @@ function TabBarIcon({ children }: IconProps) {
 }
 
 export default function TabLayout() {
-  const { isSignedIn } = useAuth()
 
-  if (!isSignedIn) {
-    return <Redirect href={'/(auth)'} />
-  }
+
   return (
     <Tabs
       screenOptions={({ route }) => ({

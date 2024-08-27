@@ -15,9 +15,7 @@ import RecentActivityComponent from "@/components/recent-activity/RecentActivity
 import AllGigs from "@/components/git-item/AllGigs";
 import { Fonts, Typography } from "@/constants/typography";
 import Text from "@/components/ui/Text";
-import useAxiosInstance from "../utils/axios";
 import { useEffect, useState } from "react";
-import { useAuth } from "@clerk/clerk-expo";
 
 const cards = [
   {
@@ -63,21 +61,12 @@ const search_filters = [
 export default function Home() {
   const [gigs, setGigs] = useState([]);
   const insets = useSafeAreaInsets();
-  const axiosInstance = useAxiosInstance()
-  const { userId } = useAuth()
   const [selected_option, setSelectedOption] = useState(search_filters[0]);
 
   const [refreshing, setRefreshing] = useState(false);
 
   const onFetchData = () => {
-    axiosInstance
-      .get("/gigs")
-      .then((res) => {
-        setGigs(res.data.gigs);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
   };
 
   const onRefresh = async () => {

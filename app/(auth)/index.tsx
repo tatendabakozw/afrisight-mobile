@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
-import { useSignIn, useSignUp, useOAuth } from "@clerk/clerk-expo";
 import { Picker } from "@react-native-picker/picker";
 import { useRouter } from "expo-router";
 import { Feather, Ionicons } from "@expo/vector-icons";
@@ -9,6 +8,16 @@ import TextInput from "@/components/ui/TextInput";
 import { Fonts, Typography } from "@/constants/typography";
 import Colors from "@/constants/Colors";
 import AnimatedLoader from "@/components/ui/AnimatedLoader";
+import {
+  GoogleSigninButton,
+  statusCodes,
+  isErrorWithCode,
+  GoogleSignin,
+} from '@react-native-google-signin/google-signin';
+import { axiosInstance } from "../utils/axios";
+import { saveItemToSecureStore } from "@/helpers/secureStore";
+import { AUTH_ROUTES } from "@/constants/routers";
+import { useAuth } from "@/services/auth/hooks";
 
 const countryCodes = [
   { code: "+263", country: "Zimbabwe" },
@@ -17,26 +26,24 @@ const countryCodes = [
   // Add more country codes as needed
 ];
 
+
+
+
 export default function AuthScreen() {
   const [isSignUp, setIsSignUp] = useState(true);
   const [isEmailLogin, setIsEmailLogin] = useState(true);
   const [countryCode, setCountryCode] = useState("+263");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false)
+  const { signIn } = useAuth()
 
-  const { signIn, setActive: setSignInActive } = useSignIn();
-  const { signUp, setActive: setSignUpActive } = useSignUp();
-  const { startOAuthFlow: startGoogleOAuth } = useOAuth({
-    strategy: "oauth_google",
-  });
-  const { startOAuthFlow: startFacebookOAuth } = useOAuth({
-    strategy: "oauth_facebook",
-  });
   const router = useRouter();
+
+
 
   const handleEmailOrPhoneAuth = async () => {
     setError('');
@@ -45,42 +52,9 @@ export default function AuthScreen() {
     try {
       if (isEmailLogin) {
         // Email authentication flow
-        const emailExists = await doesAUserWithThisEmailExist(email);
-        if (emailExists) {
-          if (!signIn) throw new Error("signIn not ready")
 
-          if (!showPassword) {
-            setShowPassword(true);
-            setIsLoading(false);
-            return;
-          }
-          // Attempt to sign in with email and password
-          const result = await signIn.create({
-            identifier: email,
-            password: password,
-          });
-          setSignInActive({ session: result.createdSessionId });
-          router.push('/(tabs)');
-        } else {
-          // Email not found, redirect to profile page for sign up
-          router.push({
-            pathname: '/(auth)/profile',
-            params: { emailAddress: email }
-          });
-        }
       } else {
-        if (!signUp) throw Error("signUp not ready")
-        // Phone authentication flow
-        const phoneIdentifier = `${countryCode}${phoneNumber}`;
-        // Initiate phone verification
-        await signUp.create({
-          phoneNumber: phoneIdentifier,
-        });
-        await signUp.preparePhoneNumberVerification({ strategy: "phone_code" });
-        router.push({
-          pathname: '/(auth)/verification',
-          params: { phoneNumber: phoneIdentifier }
-        });
+
       }
     } catch (err: any) {
       console.error(JSON.stringify(err, null, 2))
@@ -90,45 +64,79 @@ export default function AuthScreen() {
     }
   };
 
-  console.log(error)
 
-  const doesAUserWithThisEmailExist = async (
-    email: string
-  ): Promise<boolean> => {
-    if (!signIn) return false;
-
+  const startAuthFlow = async () => {
+    setIsLoading(true);
     try {
-      await signIn.create({
-        identifier: email,
-      });
-      return true;
-    } catch (err: any) {
-      if (err.errors[0].code === "form_identifier_not_found") {
-        return false;
+      if (!emailAddress) {
+        throw new Error("Email address is required")
       }
-      return false;
+      const result = await axiosInstance.post(AUTH_ROUTES.DOES_USER_EXIST, {
+        email: emailAddress
+      })
+
+      const { data } = result
+      if (data.result === "user_account_exists") {
+        setShowPassword(true)
+      }
+
+      router.push({
+        pathname: "/(auth)/register",
+        params: {
+          emailAddress
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setIsLoading(false)
     }
   };
 
   const handleGoogleAuth = async () => {
     try {
-      const { createdSessionId, setActive } = await startGoogleOAuth();
-      if (createdSessionId && setActive) {
-        setActive({ session: createdSessionId });
-        router.push("/(tabs)/");
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      GoogleSignin.configure({
+        webClientId: '65642823607-o45dd5mj4follgqmp700vgv1r17c9l6b.apps.googleusercontent.com'
+      });
+
+      const userInfo = await GoogleSignin.signIn({
+        loginHint: "Please select your account",
+      });
+
+      const idToken = userInfo.idToken;
+      const tokens = await axiosInstance.get(`${AUTH_ROUTES.GOOGLE_SIGNIN}?id_token=${idToken}`)
+
+      await signIn({ accessToken: tokens.data.accessToken, refreshToken: tokens.data.refreshToken })
+
+      router.push("/(tabs)");
+
+    } catch (error) {
+      console.error("Error:", error);
+
+      if (isErrorWithCode(error)) {
+        switch (error.code) {
+          case statusCodes.SIGN_IN_CANCELLED:
+            // sign in was cancelled
+            break;
+          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+            // Android-only: play services not available or outdated
+            // Web: when calling an unimplemented api (requestAuthorization)
+            break;
+          default:
+          // something else happened
+        }
+      } else {
+        // an error that's not related to google sign in occurred
+        console.error("Error:", error);
       }
-    } catch (err) {
-      console.error("Error:", err);
     }
+
   };
 
   const handleFacebookAuth = async () => {
     try {
-      const { createdSessionId, setActive } = await startFacebookOAuth();
-      if (createdSessionId && setActive) {
-        setActive({ session: createdSessionId });
-        router.push("/(tabs)/");
-      }
+
     } catch (err) {
       console.error("Error:", err);
     }
@@ -173,8 +181,8 @@ export default function AuthScreen() {
             style={styles.input}
             placeholder="Email address"
             withEmbeddedLabel
-            value={email}
-            onChangeText={setEmail}
+            value={emailAddress}
+            onChangeText={setEmailAddress}
             keyboardType="email-address"
             autoCapitalize="none"
           />
@@ -192,7 +200,7 @@ export default function AuthScreen() {
         </View>
       )}
 
-      <TouchableOpacity disabled={isLoading} style={styles.button} onPress={handleEmailOrPhoneAuth}>
+      <TouchableOpacity disabled={isLoading} style={styles.button} onPress={showPassword ? handleEmailOrPhoneAuth : startAuthFlow}>
         {!isLoading && <Text style={styles.buttonText}>Continue</Text>}
         {isLoading && <AnimatedLoader color={Colors.design.white} />}
       </TouchableOpacity>
