@@ -1,14 +1,17 @@
 import { useEffect } from "react";
 import { useAuth } from "./hooks";
-import { router } from "expo-router";
 import LoadingScreen from "@/components/ui/LoadingScreen";
+import { NavigationStackProps } from "@/screens";
+import { useNavigation } from "@react-navigation/native";
 
 export const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { isAuthenticated, isLoading } = useAuth();
+    const navigation = useNavigation<NavigationStackProps<"">>();
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated) {
-            router.replace('/(auth)');
+            // TODO: Redirect to login page
+            navigation.navigate("LoginScreen");
         }
     }, [isAuthenticated, isLoading]);
 

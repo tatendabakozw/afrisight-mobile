@@ -42,14 +42,14 @@ const TextInput = (props: CustomTextInputProps) => {
     const labelStyle = {
         position: 'absolute' as any,
         left: 12,
-        fontFamily: Fonts.Inter_500Medium,
+        fontFamily: Fonts.Inter_600SemiBold,
         top: labelPosition.interpolate({
             inputRange: [0, 1],
             outputRange: [17, 6],
         }),
         fontSize: labelPosition.interpolate({
             inputRange: [0, 1],
-            outputRange: [16, 12],
+            outputRange: [16, 14],
         }),
         color: labelPosition.interpolate({
             inputRange: [0, 1],
@@ -75,7 +75,7 @@ const TextInput = (props: CustomTextInputProps) => {
                     props.style,
                     isFocused && styles.inputFocused,
                     {
-                        fontSize: Typography.buttonText,
+                        fontSize: Typography.paragraph,
                         color: Colors.design.highContrastText,
                         paddingTop: props.withEmbeddedLabel ? 20 : 12,
                         paddingBottom: props.withEmbeddedLabel ? 4 : 12,
@@ -97,17 +97,18 @@ const styles = StyleSheet.create({
     },
     input: {
         borderRadius: 8,
-        height: 54,
+        height: 64,
         borderColor: Colors.design.highContrastBorder,
         borderWidth: 1,
         borderStyle: "solid",
         paddingHorizontal: 12,
         width: "100%",
-        fontFamily: Fonts.Inter_400Regular
+        fontFamily: Fonts.Inter_600SemiBold,
+        backgroundColor: Colors.design.white
     },
     inputFocused: {
         borderColor: Colors.design.highContrastText,
-        borderWidth: 2,
+        borderWidth: 2
     },
 
 });

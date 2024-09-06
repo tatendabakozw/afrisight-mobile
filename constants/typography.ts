@@ -1,15 +1,15 @@
 export const Typography = {
-  paragraph: 15,
-  buttonText: 17,
-  subheading: 20,
-  heading: 25,
+  base: 16,
+  paragraph: 20,
+  subheading: 24,
+  heading: 28,
   largeHeading: 36,
 };
 
 export const Fonts = {
   Inter_300Light: "Inter_300Light",
-  Inter_400Regular: "Inter_400Regular",
-  Inter_500Medium: "Inter_500Medium",
-  Inter_600SemiBold: "Inter_600SemiBold",
-  Inter_700Bold: "Inter_700Bold",
+  Inter_400Regular: "SF_Pro_Rounded_Regular",
+  Inter_500Medium: "SF_Pro_Rounded_Medium",
+  Inter_600SemiBold: "SF_Pro_Rounded_Semibold",
+  Inter_700Bold: "SF_Pro_Rounded_Bold",
 };

@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         paddingHorizontal: 10,
         fontFamily: Fonts.Inter_400Regular,
-        fontSize: Typography.paragraph,
+        fontSize: Typography.base,
     },
     showPasswordButton: {
         paddingHorizontal: 10,

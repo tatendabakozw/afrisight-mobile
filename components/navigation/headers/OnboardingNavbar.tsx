@@ -5,16 +5,16 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Colors from "@/constants/Colors";
 import tw from "twrnc";
 import { Entypo, Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "expo-router";
 import { Typography } from "@/constants/typography";
 import Text from "@/components/ui/Text";
+import { useNavigation } from "@react-navigation/native";
 
 const OnboardingNavbar = ({ navigation, back, options }: any) => {
   const insets = useSafeAreaInsets();
   const navigate = useNavigation();
   const colorScheme = useColorScheme();
   const title =
-    options.title !== undefined ? options.title : options.route.name;
+    options.title !== undefined ? options.title : options.route?.name;
 
   return (
     <View

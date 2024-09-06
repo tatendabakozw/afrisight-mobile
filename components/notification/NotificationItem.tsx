@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
-import { truncateText } from "@/app/utils/text-moderators";
 import Colors from "@/constants/Colors";
+import { truncateText } from "@/utils/text-moderators";
 
 const NotificationItem = () => {
   const description = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat ipsum consectetur vero accusantium molestiae dolores illum provident quod voluptatem nam eaque fuga saepe, voluptas culpa qui suscipit totam? Quaerat, quae?`;

@@ -1,9 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { useNavigation } from "expo-router";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import tw from "twrnc";
 import Colors from "@/constants/Colors";
+import IconText from "@/design-system/Text/IconText";
+import { SF_ICONS } from "@/constants/icons";
+import { useNavigation } from "@react-navigation/native";
 
 const GigDescriptionHeader = () => {
   const navigation = useNavigation();
@@ -12,17 +14,21 @@ const GigDescriptionHeader = () => {
       <TouchableOpacity
         onPress={() => navigation.goBack()}
         style={[tw`rounded-full p-2`, {
-          backgroundColor: Colors.design.interactiveCardSurface
+          backgroundColor: Colors.design.surface
         }]}
       >
-        <Feather name="x" size={24} color={Colors.design.text} />
+        <IconText>
+          {SF_ICONS.chevron_left}
+        </IconText>
       </TouchableOpacity>
       <View style={tw`flex-1`} />
 
       <TouchableOpacity style={[tw`rounded-full p-2`, {
-        backgroundColor: Colors.design.interactiveCardSurface
+        backgroundColor: Colors.design.surface
       }]}>
-        <Feather name="bookmark" size={24} color={Colors.design.text} />
+        <IconText>
+          {SF_ICONS.heart_outlined}
+        </IconText>
       </TouchableOpacity>
     </View>
   );

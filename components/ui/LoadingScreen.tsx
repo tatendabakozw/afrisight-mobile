@@ -17,7 +17,7 @@ export default function LoadingScreen(props: {
                 {
                     props.message && <Text style={styles.message}>{props.message}</Text>
                 }
-                <AnimatedLoader />
+                <AnimatedLoader color={Colors.design.mutedText} />
             </View>
         </View>
     )
@@ -28,16 +28,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: Colors.design.white
 
     },
     contentContainer: {
         padding: 20,
         backgroundColor: Colors.design.white,
         borderRadius: 8,
-
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
 
     },
     title: {
@@ -47,7 +44,7 @@ const styles = StyleSheet.create({
 
     },
     message: {
-        fontSize: Typography.buttonText,
+        fontSize: Typography.paragraph,
         textAlign: "center",
         marginBottom: 20,
 

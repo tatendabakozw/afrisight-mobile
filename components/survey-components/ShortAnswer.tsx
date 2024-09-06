@@ -1,40 +1,45 @@
-import { StyleSheet, View } from "react-native";
-import React, { useState } from "react";
-import tw from "twrnc";
-import { Fonts, Typography } from "@/constants/typography";
-import Colors from "@/constants/Colors";
-import Text from "../ui/Text";
-import TextInput from "../ui/TextInput";
+import React from 'react';
+import { View } from 'react-native';
+import { Fonts, Typography } from '@/constants/typography';
+import Colors from '@/constants/Colors';
+import Text from '../ui/Text';
+import TextInput from '../ui/TextInput';
 
 type Props = {
   question: string;
   value: string;
   onChange: (value: string) => void;
+  error?: string;
+  required?: boolean;
 };
-const ShortAnswer = (props: Props) => {
-  const [text, setText] = useState("");
 
+const ShortAnswer = ({ question, value, onChange, error, required: optional }: Props) => {
   return (
     <View style={{ paddingHorizontal: 16 }}>
       <Text style={{
         fontFamily: Fonts.Inter_600SemiBold,
         color: Colors.design.highContrastText,
-        fontSize: Typography.buttonText,
+        fontSize: Typography.paragraph,
         marginBottom: 8
-
-      }}>{props.question}</Text>
+      }}>
+        {question}
+        {optional && <Text style={{ color: Colors.design.mutedText }}> (Optional)</Text>}
+      </Text>
       <TextInput
-        style={[tw`border rounded-lg p-2`, {
-          borderColor: Colors.design.separator,
+        autoFocus
+        style={{
+          borderColor: error ? Colors.design.redSurface : Colors.design.separator,
           backgroundColor: Colors.design.white,
-        }]}
-        value={text}
-        onChangeText={setText}
+          borderWidth: 1,
+          borderRadius: 8,
+          padding: 8,
+        }}
+        value={value}
+        onChangeText={onChange}
       />
+      {error && <Text style={{ color: Colors.design.redSurface, marginTop: 4 }}>{error}</Text>}
     </View>
   );
 };
 
 export default ShortAnswer;
-
-const styles = StyleSheet.create({});

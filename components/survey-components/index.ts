@@ -1,6 +1,5 @@
 import DatePicker from "./DatePicker";
 import FilePicker from "./FilePicker";
-import InfoArea from "./InfoArea";
 import ShortAnswer from "./ShortAnswer";
 import Paragraph from "./Paragraph";
 import Option from "./Option";
@@ -8,7 +7,6 @@ import Option from "./Option";
 const SurveyComponents = {
   DatePicker,
   FilePicker,
-  InfoArea,
   ShortAnswer,
   Paragraph,
   Option,
@@ -22,6 +20,15 @@ export type SectionKey =
   | "text-area"
   | "paragraph";
 
+export type SurveyComponentProps = {
+  question: string;
+  value: any;
+  onChange: (value: any) => void;
+  error?: string;
+  optional?: boolean;
+  options?: { _id: string; name: string }[];
+};
+
 export const getSurveyComponent = (type: string) => {
   switch (type) {
     case "short-answer":
@@ -32,8 +39,6 @@ export const getSurveyComponent = (type: string) => {
       return SurveyComponents.Option;
     case "file-upload":
       return SurveyComponents.FilePicker;
-    case "text-area":
-      return SurveyComponents.InfoArea;
     case "paragraph":
       return SurveyComponents.Paragraph;
     default:

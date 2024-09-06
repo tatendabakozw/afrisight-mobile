@@ -1,31 +1,25 @@
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Platform,
-  TouchableOpacity,
-} from "react-native";
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
-import tw from "twrnc";
+import React from "react";
+import { View, TouchableOpacity, Platform } from "react-native";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import Feather from "@expo/vector-icons/Feather";
 import { Fonts, Typography } from "@/constants/typography";
 import Colors from "@/constants/Colors";
 import Text from "../ui/Text";
+import { StyleSheet } from "react-native";
 
 interface DatePickerProps {
   question: string;
+  value: Date;
+  onChange: (value: Date) => void;
 }
 
-const DatePicker: React.FC<DatePickerProps> = (props: DatePickerProps) => {
-  const [date, setDate] = useState<Date>(new Date());
-  const [show, setShow] = useState<boolean>(false);
+const DatePicker: React.FC<DatePickerProps> = ({ question, value, onChange }) => {
+  const [show, setShow] = React.useState<boolean>(false);
 
-  const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    const currentDate = selectedDate || date;
+  const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    const currentDate = selectedDate || value;
     setShow(Platform.OS === "ios");
-    setDate(currentDate);
+    onChange(currentDate);
   };
 
   const showDatepicker = () => {
@@ -37,29 +31,38 @@ const DatePicker: React.FC<DatePickerProps> = (props: DatePickerProps) => {
       <Text style={{
         fontFamily: Fonts.Inter_600SemiBold,
         color: Colors.design.highContrastText,
-        fontSize: Typography.buttonText,
+        fontSize: Typography.paragraph,
         marginBottom: 8
-
-      }}>{props.question}</Text>
+      }}>{question}</Text>
       <TouchableOpacity
         onPress={showDatepicker}
         activeOpacity={0.7}
-        style={tw`flex flex-row gap-2 w-full p-2 border border-zinc-300/50 items-center bg-zinc-100 rounded-xl`}
+        style={{
+          flexDirection: "row",
+          gap: 8,
+          padding: 8,
+          borderWidth: 1,
+          borderColor: Colors.design.separator,
+          alignItems: "center",
+          backgroundColor: Colors.design.white,
+          borderRadius: 8,
+        }}
       >
-        <Feather name="calendar" size={24} color="black" />
-        <Text style={[{
+        <Feather name="calendar" size={24} color={Colors.design.text} />
+        <Text style={{
           fontFamily: Fonts.Inter_500Medium,
-
-        }]}>{date.toDateString()}</Text>
+          color: Colors.design.highContrastText,
+        }}>{value.toDateString()}</Text>
       </TouchableOpacity>
 
       {show && (
         <DateTimePicker
+
           testID="dateTimePicker"
-          value={date}
+          value={value}
           mode="date"
           display="default"
-          onChange={onChange}
+          onChange={onChangeDate}
         />
       )}
     </View>

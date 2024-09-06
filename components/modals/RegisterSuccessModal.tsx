@@ -5,7 +5,7 @@ import tw from "twrnc";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import PrimaryButton from "../buttons/PrimaryButton";
-import { useNavigation } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 
 interface Props {
   modalVisible: boolean;

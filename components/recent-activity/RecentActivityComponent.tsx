@@ -1,45 +1,67 @@
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Feather, FontAwesome6, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Survey } from "@/utils/types";
 import Colors from "@/constants/Colors";
-import React from "react";
-import { StyleSheet, View, TouchableOpacity } from "react-native";
-import tw from "twrnc";
-import { Entypo, Ionicons } from "@expo/vector-icons";
+import { truncateText } from "@/utils/text-moderators";
 import Text from "../ui/Text";
 import { Fonts, Typography } from "@/constants/typography";
+import { timeFromNow } from "../git-item/GigItem";
+import { Image } from "react-native";
 
-interface Props {
-  color: string;
-  name: string;
-  amount: number;
-  id: string | number;
-  removeCard?: any;
-  date: string;
-  duration: number | string;
-  status: string;
+interface RecentActivityProps extends Survey {
+  status: "COMPLETED" | "DRAFT";
 }
 
-const RecentActivityComponent = ({
-  color,
-  amount,
-  removeCard,
-  date,
-  id,
-  name,
-  duration,
-  status,
-}: Props) => {
+const RecentActivityComponent = (props: RecentActivityProps) => {
+  const router = { push: () => { } }
+  // TODO: routing here
+
+
   return (
     <TouchableOpacity
-      activeOpacity={0.7}
-      onLongPress={() => removeCard(id)}
-      style={styles.container}
+      onPress={() =>
+        router.push({
+          pathname: "/(modals)/gig-description",
+          params: { gig_id: props._id, gig_type: "UNKNOWN_TYPE" },
+        })
+      }
+      style={{
+        borderRadius: 10,
+        paddingVertical: 10,
+        flexDirection: "row",
+        gap: 10,
+        flex: 1,
+        alignItems: "center",
+      }}
     >
-      <View style={[tw`${color}`, styles.card]}>
-        <View style={tw`flex flex-col`}>
-          <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.subheading }}>${amount}</Text>
-          <View style={tw`flex flex-row items-center justify-between`}>
-            <Text>{name}</Text>
-            <Text>{status}</Text>
-          </View>
+      <Image source={require("@/assets/images/imports/document-icon.png")} style={{ width: 40, height: 40 }} />
+
+      <View style={{ flex: 1 }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", gap: 40, marginBottom: 10 }}>
+          <Text
+            style={{
+              fontFamily: Fonts.Inter_600SemiBold,
+              fontSize: Typography.paragraph,
+              lineHeight: Typography.paragraph,
+              color: Colors.design.highContrastText,
+              flex: 1,
+            }}
+            numberOfLines={1}
+          >
+            {props.name}
+          </Text>
+          <Text numberOfLines={1} style={{
+            color: Colors.design.text, fontFamily: Fonts.Inter_500Medium, fontSize: Typography.paragraph, lineHeight: Typography.paragraph,
+          }}>
+
+            ${props.dollarRewardValue}
+          </Text>
+        </View>
+        <View style={{ flexDirection: "row", gap: 8, justifyContent: "space-between", }}>
+          <Text style={{ color: Colors.design.mutedText, fontFamily: Fonts.Inter_500Medium, fontSize: Typography.paragraph, lineHeight: Typography.paragraph, }}>
+            Completed a day ago
+          </Text>
+
         </View>
       </View>
     </TouchableOpacity>
@@ -48,60 +70,4 @@ const RecentActivityComponent = ({
 
 export default RecentActivityComponent;
 
-const styles = StyleSheet.create({
-  container: {},
-  card: {
-    width: 180,
-    borderRadius: 8,
-    overflow: "hidden",
-    position: "relative",
-    backgroundColor: Colors.design.interactiveSurface,
-    padding: 12
-  },
-  background: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  cardContent: {
-    flex: 1,
-    padding: 20,
-    justifyContent: "space-between",
-  },
-  cardNumber: {
-    color: "#fff",
-    fontSize: 20,
-    letterSpacing: 2,
-    marginBottom: 20,
-  },
-  cardDetails: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  cardHolderLabel: {
-    color: "#fff",
-    fontSize: 10,
-  },
-  cardHolder: {
-    color: "#fff",
-    fontSize: 16,
-  },
-  expiryDateLabel: {
-    color: "#fff",
-    fontSize: 10,
-  },
-  expiryDate: {
-    color: "#fff",
-    fontSize: 16,
-  },
-  amountContainer: {
-    alignItems: "flex-end",
-  },
-  amountLabel: {
-    color: "#fff",
-    fontSize: 12,
-  },
-  amount: {
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "semibold",
-  },
-});
+const styles = StyleSheet.create({});

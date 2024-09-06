@@ -1,25 +1,27 @@
-import { ScrollView, StyleSheet, View } from "react-native";
-import React from "react";
-import tw from "twrnc";
+import { StyleSheet, View } from "react-native";
 import GigItem from "./GigItem";
-import { useFetch } from "@/hooks/useFetch";
-import { apiUrl } from "@/utils/apiUrl";
-import { GigItemProps } from "@/utils/types";
-import { gigs } from "@/utils/data";
+import { Survey } from "@/utils/types";
+import Separator from "@/design-system/Separator";
+import { EndOfListCaption } from "../captions";
 
 const AllGigs = (props: {
-  gigs: any[]
+  gigs: Survey[]
 }) => {
   return (
     <View
       style={{
         flex: 1,
+        paddingBottom: 20
       }}
     >
       {props.gigs.map((item, index) => (
-        <GigItem key={index} {...item} />
+        <>
+          <GigItem key={index} {...item} />
+          <Separator key={`${index}-separator`} />
+        </>
 
       ))}
+      <EndOfListCaption />
     </View>
   );
 };

@@ -1,38 +1,29 @@
 import { StyleSheet, View, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
-import tw from "twrnc";
+import React from "react";
 import Colors from "@/constants/Colors";
-import { OptionType } from "@/utils/types";
 import { Fonts, Typography } from "@/constants/typography";
 import Text from "../ui/Text";
 
 type Props = {
   question: string;
-  options: OptionType[];
+  options: { _id: string; name: string }[];
+  value: string;
+  onChange: (value: string) => void;
 };
 
-const answers = [
-  { answer: "Sugar", id: "sugar" },
-  { answer: "Salt", id: "salt" },
-  { answer: "Melon", id: "melon" },
-  { answer: "Height", id: "height" },
-];
-
-const Option = (props: Props) => {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-
+const Option = ({ question, options, value, onChange }: Props) => {
   return (
     <View>
       <Text
         style={{
           fontFamily: Fonts.Inter_600SemiBold,
           color: Colors.design.highContrastText,
-          fontSize: Typography.buttonText,
+          fontSize: Typography.paragraph,
           marginBottom: 24,
           paddingHorizontal: 16,
         }}
       >
-        {props.question}
+        {question}
       </Text>
       <View
         style={{
@@ -40,25 +31,27 @@ const Option = (props: Props) => {
           borderColor: Colors.design.separator,
         }}
       >
-        {props.options?.map((option: OptionType) => (
+        {options?.map((option) => (
           <TouchableOpacity
             activeOpacity={0.7}
             key={option._id}
-            onPress={() => setSelectedId(option._id)}
+            onPress={() => onChange(option._id)}
             style={[
-              tw`flex flex-row items-center`,
               {
                 height: 64,
                 borderBottomWidth: 1,
                 borderColor: Colors.design.separator,
                 paddingHorizontal: 16,
+                flexDirection: "row",
+                alignItems: "center",
+                backgroundColor: value === option._id ? Colors.design.accent + '20' : 'transparent',
               },
             ]}
           >
             <Text
               style={{
                 fontFamily: Fonts.Inter_500Medium,
-                fontSize: Typography.buttonText,
+                fontSize: Typography.paragraph,
                 color: Colors.design.highContrastText,
               }}
             >

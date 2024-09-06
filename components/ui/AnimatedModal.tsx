@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
     modal: {
         margin: 0,
         justifyContent: 'flex-end',
+        zIndex: 2000,
     },
     backdrop: {
         ...StyleSheet.absoluteFillObject,
@@ -117,6 +118,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
         padding: 20,
         maxHeight: SCREEN_HEIGHT,
+        overflow: "hidden"
     },
 });
 

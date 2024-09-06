@@ -1,34 +1,47 @@
-import Colors from "@/constants/Colors";
-import { Fonts, Typography } from "@/constants/typography";
-import React, { useState } from "react";
-import { View } from "react-native";
-import tw from "twrnc";
-import Text from "../ui/Text";
-import TextInput from "../ui/TextInput";
+import React from 'react';
+import { View } from 'react-native';
+import { Fonts, Typography } from '@/constants/typography';
+import Colors from '@/constants/Colors';
+import Text from '../ui/Text';
+import TextInput from '../ui/TextInput';
 
 type Props = {
   question: string;
+  value: string;
+  onChange: (value: string) => void;
+  error?: string;
+  required?: boolean;
 };
 
-const Paragraph = (props: Props) => {
-  const [text, setText] = useState("");
-
+const Paragraph = ({ question, value, onChange, error, required: optional }: Props) => {
   return (
     <View style={{ paddingHorizontal: 16 }}>
       <Text style={{
         fontFamily: Fonts.Inter_600SemiBold,
         color: Colors.design.highContrastText,
-        fontSize: Typography.buttonText,
+        fontSize: Typography.paragraph,
         marginBottom: 8
-
-      }}>{props.question}</Text>
+      }}>
+        {question}
+        {optional && <Text style={{ color: Colors.design.mutedText }}> (Optional)</Text>}
+      </Text>
       <TextInput
-        style={[tw`border border-zinc-300/50 rounded-lg p-4 h-40`, { backgroundColor: Colors.design.white }]}
+        autoFocus
+        style={{
+          borderColor: Colors.design.separator,
+          backgroundColor: Colors.design.white,
+          borderWidth: 1,
+          borderRadius: 8,
+          padding: 8,
+          height: 120,
+          textAlignVertical: 'top',
+        }}
         multiline={true}
         numberOfLines={4}
-        value={text}
-        onChangeText={setText}
+        value={value}
+        onChangeText={onChange}
       />
+      {error && <Text style={{ color: Colors.design.redSurface, marginTop: 4 }}>{error}</Text>}
     </View>
   );
 };

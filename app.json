@@ -22,12 +22,8 @@
       },
       "package": "com.tatendazw.afrisight"
     },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
-    },
-    "plugins": ["expo-router", "expo-secure-store", "expo-font"],
+
+    "plugins": [],
     "experiments": {
       "typedRoutes": true
     },
