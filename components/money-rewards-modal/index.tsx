@@ -10,6 +10,7 @@ import useDisclosure from "@/hooks/useDisclosure"
 import { useState } from "react"
 import Row from "@/design-system/Row"
 import IconText from "@/design-system/Text/IconText"
+import { ModalStackWrapper } from "@/design-system/Modal/ModalStackWrapper"
 
 const MoneyRewardsModal = () => {
     const { user, signOut } = useAuth();
@@ -18,14 +19,14 @@ const MoneyRewardsModal = () => {
 
 
     return (
-        <>
-            <View style={{ alignItems: "center", padding: 20 }}>
-                <Text style={{ fontSize: Typography.largeHeading * 1.5, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText, lineHeight: Typography.largeHeading * 1.5 }}>
+        <ModalStackWrapper>
+            <View style={{ alignItems: "center", flex: 1, justifyContent: "center" }}>
+                <Text style={{ fontSize: Typography.largeHeading * 2, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText, lineHeight: Typography.largeHeading * 2, marginBottom: 20 }}>
                     $3.20
                 </Text>
                 <Row style={{ gap: 20, marginBottom: 10 }}>
                     <Row style={{ gap: 4 }}>
-                        <IconText>
+                        <IconText style={{ color: Colors.design.green }}>
                             {SF_ICONS.cards_stack}
                         </IconText>
                         <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_700Bold, color: Colors.design.text }}>
@@ -33,7 +34,7 @@ const MoneyRewardsModal = () => {
                         </Text>
                     </Row>
                     <Row style={{ gap: 4 }}>
-                        <IconText>
+                        <IconText style={{ color: Colors.design.redText }}>
                             {SF_ICONS.medal_filled}
                         </IconText>
                         <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_700Bold, color: Colors.design.text }}>
@@ -46,12 +47,12 @@ const MoneyRewardsModal = () => {
                 </Text>
             </View>
 
-            <View style={{ marginBottom: 40, paddingHorizontal: 20, gap: 20 }}>
+            <View style={{ marginBottom: 20, gap: 20 }}>
                 <Button leftIcon={SF_ICONS.checkmark_filled} text={"Request payout"} size="medium" variant="accent" />
                 <PayoutDetails />
             </View>
 
-        </>
+        </ModalStackWrapper>
     )
 }
 

@@ -10,22 +10,24 @@ import IconText from "@/design-system/Text/IconText";
 import Separator from "@/design-system/Separator";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useBottomSheetContext } from "@/design-system/Modal/BottomSheetContext";
+import { useLayoutEffect } from "react";
 
 const EditProfile = () => {
     const navigation = useNavigation()
+    const { setHeight } = useBottomSheetContext()
     const onCancelOrGoBack = () => {
         navigation.goBack()
     }
+
+    useLayoutEffect(() => {
+        setHeight(540)
+    }, [setHeight])
+
     return (
         <SafeAreaView>
-            <ScrollView style={{ paddingTop: 0, }} contentContainerStyle={{ padding: 20, gap: 20, paddingTop: 0 }}>
-                <Row style={{ justifyContent: "space-between" }}>
-                    <Button onPress={onCancelOrGoBack} size={"icon"} text={SF_ICONS.chevron_left} />
-                    <Text style={{ fontSize: 20, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
-                        Edit Profile
-                    </Text>
-                    <View />
-                </Row>
+            <ScrollView style={{ paddingTop: 0, flex: 0 }} contentContainerStyle={{ padding: 20, gap: 20, paddingTop: 0 }}>
+
                 <View>
                     <Row style={{ justifyContent: "center", marginBottom: 10 }}>
                         <ImageBackground source={require("@/assets/images/backgrounds/background-night-stars.png")} imageStyle={{ borderRadius: 100 }} style={{ width: 100, height: 100, borderRadius: 100, backgroundColor: Colors.design.surfaceOnSurface, alignItems: "center", justifyContent: "center" }}>

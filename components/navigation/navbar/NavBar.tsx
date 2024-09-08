@@ -9,25 +9,18 @@ import Row from "@/design-system/Row";
 import { SF_ICONS } from "@/constants/icons";
 import Button from "@/design-system/Button";
 import useDisclosure from "@/hooks/useDisclosure";
-import SettingsModal from "@/components/settings";
-import { ProfileModal, ProfileModalStack } from "@/components/profile-modal";
-import MoneyRewardsModal from "@/components/money-rewards-modal";
-import ProfileManagerIndex from "@/components/profile-modal/ProfileManager";
-import CXBottomSheet from '@/design-system/Modal';
+import { ProfileModalStack } from "@/components/profile-modal";
+import { SettingsModalStack } from "@/components/settings/SettingsNavigator";
+import { MoneyRewardsModalStack } from "@/components/money-rewards-modal/MoneyRewardsModal";
 
 const NAVBAR_HEIGHT = 72; // Adjust this value based on your navbar's height
 
-const NavBar = ({ navigation, back, options, route }: any) => {
+const NavBar = () => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isMoneyRewardsModalOpen, setIsMoneyRewardsModalOpen] = useState(false);
 
   const { scrollY } = useScroll();
-  const title = options.title !== undefined ? options.title : options.route.name;
-
-  const { isOpen: isProfileModalOpenOriginal, onOpen: onProfileModalOpenOriginal, onClose: onProfileModalCloseOriginal } = useDisclosure()
-  const { isOpen: isSettingsModalOpenOriginal, onOpen: onSettingsModalOpenOriginal, onClose: onSettingsModalCloseOriginal } = useDisclosure()
-  const { isOpen: isMoneyRewardsModalOpenOriginal, onOpen: onMoneyRewardsModalOpenOriginal, onClose: onMoneyRewardsModalCloseOriginal } = useDisclosure()
   const animatedValue = useRef(new Animated.Value(0)).current;
   const lastScrollY = useRef(0);
   const isScrollingUp = useRef(true);
@@ -85,29 +78,9 @@ const NavBar = ({ navigation, back, options, route }: any) => {
         },
       ]}
     >
-      <CXBottomSheet
-        isOpen={isProfileModalOpen}
-        onClose={() => setIsProfileModalOpen(false)}
-        title="Profile"
-      >
-        <ProfileManagerIndex />
-      </CXBottomSheet>
-
-      <CXBottomSheet
-        isOpen={isSettingsModalOpen}
-        onClose={() => setIsSettingsModalOpen(false)}
-        title="Settings"
-      >
-        <SettingsModal />
-      </CXBottomSheet>
-
-      <CXBottomSheet
-        isOpen={isMoneyRewardsModalOpen}
-        onClose={() => setIsMoneyRewardsModalOpen(false)}
-        title="Money Rewards"
-      >
-        <MoneyRewardsModal />
-      </CXBottomSheet>
+      <ProfileModalStack isOpen={isProfileModalOpen} onClose={() => setIsProfileModalOpen(false)} />
+      <SettingsModalStack isOpen={isSettingsModalOpen} onClose={() => setIsSettingsModalOpen(false)} />
+      <MoneyRewardsModalStack isOpen={isMoneyRewardsModalOpen} onClose={() => setIsMoneyRewardsModalOpen(false)} />
 
       <Row style={tw`gap-8`}>
         <TouchableOpacity style={{ flex: 1, flexDirection: "row" }} onPress={() => setIsProfileModalOpen(true)}>

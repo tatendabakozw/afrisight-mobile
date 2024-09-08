@@ -1,18 +1,25 @@
 import CXBottomSheet from "@/design-system/Modal";
-import ProfileManagerIndex from "./ProfileManager";
 import { NavigationContainer } from "@react-navigation/native";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import EditProfile from "./EditProfile";
 import { createStackNavigator, StackNavigationOptions, TransitionPresets } from "@react-navigation/stack";
+import ActionCentre from "./ActionCentre";
+import { View } from "react-native";
+import { useBottomSheetContext } from "@/design-system/Modal/BottomSheetContext";
+import { ProfileModalHeader } from "./Header";
 
+export type ProfileStackParamList = {
+    ActionCentre: undefined;
+    EditProfile: undefined;
+};
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<ProfileStackParamList>();
 
 export const ProfileStack = () => {
     const screenOptions = useMemo<StackNavigationOptions>(
         () => ({
             ...TransitionPresets.SlideFromRightIOS,
-            headerMode: 'screen',
+            header: () => <ProfileModalHeader />,
             headerShown: true,
             safeAreaInsets: { top: 0 },
             cardStyle: {
@@ -25,8 +32,8 @@ export const ProfileStack = () => {
 
     return (
         <NavigationContainer independent>
-            <Stack.Navigator screenOptions={screenOptions} initialRouteName="ProfileManager">
-                <Stack.Screen name="ProfileManager" component={ProfileManagerIndex} />
+            <Stack.Navigator screenOptions={screenOptions} initialRouteName="ActionCentre">
+                <Stack.Screen name="ActionCentre" component={ActionCentre} options={{ headerShown: false }} />
                 <Stack.Screen name="EditProfile" component={EditProfile} />
             </Stack.Navigator>
         </NavigationContainer>
@@ -45,7 +52,6 @@ const ProfileModalStack = (props: {
 }
 
 export {
-    ProfileManagerIndex as ProfileModal,
     ProfileModalStack
 }
 
