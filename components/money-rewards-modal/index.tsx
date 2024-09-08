@@ -1,7 +1,7 @@
 import Colors from "@/constants/Colors"
 import { SF_ICONS } from "@/constants/icons"
 import Button from "@/design-system/Button"
-import CXMappersModal from "@/design-system/Modal"
+import CXBottomSheet from "@/design-system/Modal"
 import { ImageBackground, View } from "react-native"
 import Text from "../ui/Text"
 import { Fonts, Typography } from "@/constants/typography"
@@ -11,18 +11,15 @@ import { useState } from "react"
 import Row from "@/design-system/Row"
 import IconText from "@/design-system/Text/IconText"
 
-const MoneyRewardsModal = (props: {
-    isOpen: boolean
-    onClose: () => void
-}) => {
+const MoneyRewardsModal = () => {
     const { user, signOut } = useAuth();
     const { isOpen: isEditProfileOpen, onOpen: onEditProfileOpen, onClose: onEditProfileClose } = useDisclosure();
 
 
 
     return (
-        <CXMappersModal title={"Rewards"} isOpen={props.isOpen} onClose={props.onClose}>
-            <View style={{ alignItems: "center", marginBottom: 40, marginTop: 40 }}>
+        <>
+            <View style={{ alignItems: "center", padding: 20 }}>
                 <Text style={{ fontSize: Typography.largeHeading * 1.5, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText, lineHeight: Typography.largeHeading * 1.5 }}>
                     $3.20
                 </Text>
@@ -49,12 +46,12 @@ const MoneyRewardsModal = (props: {
                 </Text>
             </View>
 
-            <View style={{ marginBottom: 40 }}>
+            <View style={{ marginBottom: 40, paddingHorizontal: 20, gap: 20 }}>
                 <Button leftIcon={SF_ICONS.checkmark_filled} text={"Request payout"} size="medium" variant="accent" />
+                <PayoutDetails />
             </View>
-            <PayoutDetails />
 
-        </CXMappersModal>
+        </>
     )
 }
 

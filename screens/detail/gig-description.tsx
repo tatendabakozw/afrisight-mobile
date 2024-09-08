@@ -10,7 +10,6 @@ import React, { ReactNode, useEffect, useState } from "react";
 import tw from "twrnc";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import GigDescriptionHeader from "@/components/navigation/headers/GigDescriptionHeader";
-import { useLocalSearchParams, useRouter } from "expo-router";
 import Text from "@/components/ui/Text";
 import { Fonts, Typography } from "@/constants/typography";
 import Colors from "@/constants/Colors";
@@ -24,6 +23,18 @@ import Button from "@/design-system/Button";
 import { SF_ICONS } from "@/constants/icons";
 import IconText from "@/design-system/Text/IconText";
 import Separator from "@/design-system/Separator";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type RootStackParamList = {
+  GigDetails: {
+    screen: 'GigDescriptionScreen' | 'GigModalScreen';
+    params: { gig_id: string, surveyLink: string };
+  };
+};
+
+type GigDescriptionScreenRouteProp = RouteProp<RootStackParamList, 'GigDetails'>;
+type GigDescriptionScreenNavigationProp = StackNavigationProp<RootStackParamList, 'GigDetails'>;
 
 function formatDollarAmount(
   amount: number,
@@ -40,15 +51,16 @@ function formatDollarAmount(
   return formatter.format(amount);
 }
 
-const GigDescription = () => {
+const GigDescriptionScreen = () => {
+  const navigation = useNavigation<GigDescriptionScreenNavigationProp>();
+  const route = useRoute<GigDescriptionScreenRouteProp>();
+  console.log(route.params)
+  const { gig_id } = route.params as any as { gig_id: string };
+
   const [hasStarted, setHasStarted] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
   const [refreshing, setRefreshing] = useState(false);
   const [survey, setSurvey] = useState<Survey | null>(null);
-
-  const insets = useSafeAreaInsets();
-  const { gig_type, gig_id } = useLocalSearchParams();
-  const router = useRouter();
 
   const fetchHasSurveyStarted = async (id: string) => {
     const response = await axiosInstance.get(GIG_ROUTES.GET_SURVEY_RESPONSE_HAS_STARTED(id));
@@ -61,8 +73,6 @@ const GigDescription = () => {
     const response = await axiosInstance.get(GIG_ROUTES.GET_GIG_BY_ID(id));
     setSurvey(response.data);
   };
-
-
 
   useEffect(() => {
     if (gig_id) {
@@ -79,14 +89,12 @@ const GigDescription = () => {
     if (!hasStarted) {
       await axiosInstance.post(GIG_ROUTES.START_RESPONDING(survey._id))
     }
-    router.push({
-      pathname: "/(modals)/gig-modal",
+    navigation.navigate('GigDetails', {
+      screen: 'GigModalScreen',
       params: {
-        surveyLink:
-          typeof survey.form === "string" ? survey.form : survey.form._id,
         gig_id,
-
-      },
+        surveyLink: typeof survey.form === "string" ? survey.form : survey.form._id,
+      }
     });
   };
 
@@ -98,7 +106,6 @@ const GigDescription = () => {
       setRefreshing(false)
     }
   }
-
 
   return (
     <ScrollView refreshControl={
@@ -327,6 +334,4 @@ const DetailItem = ({
   );
 };
 
-export default GigDescription;
-
-const styles = StyleSheet.create({});
+export default GigDescriptionScreen;

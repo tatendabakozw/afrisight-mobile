@@ -4,7 +4,7 @@ import { Fonts, Typography } from "@/constants/typography";
 import { Feather, FontAwesome6 } from "@expo/vector-icons";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
-import { Reward } from "../../__app/(modals)/gig-modal";
+import { Reward } from "../../screens/detail/gig-modal";
 import AnimatedModal from "@/components/ui/AnimatedModal";
 import Button from "@/design-system/Button";
 

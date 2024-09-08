@@ -10,6 +10,7 @@ import AllGigs from "@/components/git-item/AllGigs";
 import RecentActivitySection from "@/components/explore/RecentActivitySection";
 import { useScroll } from "@/contexts/ScrollContext";
 import { NAVBAR_HEIGHT } from "@/constants/layout";
+import { RouteProp } from "@react-navigation/native";
 
 export default function ExploreScreen() {
   const [surveys, setSurveys] = useState<Survey[]>([]);

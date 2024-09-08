@@ -7,6 +7,20 @@ import { Fonts, Typography } from "@/constants/typography";
 import { Image } from "react-native";
 import { SF_ICONS } from "@/constants/icons";
 import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { NavigationStackProps } from "@/screens";
+
+// Add this type definition at the top of the file
+type RootStackParamList = {
+  ExploreScreen: undefined;
+  MyGigsScreen: undefined;
+  GigDetails: {
+    screen: 'GigDescriptionScreen' | 'GigModalScreen';
+    params: { gig_id: string };
+  };
+};
+
+type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 export function timeFromNow(date: Date): string {
   const now = new Date();
@@ -33,15 +47,22 @@ export function timeFromNow(date: Date): string {
 }
 
 const GigItem = (props: Survey) => {
-  const router = useNavigation();
+  console.log("Mounted gig")
+  const navigation = useNavigation<NavigationProp>();
+  const onNavigate = () => {
+    console.log("Attempting to navigate to GigDetails with gig_id:", props._id);
+    try {
+      navigation.navigate('GigDetails', {
+        screen: 'GigDescriptionScreen',
+        params: { gig_id: props._id }
+      });
+    } catch (error) {
+      console.error("Navigation error:", error);
+    }
+  }
   return (
     <TouchableOpacity
-      onPress={() =>
-        router.navigate({
-          pathname: "/(modals)/gig-description",
-          params: { gig_id: props._id, gig_type: "UNKNOWN_TYPE" },
-        })
-      }
+      onPress={onNavigate}
       style={{
         flexDirection: "row",
         gap: 4,
@@ -119,5 +140,3 @@ const GigItem = (props: Survey) => {
 };
 
 export default GigItem;
-
-const styles = StyleSheet.create({});

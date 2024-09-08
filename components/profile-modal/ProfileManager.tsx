@@ -1,13 +1,11 @@
 import Colors from "@/constants/Colors"
 import { SF_ICONS } from "@/constants/icons"
 import Button from "@/design-system/Button"
-import CXMappersModal from "@/design-system/Modal"
 import { ImageBackground, View } from "react-native"
 import Text from "../ui/Text"
 import { Fonts, Typography } from "@/constants/typography"
 import { useAuth } from "@/services/auth/hooks"
 import useDisclosure from "@/hooks/useDisclosure"
-import EditProfile from "./EditProfile"
 import { useState } from "react"
 
 const ProfileManagerIndex = () => {
@@ -27,9 +25,9 @@ const ProfileManagerIndex = () => {
     }
 
     return (
-        <>
+        <View style={{ padding: 20 }}>
             <ProfileItem idx={1} />
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: 20 }}>
                 <Button leftIcon={SF_ICONS.pencil} text={"Edit profile"} size="medium" variant="text" onPress={handleOpenEditProfile} />
 
                 <Button leftIcon={SF_ICONS.gift_filled} text={"Redeem voucher"} size="medium" variant="text" />
@@ -37,7 +35,7 @@ const ProfileManagerIndex = () => {
                 <Button leftIcon={SF_ICONS.logout} text={"Log out"} size="medium" variant="text" colorScheme="danger" onPress={signOut} />
 
             </View>
-        </>
+        </View>
     )
 }
 

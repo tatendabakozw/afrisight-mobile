@@ -1,19 +1,12 @@
-import CXMappersModal from "@/design-system/Modal";
+import CXBottomSheet from "@/design-system/Modal";
 import ProfileManagerIndex from "./ProfileManager";
-import ModalStack, { ModalStackParamList } from "@/design-system/Modal/ModalStack";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { NavigationContainer, RouteProp } from "@react-navigation/native";
-import { View } from "react-native";
-import Text from "../ui/Text";
-import Button from "@/design-system/Button";
-import { useEffect, useMemo, useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { useMemo } from "react";
 import EditProfile from "./EditProfile";
 import { createStackNavigator, StackNavigationOptions, TransitionPresets } from "@react-navigation/stack";
 
 
 const Stack = createStackNavigator();
-
-
 
 export const ProfileStack = () => {
     const screenOptions = useMemo<StackNavigationOptions>(
@@ -30,7 +23,6 @@ export const ProfileStack = () => {
         []
     );
 
-    const screenAOptions = useMemo(() => ({ headerLeft: () => null }), []);
     return (
         <NavigationContainer independent>
             <Stack.Navigator screenOptions={screenOptions} initialRouteName="ProfileManager">
@@ -46,9 +38,9 @@ const ProfileModalStack = (props: {
     onClose: () => void
 }) => {
     return (
-        <CXMappersModal title="Profile" isOpen={props.isOpen} onClose={props.onClose}>
+        <CXBottomSheet title="Profile" isOpen={props.isOpen} onClose={props.onClose}>
             <ProfileStack />
-        </CXMappersModal>
+        </CXBottomSheet>
     )
 }
 

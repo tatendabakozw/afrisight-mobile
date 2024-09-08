@@ -6,12 +6,12 @@ import { useNavigation } from "@react-navigation/native";
 
 export const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { isAuthenticated, isLoading } = useAuth();
-    const navigation = useNavigation<NavigationStackProps<"">>();
+    const navigation = useNavigation<NavigationStackProps<"LoginScreen">>();
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated) {
             // TODO: Redirect to login page
-            navigation.navigate("LoginScreen");
+            navigation.navigate("Auth", { screen: "LoginScreen" });
         }
     }, [isAuthenticated, isLoading]);
 

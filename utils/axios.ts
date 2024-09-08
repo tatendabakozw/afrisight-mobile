@@ -92,7 +92,6 @@ axiosInstance.interceptors.response.use(
         await SecureStore.deleteItemAsync("accessToken");
         await SecureStore.deleteItemAsync("refreshToken");
         // TODO: redirect to login
-        router.replace("/(auth)");
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

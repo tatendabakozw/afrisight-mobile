@@ -61,6 +61,8 @@ const TextInput = (props: CustomTextInputProps) => {
         if (props.value) setHasValue(props.value.length > 0)
     }, [])
 
+    console.log(props.withEmbeddedLabel)
+
     return (
         <View style={styles.container}>
             {props.withEmbeddedLabel && (
@@ -104,7 +106,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         width: "100%",
         fontFamily: Fonts.Inter_600SemiBold,
-        backgroundColor: Colors.design.white
     },
     inputFocused: {
         borderColor: Colors.design.highContrastText,

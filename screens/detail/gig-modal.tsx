@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { View, ScrollView, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import tw from "twrnc";
@@ -22,6 +21,7 @@ import GigSubmission from '../../components/gig-submission';
 import { STRINGS } from '@/constants/strings';
 import AnimatedLoader from '@/components/ui/AnimatedLoader';
 import Button from '@/design-system/Button';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 export type Reward = {
   type: string
@@ -32,9 +32,8 @@ export type Reward = {
   isRedeemed: boolean
 }
 
-const GigModals = () => {
-  const { gig_id, surveyLink } = useLocalSearchParams();
-  const router = useRouter();
+const GigModalScreen = ({ navigation, route }: { navigation: any, route: any }) => {
+  const { gig_id, surveyLink } = route.params as { gig_id: string; surveyLink: string };
   const { user } = useAuth();
 
   const validSurveyLink = typeof surveyLink === "string" ? surveyLink : "";
@@ -156,7 +155,7 @@ const GigModals = () => {
     } finally {
       setIsLoading(false)
     }
-  }, [formData, gig_id, router, user?._id]);
+  }, [formData, gig_id, user?._id]);
 
   const updateFormData = useCallback((key: string, value: string | Date) => {
     setFormData((prevData) => ({ ...prevData, [key]: value }));
@@ -193,14 +192,14 @@ const GigModals = () => {
   }
 
   const navigateToHome = () => {
-    router.replace("/(tabs)/explore")
+    navigation.replace("ExploreScreen")
   }
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.design.white, }}>
       {isRewardModelOpen && reward && <GigSubmission {...reward} isOpen={isRewardModelOpen} onClose={handleOnCloseRewardModal} onReturnHome={handleOnCloseRewardModal} />}
       <View style={{ flex: 1, }}>
-        <Header progress={progress} onBack={() => router.back()} />
+        <Header progress={progress} onBack={() => navigation.goBack()} />
         <ScrollView style={[tw`flex-1`, { paddingTop: 20 }]} contentContainerStyle={tw`gap-6`}>
           <KeyboardAvoidingView>
             <FormInfo name={form.name} description={form.description} />
@@ -296,4 +295,4 @@ const Footer = ({ currentSectionIndex, isLoading, onPrevious, onNext }: {
   </View>
 );
 
-export default GigModals;
+export default GigModalScreen;

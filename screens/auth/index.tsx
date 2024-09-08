@@ -1,27 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import Text from "@/components/ui/Text";
 import TextInput from "@/components/ui/TextInput";
 import { Fonts, Typography } from "@/constants/typography";
 import Colors from "@/constants/Colors";
-import AnimatedLoader from "@/components/ui/AnimatedLoader";
 import {
-  GoogleSigninButton,
   statusCodes,
   isErrorWithCode,
-  GoogleSignin,
+  GoogleSignin
 } from "@react-native-google-signin/google-signin";
 import { axiosInstance } from "../../utils/axios";
-import { saveItemToSecureStore } from "@/helpers/secureStore";
 import { AUTH_ROUTES } from "@/constants/routers";
 import { useAuth } from "@/services/auth/hooks";
 import Button from "@/design-system/Button";
 import ErrorMessage from "@/design-system/ErrorMessage";
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { ModalStackParamList } from "@/design-system/Modal/ModalStack";
 import { NavigationStackProps } from "..";
 
 const countryCodes = [
@@ -31,9 +26,7 @@ const countryCodes = [
   // Add more country codes as needed
 ];
 
-export default function LoginScreen({ navigation }: {
-  navigation: NavigationStackProps<"LoginScreen">;
-}) {
+export default function LoginScreen() {
   const [isSignUp, setIsSignUp] = useState(true);
   const [isEmailLogin, setIsEmailLogin] = useState(true);
   const [countryCode, setCountryCode] = useState("+263");
@@ -49,6 +42,7 @@ export default function LoginScreen({ navigation }: {
     isLoading: isAuthStatusLoading,
     signInWithEmailAndPassword,
   } = useAuth();
+  const navigation = useNavigation<NavigationStackProps<"ExploreScreen">>();
 
   const handleEmailOrPhoneAuth = async () => {
     setError("");
@@ -120,7 +114,7 @@ export default function LoginScreen({ navigation }: {
         refreshToken: tokens.data.refreshToken,
       });
 
-      navigation.navigate("Main", { emailAddress, screen: "ExploreScreen" });
+      navigation.navigate("Main", { screen: "ExploreScreen" });
     } catch (error) {
       console.error("Error:", error);
 
@@ -153,9 +147,11 @@ export default function LoginScreen({ navigation }: {
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      navigation.replace("ExploreScreen");
+      // navigation.replace("ExploreScreen");
     }
   }, [isAuthenticated, isLoading]);
+
+  console.log(navigation.getState())
 
   return (
     <View style={styles.container}>

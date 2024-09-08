@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Animated, ImageBackground, Image, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 import Colors from "@/constants/Colors";
@@ -13,16 +13,21 @@ import SettingsModal from "@/components/settings";
 import { ProfileModal, ProfileModalStack } from "@/components/profile-modal";
 import MoneyRewardsModal from "@/components/money-rewards-modal";
 import ProfileManagerIndex from "@/components/profile-modal/ProfileManager";
+import CXBottomSheet from '@/design-system/Modal';
 
 const NAVBAR_HEIGHT = 72; // Adjust this value based on your navbar's height
 
 const NavBar = ({ navigation, back, options, route }: any) => {
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isMoneyRewardsModalOpen, setIsMoneyRewardsModalOpen] = useState(false);
+
   const { scrollY } = useScroll();
   const title = options.title !== undefined ? options.title : options.route.name;
 
-  const { isOpen: isProfileModalOpen, onOpen: onProfileModalOpen, onClose: onProfileModalClose } = useDisclosure()
-  const { isOpen: isSettingsModalOpen, onOpen: onSettingsModalOpen, onClose: onSettingsModalClose } = useDisclosure()
-  const { isOpen: isMoneyRewardsModalOpen, onOpen: onMoneyRewardsModalOpen, onClose: onMoneyRewardsModalClose } = useDisclosure()
+  const { isOpen: isProfileModalOpenOriginal, onOpen: onProfileModalOpenOriginal, onClose: onProfileModalCloseOriginal } = useDisclosure()
+  const { isOpen: isSettingsModalOpenOriginal, onOpen: onSettingsModalOpenOriginal, onClose: onSettingsModalCloseOriginal } = useDisclosure()
+  const { isOpen: isMoneyRewardsModalOpenOriginal, onOpen: onMoneyRewardsModalOpenOriginal, onClose: onMoneyRewardsModalCloseOriginal } = useDisclosure()
   const animatedValue = useRef(new Animated.Value(0)).current;
   const lastScrollY = useRef(0);
   const isScrollingUp = useRef(true);
@@ -63,7 +68,6 @@ const NavBar = ({ navigation, back, options, route }: any) => {
     outputRange: [0, isScrollingUp.current ? -NAVBAR_HEIGHT : 0],
   });
 
-
   return (
     <Animated.View
       style={[
@@ -81,11 +85,32 @@ const NavBar = ({ navigation, back, options, route }: any) => {
         },
       ]}
     >
-      <ProfileModalStack isOpen={isProfileModalOpen} onClose={onProfileModalClose} />
-      <SettingsModal isOpen={isSettingsModalOpen} onClose={onSettingsModalClose} />
-      <MoneyRewardsModal isOpen={isMoneyRewardsModalOpen} onClose={onMoneyRewardsModalClose} />
+      <CXBottomSheet
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        title="Profile"
+      >
+        <ProfileManagerIndex />
+      </CXBottomSheet>
+
+      <CXBottomSheet
+        isOpen={isSettingsModalOpen}
+        onClose={() => setIsSettingsModalOpen(false)}
+        title="Settings"
+      >
+        <SettingsModal />
+      </CXBottomSheet>
+
+      <CXBottomSheet
+        isOpen={isMoneyRewardsModalOpen}
+        onClose={() => setIsMoneyRewardsModalOpen(false)}
+        title="Money Rewards"
+      >
+        <MoneyRewardsModal />
+      </CXBottomSheet>
+
       <Row style={tw`gap-8`}>
-        <TouchableOpacity style={{ flex: 1, flexDirection: "row" }} onPress={onProfileModalOpen}>
+        <TouchableOpacity style={{ flex: 1, flexDirection: "row" }} onPress={() => setIsProfileModalOpen(true)}>
           <ImageBackground
             style={tw`flex flex-row items-center justify-center h-[40px] w-[40px] rounded-full bg-[${Colors.light.primary}]`}
             source={require("@/assets/images/backgrounds/background-night-stars.png")}
@@ -96,8 +121,8 @@ const NavBar = ({ navigation, back, options, route }: any) => {
         </TouchableOpacity>
 
         <Row style={{ gap: 10 }}>
-          <Button text={SF_ICONS.settings_filled} size="icon" onPress={onSettingsModalOpen} />
-          <TouchableOpacity onPress={onMoneyRewardsModalOpen} style={{ flexDirection: "row", alignItems: "center", gap: 5, paddingHorizontal: 4, paddingRight: 20, paddingVertical: 6, borderRadius: 20, backgroundColor: Colors.design.surfaceOnSurface }}>
+          <Button text={SF_ICONS.settings_filled} size="icon" onPress={() => setIsSettingsModalOpen(true)} />
+          <TouchableOpacity onPress={() => setIsMoneyRewardsModalOpen(true)} style={{ flexDirection: "row", alignItems: "center", gap: 5, paddingHorizontal: 4, paddingRight: 20, paddingVertical: 6, borderRadius: 20, backgroundColor: Colors.design.surfaceOnSurface }}>
             <Image source={require("@/assets/images/imports/dollar-icon.png")} style={{ width: 32, height: 32 }} />
             <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
               $3.20
@@ -108,10 +133,6 @@ const NavBar = ({ navigation, back, options, route }: any) => {
     </Animated.View>
   );
 };
-
-
-
-
 
 export default NavBar;
 
