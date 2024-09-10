@@ -22,6 +22,7 @@ export const AUTH_ROUTES = {
   UPDATE_WITHDRAWAL_METHOD: "/profile/withdrawal-methods/update",
   SET_DEFAULT_WITHDRAWAL_METHOD: "/profile/withdrawal-methods/set-default",
   WITHDRAWAL_HISTORY: '/withdrawal-history',
+  UPDATE_PROFILE: (id: string) => `/profile/${id}`,
 };
 
 export const GIG_ROUTES = {
@@ -36,4 +37,9 @@ export const GIG_ROUTES = {
 
 export const FORM_ROUTES = {
   GET_FORM_BY_ID: (id: string) => `/form/${id}`,
+};
+
+export const LEADERBOARD_ROUTES = {
+  GET_LEADERBOARD: "/leaderboard",
+  GET_LEADERBOARD_RANK: "/leaderboard/rank",
 };

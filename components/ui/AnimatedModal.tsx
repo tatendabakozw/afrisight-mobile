@@ -84,11 +84,7 @@ const AnimatedModal: React.FC<AnimatedModalProps> = ({ isOpen: isVisible, onClos
 
             <Animated.View style={[styles.backdrop, backdropStyle]} />
 
-            <StatusBar
-                backgroundColor={'transparent'}
-                barStyle="default"
-                translucent={fullHeight}
-            />
+
             <Animated.View style={[styles.contentContainer, fullHeight ? { flex: 1, maxHeight: SCREEN_HEIGHT - 8 } : {}, animatedStyle]}>
                 <View style={{ flexDirection: "row", justifyContent: "flex-end", marginBottom: 32 }}>
                     <TouchableOpacity onPress={onClose} style={{ borderRadius: 20, }}>

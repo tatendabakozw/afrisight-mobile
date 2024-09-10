@@ -1,4 +1,4 @@
-import { FlatList, Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, RefreshControl, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useEffect, useState } from "react";
 import tw from "twrnc";
 import GigList from "@/components/git-item/AllGigs";
@@ -17,6 +17,7 @@ import { SurveyRepository } from "@/model/survey/repo";
 import { useSavedSurveys } from "@/contexts/SavedSurveysContext";
 import MySurvey from "@/components/recent-activity/RecentActivityComponent";
 import Separator from "@/design-system/Separator";
+import { useNavigation } from "@react-navigation/native";
 
 const search_filters = [
   { name: "All", _id: "all", icon: SF_ICONS.cards_stack, color: Colors.design.purpleText, backgroundColor: Colors.design.purple },
@@ -28,6 +29,7 @@ const search_filters = [
 const localSurveyStoreRepository = new SurveyRepository();
 
 const MyGigsScreen = () => {
+  const navigation = useNavigation();
   const { savedSurveys } = useSavedSurveys();
   const [selected_option, setSelectedOption] = useState(search_filters[0]);
   const [surveys, setSurveys] = useState<Survey[]>([]);
@@ -109,65 +111,85 @@ const MyGigsScreen = () => {
     </TouchableOpacity>
   );
 
-  return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: Colors.design.white }}
-      contentContainerStyle={{
-        flex: 1,
-        paddingTop: NAVBAR_HEIGHT + 20
-      }}
-      refreshControl={
-        <RefreshControl
-          refreshing={myRecentSurveys.isLoading}
-          onRefresh={myRecentSurveys.refetch}
-        />
-      }
-      onScroll={handleScroll}
-      scrollEventThrottle={16}
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          gap: 8,
-          marginBottom: 20,
-        }}
-      >
-        <FlatList
-          data={search_filters}
-          renderItem={renderSearchFilter}
-          keyExtractor={(item) => item._id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingHorizontal: 20,
+  const renderItem = ({ item }: {
+    item: any
+  }) => {
+    if (item.type === 'filters') {
+      return (
+        <View
+          style={{
+            flexDirection: "row",
             gap: 8,
+            marginBottom: 20,
           }}
-        />
-      </View>
-      <View style={{
-        flex: 1,
-        gap: 20,
-        justifyContent: "center"
-      }}>
+        >
+          <FlatList
+            data={search_filters}
+            renderItem={renderSearchFilter}
+            keyExtractor={(item) => item._id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingHorizontal: 20,
+              gap: 8,
+            }}
+          />
+        </View>
+      );
+    } else if (item.type === 'surveys') {
+      return (
         <FlatList
-          data={savedSurveys}
-          renderItem={({ item }) => <>
-            <MySurvey key={`${item._id}-${item.name}`} {...item} />
-            <Separator key={`${item._id}-${item.name}-separator`} />
-          </>}
+          data={selected_option._id === "saved" ? savedSurveys.filter(item => item.type === "saved") : selected_option._id === "completed" ? savedSurveys.filter(item => item.type === "completed") : savedSurveys}
+          renderItem={({ item }) => (
+            <>
+              <MySurvey key={`${item._id}-${item.name}`} {...item} />
+              <Separator key={`${item._id}-${item.name}-separator`} />
+            </>
+          )}
           keyExtractor={(item) => item._id}
           contentContainerStyle={{
             gap: 20,
           }}
-          style={{ flex: 1 }}
-          ListEmptyComponent={EmptyState}
+          ListEmptyComponent={() => <EmptyState navigation={navigation} />}
         />
-      </View>
-    </ScrollView>
+      );
+    }
+  };
+
+  return (
+    <View
+      style={{ flex: 1, backgroundColor: Colors.design.white }}
+    >
+      <FlatList
+        data={[
+          { type: 'filters' },
+          { type: 'surveys' }
+        ]}
+        // @ts-ignore
+        renderItem={
+          renderItem
+        }
+        keyExtractor={(item) => item.type}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingTop: NAVBAR_HEIGHT + 20
+        }}
+        refreshControl={
+          <RefreshControl
+            refreshing={myRecentSurveys.isLoading}
+            onRefresh={myRecentSurveys.refetch}
+          />
+        }
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      />
+    </View>
   );
 };
 
-const EmptyState = () => (
+const EmptyState = (props: {
+  navigation: any
+}) => (
   <View style={{
     flex: 1,
     paddingHorizontal: 20,
@@ -192,7 +214,7 @@ const EmptyState = () => (
     }}>
       Find gigs to participate in and start earning today.
     </Text>
-    <Button text={"Explore gigs"} size="medium" variant="primary" colorScheme="primary" style={{
+    <Button onPress={() => props.navigation.navigate("Main")} text={"Explore gigs"} size="medium" variant="primary" colorScheme="primary" style={{
       width: "100%"
     }} />
   </View>

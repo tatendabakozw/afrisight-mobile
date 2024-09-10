@@ -12,6 +12,9 @@ import { useStackModalHeight } from '@/design-system/Modal/utils';
 import { ModalStackWrapper } from '@/design-system/Modal/ModalStackWrapper';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withSpring } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getUserBalance, getUserDisplayName } from '@/services/auth/utils';
+import { FEATURE_FLAGS, useSystemPreferences } from '@/contexts/SystemPreferencesContext';
+import { useFeatureFlag } from 'posthog-react-native';
 
 type ActionCentreNavigationProp = StackNavigationProp<ProfileStackParamList, 'ActionCentre'>;
 
@@ -20,6 +23,7 @@ const ACTION_CENTRE_HEIGHT = 640; // Increased height to accommodate new buttons
 const ActionCentre = () => {
     const { signOut } = useAuth();
     const navigation = useNavigation<ActionCentreNavigationProp>();
+    const { preferences, updatePreference, isFeatureEnabled } = useSystemPreferences();
     useStackModalHeight(ACTION_CENTRE_HEIGHT);
 
     const translateY = useSharedValue(50);
@@ -39,6 +43,12 @@ const ActionCentre = () => {
         return () => clearTimeout(timeout);
     }, []);
 
+    const showSurveyPreferences = useFeatureFlag(FEATURE_FLAGS.SURVEY_PREFERENCES)
+    const showWithdrawalMethods = useFeatureFlag(FEATURE_FLAGS.WITHDRAWAL_METHODS)
+    const showPrivacySecurity = useFeatureFlag(FEATURE_FLAGS.PRIVACY_SECURITY)
+    const showNotificationSettings = useFeatureFlag(FEATURE_FLAGS.NOTIFICATION_SETTINGS)
+    const showDarkMode = useFeatureFlag(FEATURE_FLAGS.DARK_MODE)
+
     return (
         <ModalStackWrapper>
             <SafeAreaView >
@@ -49,38 +59,56 @@ const ActionCentre = () => {
                             text="Edit Profile"
                             onPress={() => navigation.navigate('EditProfile')}
                             leftIcon={SF_ICONS.person}
+                            variant='text'
                         />
                         <Button
                             text="Change Password"
                             onPress={() => navigation.navigate('ChangePassword')}
                             leftIcon={SF_ICONS.lock_filled}
+                            variant='text'
                         />
-                        <Button
+                        {showPrivacySecurity && <Button
                             text="Privacy & Security"
                             onPress={() => navigation.navigate('PrivacyAndSecuritySettings')}
-                            leftIcon={SF_ICONS.shield_filled}
-                        />
-                        <Button
+                            leftIcon={SF_ICONS.eye}
+                            variant='text'
+
+                        />}
+                        {showWithdrawalMethods && <Button
                             text="Withdrawal Methods"
                             onPress={() => navigation.navigate('WithdrawalMethods')}
                             leftIcon={SF_ICONS.dollar}
-                        />
-                        <Button
+                            variant='text'
+
+                        />}
+                        {showSurveyPreferences && <Button
                             text="Survey Preferences"
                             onPress={() => navigation.navigate('SurveyPreferences')}
-                            leftIcon={SF_ICONS.clipboard_filled}
-                        />
-                        <Button
+                            leftIcon={SF_ICONS.cards_stack}
+                            variant='text'
+
+                        />}
+                        {showNotificationSettings && <Button
                             text="Notification Settings"
                             onPress={() => navigation.navigate('NotificationSettings')}
                             leftIcon={SF_ICONS.bell_filled}
-                        />
+                            variant='text'
 
+                        />}
+                        {showDarkMode && (
+                            <Button
+                                text={preferences.darkMode ? "Disable Dark Mode" : "Enable Dark Mode"}
+                                onPress={() => updatePreference('darkMode', !preferences.darkMode)}
+                                leftIcon={SF_ICONS.moon_filled}
+                                variant='text'
+                            />
+                        )}
                         <Button
                             text="Log out"
                             onPress={signOut}
                             leftIcon={SF_ICONS.logout}
                             colorScheme="danger"
+                            variant='text'
                         />
                     </ScrollView>
                 </Animated.View>
@@ -90,6 +118,7 @@ const ActionCentre = () => {
 };
 
 const ProfileItem = ({ idx }: { idx: number }) => {
+    const { user } = useAuth();
     return (
         <View style={{ marginTop: 20, flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between" }}>
             <View style={{ flexDirection: "row", gap: 10, alignItems: "flex-start", flex: 1 }}>
@@ -106,10 +135,10 @@ const ProfileItem = ({ idx }: { idx: number }) => {
                 </ImageBackground>
                 <View>
                     <Text style={{ fontFamily: Fonts.Inter_600SemiBold, color: Colors.design.highContrastText, fontSize: Typography.body, lineHeight: Typography.body * 1.2 }}>
-                        Tatenda Chris
+                        {user && getUserDisplayName(user)}
                     </Text>
                     <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.body, color: Colors.design.mutedText }}>
-                        $109.20
+                        {user && getUserBalance(user)}
                     </Text>
                 </View>
             </View>

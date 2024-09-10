@@ -40,7 +40,7 @@ export default {
     purpleText: "#8347B9",
     redSurface: "#FFDBDC",
     redText: "#DD4425",
-    yellow: "#FFDC00",
+    yellow: "#FFFAB8",
     yellowText: "#9E6C00",
     gold: "#FFBA18",
     silver: "#C0C0C0",

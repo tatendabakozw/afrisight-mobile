@@ -2,8 +2,8 @@ export const SF_ICONS = {
     device: '􀋚',
     bell_filled: "􀋚",
     bell_outlined: "􀋛",
-    lock_filled: "􀋜",
-    lock_outlined: "􀋝",
+    lock_filled: "􀎡",
+    lock_outlined: "􀎠",
     clipboard_filled: "􀋞",
     clipboard_outlined: "􀋟",
     gear_filled: "􀋠",
@@ -47,5 +47,6 @@ export const SF_ICONS = {
     trash: '􀁢',
     chart_filled: '􀣌',
     shield_filled: '􀣌',
+    moon_filled: '􀆺',
 
 }

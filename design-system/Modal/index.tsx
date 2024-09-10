@@ -95,11 +95,7 @@ const CXBottomSheet: React.FC<CXBottomSheetProps> = ({ isOpen, onClose, children
 
     return (
         <CXBottomSheetProvider value={contextValue}>
-            <StatusBar
-                backgroundColor={'transparent'}
-                barStyle="default"
-                translucent={isFullScreen}
-            />
+
             <BottomSheetModal
                 ref={bottomSheetModalRef}
                 onChange={handleSheetChanges}

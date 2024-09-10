@@ -26,8 +26,9 @@
         "android.permission.WRITE_EXTERNAL_STORAGE"
       ]
     },
-
-    "plugins": [],
+    "plugins": [
+      "expo-localization"
+    ],
     "experiments": {
       "typedRoutes": true
     },

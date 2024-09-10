@@ -11,6 +11,7 @@ import { useState } from "react"
 import Row from "@/design-system/Row"
 import IconText from "@/design-system/Text/IconText"
 import { ModalStackWrapper } from "@/design-system/Modal/ModalStackWrapper"
+import { getUserBalance, getUserPointsFormatted } from "@/services/auth/utils"
 
 const MoneyRewardsModal = () => {
     const { user, signOut } = useAuth();
@@ -21,16 +22,16 @@ const MoneyRewardsModal = () => {
     return (
         <ModalStackWrapper>
             <View style={{ alignItems: "center", flex: 1, justifyContent: "center" }}>
-                <Text style={{ fontSize: Typography.largeHeading * 2, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText, lineHeight: Typography.largeHeading * 2, }}>
-                    $3.20
+                <Text style={{ fontSize: Typography.largeHeading * 1.5, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText, lineHeight: Typography.largeHeading * 2, }}>
+                    {user && getUserBalance(user)}
                 </Text>
                 <Row style={{ gap: 20, marginBottom: 20 }}>
                     <Row style={{ gap: 4 }}>
-                        <IconText style={{ color: Colors.design.green }}>
+                        <IconText style={{ color: Colors.design.purpleText }}>
                             {SF_ICONS.cards_stack}
                         </IconText>
                         <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_700Bold, color: Colors.design.text }}>
-                            12 Gigs
+                            {user?.gigsCompleted?.length ?? 0} Gigs
                         </Text>
                     </Row>
                     <Row style={{ gap: 4 }}>
@@ -38,12 +39,12 @@ const MoneyRewardsModal = () => {
                             {SF_ICONS.medal_filled}
                         </IconText>
                         <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_700Bold, color: Colors.design.text }}>
-                            40 XP
+                            {user && getUserPointsFormatted(user.xp?.points)} XP
                         </Text>
                     </Row>
                 </Row>
                 <Text style={{ textAlign: "center", maxWidth: 320, fontSize: Typography.body, fontFamily: Fonts.Inter_600SemiBold, color: Colors.design.mutedText }}>
-                    You're almost there! Rewards are available to withdraw once you reach $10.00.
+                    You're almost there! Rewards are available to withdraw once you reach US$10.00.
                 </Text>
             </View>
 

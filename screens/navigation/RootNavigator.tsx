@@ -18,6 +18,12 @@ import { useAuth } from '@/services/auth/hooks';
 import { SurveyProvider } from '../detail/context';
 import { SQLiteProvider } from 'expo-sqlite';
 import { SavedSurveysProvider } from '@/contexts/SavedSurveysContext';
+import { StatusBar } from 'react-native';
+import { PostHogProvider } from 'posthog-react-native';
+import { SystemPreferencesProvider } from '@/contexts/SystemPreferencesContext';
+import PostAuthOnboardingNavigator from './PostAuthOnboardingNavigator';
+import { useSystemPreferences } from '@/contexts/SystemPreferencesContext';
+import { FEATURE_FLAGS } from '@/contexts/SystemPreferencesContext';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -26,6 +32,7 @@ export type RootStackParamList = {
     Onboarding: undefined;
     Auth: undefined;
     Main: undefined
+    PostAuthOnboarding: undefined;
 };
 
 export type AuthStackParamList = {
@@ -44,15 +51,20 @@ const Stack = createStackNavigator<RootStackParamList>();
 const client = new QueryClient();
 
 function RootNavigatorContent() {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { isAuthenticated, isLoading, user } = useAuth();
     const [hasSeenOnboarding, setHasSeenOnboarding] = useState<boolean | null>(null);
+    const [hasCompletedPostAuthOnboarding, setHasCompletedPostAuthOnboarding] = useState<boolean | null>(null);
     const [isReady, setIsReady] = useState(false);
+    const { isFeatureEnabled } = useSystemPreferences();
 
     useEffect(() => {
         async function prepare() {
             try {
                 const onboardingStatus = await AsyncStorage.getItem('hasSeenOnboarding');
                 setHasSeenOnboarding(onboardingStatus === 'true');
+
+                const postAuthOnboardingStatus = await AsyncStorage.getItem('hasCompletedPostAuthOnboarding');
+                setHasCompletedPostAuthOnboarding(postAuthOnboardingStatus === 'true');
             } catch (e) {
                 console.warn('Failed to fetch onboarding status');
             } finally {
@@ -73,7 +85,8 @@ function RootNavigatorContent() {
         return null;
     }
 
-    console.log('hasSeenOnboarding', hasSeenOnboarding);
+
+
 
     return (
         <QueryClientProvider client={client}>
@@ -82,9 +95,11 @@ function RootNavigatorContent() {
                     {!hasSeenOnboarding && (
                         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
                     )}
-                    <Stack.Screen name="Auth" component={AuthNavigator} />
+                    <Stack.Screen name="PostAuthOnboarding" component={PostAuthOnboardingNavigator} />
 
                     <Stack.Screen name="Main" component={CoreAppNavigator} />
+
+                    <Stack.Screen name="Auth" component={AuthNavigator} />
 
                 </Stack.Navigator>
             </View>
@@ -96,17 +111,23 @@ function RootNavigator() {
     return (
         <SurveyProvider>
             <SavedSurveysProvider>
-                <GestureHandlerRootView style={{ flex: 1 }}>
-                    <NavigationContainer>
-                        <SafeAreaProvider style={{ backgroundColor: Colors.design.white }}>
-                            <BottomSheetModalProvider>
-                                <AuthProvider>
-                                    <RootNavigatorContent />
-                                </AuthProvider>
-                            </BottomSheetModalProvider>
-                        </SafeAreaProvider>
-                    </NavigationContainer>
-                </GestureHandlerRootView>
+                <SystemPreferencesProvider>
+                    <GestureHandlerRootView style={{ flex: 1 }}>
+                        <NavigationContainer>
+                            <PostHogProvider apiKey="phc_vxCHVGyr69GJAPuWujqSCDkLnkflcAFq4dB8MaW16Dh" options={{
+                                host: "https://us.i.posthog.com",
+                            }}>
+                                <SafeAreaProvider style={{ backgroundColor: Colors.design.white }}>
+                                    <BottomSheetModalProvider>
+                                        <AuthProvider>
+                                            <RootNavigatorContent />
+                                        </AuthProvider>
+                                    </BottomSheetModalProvider>
+                                </SafeAreaProvider>
+                            </PostHogProvider>
+                        </NavigationContainer>
+                    </GestureHandlerRootView>
+                </SystemPreferencesProvider>
             </SavedSurveysProvider>
         </SurveyProvider>
     );

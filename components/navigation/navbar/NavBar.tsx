@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, ImageBackground, Image, TouchableOpacity } from "react-native";
+import { Animated, ImageBackground, Image, TouchableOpacity, StatusBar } from "react-native";
 import tw from "twrnc";
 import Colors from "@/constants/Colors";
 import { Fonts, Typography } from "@/constants/typography";
@@ -12,6 +12,8 @@ import useDisclosure from "@/hooks/useDisclosure";
 import { SettingsModalStack } from "@/components/settings/SettingsNavigator";
 import { MoneyRewardsModalStack } from "@/components/money-rewards-modal/MoneyRewardsModal";
 import { ProfileModalStack } from "@/components/profile-modal";
+import { useAuth } from "@/services/auth/hooks";
+import { getUserBalance } from "@/services/auth/utils";
 
 const NAVBAR_HEIGHT = 72; // Adjust this value based on your navbar's height
 
@@ -24,6 +26,7 @@ const NavBar = () => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const lastScrollY = useRef(0);
   const isScrollingUp = useRef(true);
+  const { user } = useAuth()
 
   useEffect(() => {
     const listenerId = scrollY.addListener(({ value }) => {
@@ -78,6 +81,7 @@ const NavBar = () => {
         },
       ]}
     >
+      <StatusBar barStyle="light-content" translucent />
       <ProfileModalStack isOpen={isProfileModalOpen} onClose={() => setIsProfileModalOpen(false)} />
       <MoneyRewardsModalStack isOpen={isMoneyRewardsModalOpen} onClose={() => setIsMoneyRewardsModalOpen(false)} />
 
@@ -96,7 +100,7 @@ const NavBar = () => {
           <TouchableOpacity onPress={() => setIsMoneyRewardsModalOpen(true)} style={{ flexDirection: "row", alignItems: "center", gap: 5, paddingHorizontal: 4, paddingRight: 20, paddingVertical: 6, borderRadius: 20, backgroundColor: Colors.design.surfaceOnSurface }}>
             <Image source={require("@/assets/images/imports/dollar-icon.png")} style={{ width: 32, height: 32 }} />
             <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
-              $3.20
+              {user && getUserBalance(user)}
             </Text>
           </TouchableOpacity>
         </Row>

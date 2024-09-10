@@ -2,11 +2,12 @@ import {
   Image,
   RefreshControl,
   ScrollView,
+  StatusBar,
   StyleSheet,
   TouchableOpacity,
   View
 } from "react-native";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import tw from "twrnc";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import GigDescriptionHeader from "@/components/navigation/headers/GigDescriptionHeader";
@@ -25,6 +26,7 @@ import Separator from "@/design-system/Separator";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Row from "@/design-system/Row";
+import { useSavedSurveys } from "@/contexts/SavedSurveysContext";
 
 type RootStackParamList = {
   GigDetails: {
@@ -55,6 +57,9 @@ const GigDescriptionScreen = () => {
   const navigation = useNavigation<GigDescriptionScreenNavigationProp>();
   const route = useRoute<GigDescriptionScreenRouteProp>();
   const { gig_id } = route.params as any as { gig_id: string };
+  const { addSavedSurvey, isSaved, removeSavedSurvey } = useSavedSurveys()
+
+  const isSurveySaved = useMemo(() => isSaved(gig_id), [gig_id, isSaved])
 
   const [hasStarted, setHasStarted] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
@@ -71,6 +76,21 @@ const GigDescriptionScreen = () => {
     const response = await axiosInstance.get(GIG_ROUTES.GET_GIG_BY_ID(id));
     setSurvey(response.data);
   };
+
+  const onToggleSaved = () => {
+    if (survey && !isSaved(survey._id)) {
+      addSavedSurvey({
+        _id: survey._id,
+        name: survey.name,
+        description: survey.description,
+        dollarRewardValue: survey.dollarRewardValue,
+        rewardType: survey.reward.type as "voucher" | "points",
+        type: 'saved'
+      })
+    } else {
+      removeSavedSurvey(survey._id)
+    }
+  }
 
   useEffect(() => {
     if (gig_id) {
@@ -105,6 +125,7 @@ const GigDescriptionScreen = () => {
     }
   }
 
+
   return (
     <ScrollView refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -114,9 +135,9 @@ const GigDescriptionScreen = () => {
       },
     ]}>
       <View style={{
-        paddingHorizontal: 20
+        paddingHorizontal: 10
       }}>
-        <GigDescriptionHeader />
+        <GigDescriptionHeader onToggleSaved={onToggleSaved} isSaved={isSurveySaved} />
       </View>
       <View style={{ gap: 24, padding: 24 }}>
         <View

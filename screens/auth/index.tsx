@@ -20,6 +20,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { AuthStackParamList, RootStackParamList } from "../navigation/RootNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Row from "@/design-system/Row";
+import LoadingScreen from "@/components/ui/LoadingScreen";
 
 const countryCodes = [
   { code: "+263", country: "Zimbabwe" },
@@ -151,12 +152,14 @@ export default function LoginScreen() {
   };
 
   useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      // navigation.replace("ExploreScreen");
+    if (isAuthenticated) {
+      mainAppNavigation.navigate("Main");
     }
-  }, [isAuthenticated, isLoading]);
+  }, [isAuthenticated, isLoading,]);
 
-  console.log(navigation.getState())
+  if (isLoading) {
+    return <LoadingScreen />
+  }
 
   return (
     <View style={styles.container}>

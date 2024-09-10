@@ -54,16 +54,6 @@ const GigItem = (props: Survey) => {
   const onNavigate = () => {
     try {
 
-      // Add to saved surveys
-      addSavedSurvey({
-        _id: props._id,
-        name: props.name,
-        description: props.description,
-        dollarRewardValue: props.dollarRewardValue,
-        rewardType: props.reward.type as "voucher" | "points",
-        type: 'saved'
-      });
-
       navigation.navigate('GigDetails', {
         screen: 'GigDescriptionScreen',
         params: { gig_id: props._id }
@@ -140,7 +130,7 @@ const GigItem = (props: Survey) => {
             {props.reward.type === "points" && (
               <>
                 <Text style={{
-                  color: Colors.design.accent, fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.base, lineHeight: Typography.body
+                  color: Colors.design.redText, fontFamily: Fonts.Inter_700Bold, fontSize: Typography.base, lineHeight: Typography.body
                 }}>
                   {"  "}
                   +{(props.reward.value as { amount: number }).amount} XP</Text>

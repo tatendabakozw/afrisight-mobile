@@ -7,12 +7,21 @@ import { EmptyStateCaption } from "../captions";
 import IconText from "@/design-system/Text/IconText";
 import { SF_ICONS } from "@/constants/icons";
 import { SurveyEntity } from "@/model/survey";
+import { useSavedSurveys } from "@/contexts/SavedSurveysContext";
+import Separator from "@/design-system/Separator";
+import { useNavigation } from "@react-navigation/native";
 
 interface RecentActivitySectionProps {
     surveys?: SurveyEntity[];
 }
 
 export default function RecentActivitySection({ surveys }: RecentActivitySectionProps) {
+    const { savedSurveys } = useSavedSurveys()
+    const navigate = useNavigation()
+
+    const onViewAll = () => {
+        navigate.navigate("MyGigsScreen" as never)
+    }
     return (
         <View>
             <View
@@ -32,7 +41,7 @@ export default function RecentActivitySection({ surveys }: RecentActivitySection
                 >
                     Recent Activity
                 </Text>
-                <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }}>
+                <TouchableOpacity onPress={onViewAll} style={{ flexDirection: "row", alignItems: "center" }}>
                     <Text
                         style={{
                             fontSize: Typography.body,
@@ -48,20 +57,21 @@ export default function RecentActivitySection({ surveys }: RecentActivitySection
                 </TouchableOpacity>
             </View>
             <FlatList
-                data={surveys}
-
+                data={savedSurveys.slice(0, 3)}
                 showsHorizontalScrollIndicator={false}
                 pagingEnabled
                 snapToAlignment="center"
                 decelerationRate="fast"
-                keyExtractor={(item) => item._id.toString()}
+                keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
-                    <MySurvey
-                        {...item}
-                        status={Math.random() > 0.5 ? "COMPLETED" : "DRAFT"}
-                    />
+                    <>
+                        <MySurvey
+                            {...item}
+                        />
+                        <Separator />
+                    </>
                 )}
-                contentContainerStyle={{ paddingHorizontal: 20 }}
+                contentContainerStyle={{ gap: 10 }}
                 ListEmptyComponent={<EmptyStateCaption message="No recent activity" />}
             />
         </View>

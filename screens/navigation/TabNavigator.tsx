@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AuthGuard } from '@/services/auth/AuthGuard';
 import { ExploreScreen, GiftShopScreen, MyGigsScreen } from '@/screens/tabs';
@@ -10,12 +10,17 @@ import { SF_ICONS } from '@/constants/icons';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import NavBar from '@/components/navigation/navbar/NavBar';
 import { ScrollProvider } from '@/contexts/ScrollContext';
-import LeaderboardScreen from '../tabs/profile';
+import LeaderboardScreen from '../tabs/leaderboard';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack';
 import GigDescriptionScreen from '../detail/gig-description';
 import GigModalScreen from '../detail/gig-modal';
+import { StatusBar } from 'react-native';
+import { FEATURE_FLAGS, useSystemPreferences } from '@/contexts/SystemPreferencesContext';
+import { useFeatureFlag } from 'posthog-react-native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from './RootNavigator';
 // Import your tab screens here
 
 const Tab = createBottomTabNavigator();
@@ -23,7 +28,7 @@ const Stack = createStackNavigator();
 
 function GigDetailStack() {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator screenOptions={{ headerShown: false, header: () => <NavBar /> }}>
             <Stack.Screen name="GigDescriptionScreen" component={GigDescriptionScreen} />
             <Stack.Screen name="GigModalScreen" component={GigModalScreen} />
         </Stack.Navigator>
@@ -32,8 +37,10 @@ function GigDetailStack() {
 
 function ExploreStack() {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="ExploreMain" component={ExploreScreen} />
+        <Stack.Navigator screenOptions={{ headerShown: false, header: () => <NavBar /> }}>
+            <Stack.Screen name="ExploreMain" component={ExploreScreen} options={{
+                headerShown: true,
+            }} />
             <Stack.Screen name="GigDetails" component={GigDetailStack} />
         </Stack.Navigator>
     );
@@ -41,8 +48,10 @@ function ExploreStack() {
 
 function MyGigsStack() {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="MyGigsMain" component={MyGigsScreen} />
+        <Stack.Navigator screenOptions={{ headerShown: false, header: () => <NavBar /> }}>
+            <Stack.Screen name="MyGigsMain" component={MyGigsScreen} options={{
+                headerShown: true,
+            }} />
             <Stack.Screen name="GigDetails" component={GigDetailStack} />
         </Stack.Navigator>
     );
@@ -75,13 +84,27 @@ const getTabLabel = (routeName: string) => {
 }
 
 function CoreAppNavigator() {
+    const showCxStore = useFeatureFlag(FEATURE_FLAGS.CX_STORE_ENABLED)
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>()
+    const { preferences } = useSystemPreferences()
+
+    useEffect(() => {
+        if (!preferences.hasCompletedPostAuthOnboarding) {
+            console.log("Navigating to PostAuthOnboarding")
+            navigation.navigate("PostAuthOnboarding")
+        }
+    }, [preferences])
+
+    console.log({ preferences })
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
+
             <AuthGuard>
                 <BottomSheetModalProvider>
                     <ScrollProvider>
                         <Tab.Navigator screenOptions={({ route }) => ({
-                            header: () => <NavBar />,
                             tabBarIcon: ({ focused }) => {
                                 const color = focused ? Colors.design.highContrastText : Colors.design.mutedText;
                                 return (
@@ -110,11 +133,15 @@ function CoreAppNavigator() {
                                 paddingVertical: 8
                             },
                             tabBarShowLabel: true,
+                            header: () => <NavBar />,
+
                         })}>
-                            <Tab.Screen name="ExploreScreen" component={ExploreStack} options={{ title: "Explore" }} />
-                            <Tab.Screen name="MyGigsScreen" component={MyGigsStack} options={{ title: "My Gigs" }} />
-                            <Tab.Screen component={GiftShopScreen} name="GiftShopScreen" options={{ title: "Store", }} />
-                            <Tab.Screen component={LeaderboardScreen} name="LeaderboardScreen" options={{ title: "Leaderboard", }} />
+                            <Tab.Screen name="ExploreScreen" component={ExploreStack} options={{ title: "Explore", headerShown: false }} />
+                            <Tab.Screen name="MyGigsScreen" component={MyGigsStack} options={{ title: "My Gigs", headerShown: false }} />
+                            {showCxStore &&
+                                <Tab.Screen component={GiftShopScreen} name="GiftShopScreen" options={{ title: "Store", headerShown: true, }} />
+                            }
+                            <Tab.Screen component={LeaderboardScreen} name="LeaderboardScreen" options={{ title: "Leaderboard", headerShown: true }} />
 
                         </Tab.Navigator>
                     </ScrollProvider>

@@ -9,12 +9,14 @@ import RecentActivitySection from "@/components/explore/RecentActivitySection";
 import { NAVBAR_HEIGHT } from "@/constants/layout";
 import { SurveyRepository } from "@/model/survey/repo";
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/services/auth/hooks";
 
 
 const localSurveyStoreRepository = new SurveyRepository();
 
 
 export default function ExploreScreen() {
+  const { user } = useAuth();
   const myRecentSurveys = useQuery({
     queryKey: ['recent-surveys'],
     async queryFn() {
@@ -27,6 +29,7 @@ export default function ExploreScreen() {
     async queryFn() {
       return onFetchData();
     },
+    enabled: !!user
   });
 
 
@@ -52,7 +55,8 @@ export default function ExploreScreen() {
       }
       scrollEventThrottle={16}
     >
-      <MyPointsCard points={1000} rank={325} />
+
+      <MyPointsCard points={user?.xp?.points ?? 0} rank={325} />
       <RecentActivitySection surveys={myRecentSurveys.data} />
       <View>
         <DiscoverGigsSection />

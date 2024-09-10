@@ -6,6 +6,9 @@ import { useFonts, Inter_300Light, Inter_400Regular, Inter_500Medium, Inter_600S
 import * as SplashScreen from 'expo-splash-screen';
 import RootNavigator from './screens/navigation/RootNavigator';
 import { SavedSurveysProvider } from '@/contexts/SavedSurveysContext';
+import Colors from './constants/Colors';
+import { StatusBar } from 'react-native';
+import { PostHogProvider } from 'posthog-react-native'
 
 SplashScreen.preventAutoHideAsync();
 
@@ -34,6 +37,10 @@ export default function App() {
     }
 
     return (
-        <RootNavigator />
+        <>
+
+            <RootNavigator />
+
+        </>
     );
 }

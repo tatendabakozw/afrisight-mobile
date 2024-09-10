@@ -7,6 +7,7 @@ import {
   FlatList,
   ScrollView,
   RefreshControl,
+  StatusBar,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import tw from "twrnc";
@@ -100,7 +101,6 @@ export default function GiftShopScreen() {
       }
     >
 
-
       <View style={{
         marginBottom: 40, marginTop: NAVBAR_HEIGHT + 20,
       }}>
@@ -142,7 +142,6 @@ export default function GiftShopScreen() {
 
       </View>
 
-      <GigList gigs={gigs} />
 
       {/* <View style={{ marginBottom: 48 }}>
           <Text style={{

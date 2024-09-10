@@ -1,7 +1,7 @@
 import ExploreScreen from "./explore";
 import GiftShopScreen from "./store";
 import MyGigsScreen from "./my-gigs";
-import LeaderboardScreen from "./profile";
+import LeaderboardScreen from "./leaderboard";
 
 export {
     ExploreScreen,

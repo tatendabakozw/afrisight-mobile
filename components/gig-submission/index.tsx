@@ -7,12 +7,19 @@ import tw from "twrnc";
 import { Reward } from "../../screens/detail/gig-modal";
 import AnimatedModal from "@/components/ui/AnimatedModal";
 import Button from "@/design-system/Button";
+import { useEffect } from "react";
+import { useAuth } from "@/services/auth/hooks";
+import { useSavedSurveys } from "@/contexts/SavedSurveysContext";
+import { useQuery } from "@tanstack/react-query";
+import { axiosInstance } from "@/utils/axios";
+import { GIG_ROUTES } from "@/constants/routers";
 
 
 export default function GigSubmission(props: Reward & {
     onClose: () => void
     onReturnHome: () => void
     isOpen: boolean
+    gig_id: string
 }) {
 
     const { message,
@@ -21,7 +28,38 @@ export default function GigSubmission(props: Reward & {
         code,
         maxRedemptions,
         isRedeemed } = props
+    const { fetchProfile } = useAuth()
+    const { addSavedSurvey, savedSurveys } = useSavedSurveys()
 
+    const gig = useQuery({
+        queryKey: ["gig", props.gig_id],
+        queryFn: () => axiosInstance.get(GIG_ROUTES.GET_GIG_BY_ID(props.gig_id))
+    })
+
+    useEffect(() => {
+        fetchProfile()
+        if (gig.data?.data) {
+            const { _id, name, description, dollarRewardValue, rewardType } = gig.data?.data
+            console.log(
+                {
+                    _id,
+                    name,
+                    description,
+                    dollarRewardValue,
+                    rewardType
+                }
+            )
+            addSavedSurvey({
+                _id: gig.data?.data._id,
+                name: gig.data?.data.name,
+                description: gig.data?.data.description,
+                dollarRewardValue: gig.data?.data.dollarRewardValue,
+                rewardType: gig.data?.data.reward.type as "voucher" | "points",
+                type: 'completed'
+            });
+        }
+
+    }, [gig.data, gig.isSuccess])
 
     return (
         <AnimatedModal fullHeight isOpen={props.isOpen} onClose={props.onClose}>

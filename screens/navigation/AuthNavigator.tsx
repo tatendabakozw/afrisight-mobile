@@ -14,16 +14,14 @@ const Stack = createStackNavigator();
 function AuthNavigator() {
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <AuthGuard>
-                <Stack.Navigator screenOptions={({ navigation, route }) => ({
-                    header: (props) => <OnboardingNavbar {...props} />,
-                    tabBarActiveTintColor: Colors.light.tint,
-                    headerShown: useClientOnlyValue(false, true),
-                })}>
-                    <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-                    <Stack.Screen name="SignUp" component={RegisterScreen} />
-                </Stack.Navigator>
-            </AuthGuard>
+            <Stack.Navigator screenOptions={({ navigation, route }) => ({
+                header: (props) => <OnboardingNavbar {...props} />,
+                tabBarActiveTintColor: Colors.light.tint,
+                headerShown: useClientOnlyValue(false, true),
+            })}>
+                <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="SignUp" component={RegisterScreen} />
+            </Stack.Navigator>
         </SafeAreaView>
     );
 }

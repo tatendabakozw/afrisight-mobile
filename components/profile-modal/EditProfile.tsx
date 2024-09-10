@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { ImageBackground, KeyboardAvoidingView, ScrollView, View } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,33 +21,41 @@ import { ModalStackWrapper } from '@/design-system/Modal/ModalStackWrapper';
 import { axiosInstance } from "@/utils/axios";
 import { AUTH_ROUTES } from '@/constants/routers';
 import { ProfileStackParamList } from '.';
+import { useStackModalHeight } from '@/design-system/Modal/utils';
+import { useAuth } from '@/services/auth/hooks';
+import { useLeaderBoard } from '@/services/leaderboard';
 
 const schema = z.object({
-    name: z.string().min(2, "Name must be at least 2 characters"),
+    firstname: z.string().min(2, "Name must be at least 2 characters"),
+    surname: z.string().min(2, "Name must be at least 2 characters"),
     bio: z.string().max(160, "Bio must be 160 characters or less"),
-    phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
+    phone: z.string(),
 });
 
 type FormData = z.infer<typeof schema>;
 
 const EditProfile = () => {
     const navigation = useNavigation<NavigationProp<ProfileStackParamList, 'EditProfile'>>();
+    const { user, fetchProfile } = useAuth()
     const { setHeight } = useBottomSheetContext();
     const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
     });
 
-    const onSubmit = async (data: FormData) => {
-        try {
-            await axiosInstance.put(AUTH_ROUTES.USER_PROFILE, data);
-            navigation.goBack();
-        } catch (error) {
-            console.error("Failed to update profile:", error);
+    const onSubmit = useCallback(async (data: FormData) => {
+        if (user) {
+            try {
+                await axiosInstance.put(AUTH_ROUTES.UPDATE_PROFILE(user._id), data);
+                await fetchProfile();
+                navigation.goBack();
+            } catch (error) {
+                console.error("Failed to update profile:", error);
+            }
         }
-    };
+    }, [user]);
 
     useLayoutEffect(() => {
-        setHeight(560);
+        setHeight(720);
     }, [setHeight]);
 
     const translateY = useSharedValue(50);
@@ -66,6 +74,8 @@ const EditProfile = () => {
 
         return () => clearTimeout(timeout);
     }, []);
+
+    useStackModalHeight(640)
 
     return (
         <ModalStackWrapper>
@@ -87,7 +97,7 @@ const EditProfile = () => {
                             control={control}
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <Row style={{ gap: 20, alignItems: "center", paddingVertical: 6 }}>
-                                    <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.body, color: Colors.design.highContrastText, lineHeight: Typography.body * 1.5, width: 64 }}>Name</Text>
+                                    <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.body, color: Colors.design.highContrastText, lineHeight: Typography.body * 1.5, width: 80 }}>Name</Text>
                                     <KeyboardAvoidingView style={{ flex: 1 }}>
                                         <Input
                                             placeholder="Add a display name"
@@ -98,15 +108,34 @@ const EditProfile = () => {
                                     </KeyboardAvoidingView>
                                 </Row>
                             )}
-                            name="name"
+                            name="firstname"
                         />
-                        {errors.name && <Text style={{ color: 'red' }}>{errors.name.message}</Text>}
+                        {errors.surname && <Text style={{ color: 'red' }}>{errors.surname.message}</Text>}
                         <Separator />
                         <Controller
                             control={control}
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <Row style={{ gap: 20, alignItems: "center", paddingVertical: 6 }}>
-                                    <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.body, color: Colors.design.highContrastText, lineHeight: Typography.body * 1.5, width: 64 }}>Bio</Text>
+                                    <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.body, color: Colors.design.highContrastText, lineHeight: Typography.body * 1.5, width: 80 }}>Surname</Text>
+                                    <KeyboardAvoidingView style={{ flex: 1 }}>
+                                        <Input
+                                            placeholder="Add a surname"
+                                            onBlur={onBlur}
+                                            onChangeText={onChange}
+                                            value={value}
+                                        />
+                                    </KeyboardAvoidingView>
+                                </Row>
+                            )}
+                            name="surname"
+                        />
+                        {errors.firstname && <Text style={{ color: 'red' }}>{errors.firstname.message}</Text>}
+                        <Separator />
+                        <Controller
+                            control={control}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <Row style={{ gap: 20, alignItems: "center", paddingVertical: 6 }}>
+                                    <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.body, color: Colors.design.highContrastText, lineHeight: Typography.body * 1.5, width: 80 }}>Bio</Text>
                                     <KeyboardAvoidingView style={{ flex: 1 }}>
                                         <Input
                                             placeholder="Add a bio"
@@ -125,7 +154,7 @@ const EditProfile = () => {
                             control={control}
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <Row style={{ gap: 20, alignItems: "center", paddingVertical: 6 }}>
-                                    <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.body, color: Colors.design.highContrastText, lineHeight: Typography.body * 1.5, width: 64 }}>Phone</Text>
+                                    <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.body, color: Colors.design.highContrastText, lineHeight: Typography.body * 1.5, width: 80 }}>Phone</Text>
                                     <KeyboardAvoidingView style={{ flex: 1 }}>
                                         <Input
                                             placeholder="Add a phone number"

@@ -170,7 +170,7 @@ const GigModalScreen = ({ navigation, route }: { navigation: any, route: any }) 
         code,
         isRedeemed,
         maxRedemptions,
-        value
+        value: type === "points" ? value.points : value.items
       })
 
       addCompletedSurvey({
@@ -227,27 +227,25 @@ const GigModalScreen = ({ navigation, route }: { navigation: any, route: any }) 
 
 
   return (
-    <CXBottomSheet isOpen={isSurveyModalOpen} onClose={onCloseSurveyModal} height={SCREEN_HEIGHT * 0.9} isFullScreen>
-      <View style={{ flex: 1, backgroundColor: Colors.design.white, }}>
-        {isRewardModelOpen && reward && <GigSubmission {...reward} isOpen={isRewardModelOpen} onClose={handleOnCloseRewardModal} onReturnHome={handleOnCloseRewardModal} />}
-        <View style={{ flex: 1, }}>
-          <Header currentIndex={currentSectionIndex} count={sections.length} onBack={() => navigation.goBack()} />
-          <ScrollView style={[tw`flex-1`, { paddingTop: 20 }]} contentContainerStyle={tw`gap-6`}>
-            <KeyboardAvoidingView>
-              <FormInfo name={form.name} description={form.description} />
-              {renderCurrentSection()}
-            </KeyboardAvoidingView>
-          </ScrollView>
-        </View>
-        <Footer
-          currentSectionIndex={currentSectionIndex}
-          totalSections={sections.length}
-          onPrevious={handlePrevious}
-          onNext={handleNext}
-          isLoading={isLoading}
-        />
+    <View style={{ flex: 1, backgroundColor: Colors.design.white, }}>
+      {isRewardModelOpen && reward && <GigSubmission gig_id={gig_id} {...reward} isOpen={isRewardModelOpen} onClose={handleOnCloseRewardModal} onReturnHome={handleOnCloseRewardModal} />}
+      <View style={{ flex: 1, }}>
+        <Header currentIndex={currentSectionIndex} count={sections.length} onBack={() => navigation.goBack()} />
+        <ScrollView style={[tw`flex-1`, { paddingTop: 20 }]} contentContainerStyle={tw`gap-6 pb-12`}>
+          <KeyboardAvoidingView>
+            <FormInfo name={form.name} description={form.description} />
+            {renderCurrentSection()}
+          </KeyboardAvoidingView>
+        </ScrollView>
       </View>
-    </CXBottomSheet>
+      <Footer
+        currentSectionIndex={currentSectionIndex}
+        totalSections={sections.length}
+        onPrevious={handlePrevious}
+        onNext={handleNext}
+        isLoading={isLoading}
+      />
+    </View>
   );
 };
 
@@ -322,8 +320,9 @@ const Footer = ({ currentSectionIndex, isLoading, onPrevious, onNext }: {
   <View style={{
     flexDirection: 'row',
     gap: 20,
-    padding: 20,
-    marginTop: 0
+    padding: 10,
+    marginTop: 0,
+
   }} >
     {currentSectionIndex > 0 && (
       <Button style={{ flex: 1 }} text="Previous" variant="surface" colorScheme="surface" onPress={onPrevious} />
