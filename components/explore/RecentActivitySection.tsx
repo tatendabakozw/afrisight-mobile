@@ -1,16 +1,15 @@
-import { View, TouchableOpacity, FlatList, Image } from "react-native";
+import { View, TouchableOpacity, FlatList } from "react-native";
 import Text from "@/components/ui/Text";
 import Colors from "@/constants/Colors";
 import { Fonts, Typography } from "@/constants/typography";
-import RecentActivityComponent from "@/components/recent-activity/RecentActivityComponent";
-import { Survey } from "@/types";
-import { FontAwesome6 } from "@expo/vector-icons";
+import MySurvey from "@/components/recent-activity/RecentActivityComponent";
 import { EmptyStateCaption } from "../captions";
 import IconText from "@/design-system/Text/IconText";
 import { SF_ICONS } from "@/constants/icons";
+import { SurveyEntity } from "@/model/survey";
 
 interface RecentActivitySectionProps {
-    surveys: Survey[];
+    surveys?: SurveyEntity[];
 }
 
 export default function RecentActivitySection({ surveys }: RecentActivitySectionProps) {
@@ -57,7 +56,7 @@ export default function RecentActivitySection({ surveys }: RecentActivitySection
                 decelerationRate="fast"
                 keyExtractor={(item) => item._id.toString()}
                 renderItem={({ item }) => (
-                    <RecentActivityComponent
+                    <MySurvey
                         {...item}
                         status={Math.random() > 0.5 ? "COMPLETED" : "DRAFT"}
                     />

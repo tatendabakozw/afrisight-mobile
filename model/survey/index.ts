@@ -1,33 +1,29 @@
 import { SurveyStatus } from '@/types';
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-    UpdateDateColumn,
-    BaseEntity,
-    PrimaryColumn,
+    Entity, Column, BaseEntity,
+    PrimaryColumn
 } from 'typeorm';
 
 @Entity("survey")
 export class SurveyEntity extends BaseEntity {
-    @PrimaryColumn("id")
+    @PrimaryColumn()
+    id: string;
+
+    @Column("text")
     _id: string;
 
     @Column('text')
-    title: string;
+    name: string;
 
     @Column('text')
     description: string;
 
-    @Column('enum')
+    @Column('int')
+    dollarRewardValue: number;
+
+    @Column('text')
     status: SurveyStatus
 
-    @Column('json')
-    reward: {
-        type: 'points' | 'voucher'
-        amount: number | {
-            value: number
-        }
-    }
+    @Column('text')
+    reward: string
 }

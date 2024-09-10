@@ -1,14 +1,14 @@
-import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
-import { Feather, FontAwesome6, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Survey } from "@/utils/types";
+import { TouchableOpacity, View } from "react-native";
+import { Survey } from "@/types";
 import Colors from "@/constants/Colors";
 import Text from "../ui/Text";
 import { Fonts, Typography } from "@/constants/typography";
-import { Image } from "react-native";
 import { SF_ICONS } from "@/constants/icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { NavigationStackProps } from "@/screens";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { SurveyRepository } from "@/model/survey/repo";
+import { useSavedSurveys } from "@/contexts/SavedSurveysContext";
 
 // Add this type definition at the top of the file
 type RootStackParamList = {
@@ -47,11 +47,23 @@ export function timeFromNow(date: Date): string {
 }
 
 const GigItem = (props: Survey) => {
-  console.log("Mounted gig")
   const navigation = useNavigation<NavigationProp>();
+  const client = useQueryClient();
+  const { addSavedSurvey } = useSavedSurveys();
+
   const onNavigate = () => {
-    console.log("Attempting to navigate to GigDetails with gig_id:", props._id);
     try {
+
+      // Add to saved surveys
+      addSavedSurvey({
+        _id: props._id,
+        name: props.name,
+        description: props.description,
+        dollarRewardValue: props.dollarRewardValue,
+        rewardType: props.reward.type as "voucher" | "points",
+        type: 'saved'
+      });
+
       navigation.navigate('GigDetails', {
         screen: 'GigDescriptionScreen',
         params: { gig_id: props._id }
@@ -60,6 +72,7 @@ const GigItem = (props: Survey) => {
       console.error("Navigation error:", error);
     }
   }
+
   return (
     <TouchableOpacity
       onPress={onNavigate}
@@ -89,7 +102,8 @@ const GigItem = (props: Survey) => {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 20
+            gap: 20,
+            marginBottom: 4
           }}
         >
           <Text
@@ -105,28 +119,29 @@ const GigItem = (props: Survey) => {
           >
             {props.name}
           </Text>
-          <Text style={{
-            color: Colors.design.text, fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.body, lineHeight: Typography.body
-          }}>
-            ${props.dollarRewardValue}
-          </Text>
-        </View>
-
-        <View style={{ gap: 16, flexDirection: "row", justifyContent: 'space-between' }}>
-
           <Text
             style={{
               color: Colors.design.mutedText,
-              fontFamily: Fonts.Inter_600SemiBold,
-              fontSize: Typography.base
+              fontFamily: Fonts.Inter_500Medium,
             }}
           >
             {timeFromNow(new Date(props.createdAt)).toString()}
           </Text>
+        </View>
+
+        <View style={{ gap: 16, flexDirection: "row", justifyContent: 'space-between' }}>
+          <Text style={{
+            color: Colors.design.text, fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.base, lineHeight: Typography.body
+          }}>
+            ${props.dollarRewardValue}
+          </Text>
+
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             {props.reward.type === "points" && (
               <>
-                <Text style={{ color: Colors.design.accent, fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.base }}>
+                <Text style={{
+                  color: Colors.design.accent, fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.base, lineHeight: Typography.body
+                }}>
                   {"  "}
                   +{(props.reward.value as { amount: number }).amount} XP</Text>
               </>

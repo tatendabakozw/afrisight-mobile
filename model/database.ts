@@ -1,3 +1,4 @@
+import * as SQLite from "expo-sqlite";
 import { DataSource } from 'typeorm';
 import { SurveyEntity } from './survey';
 

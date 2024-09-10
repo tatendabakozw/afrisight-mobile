@@ -39,6 +39,7 @@ export default function ExploreScreen() {
     await newSurveys.refetch();
   };
 
+
   return (
     <Animated.ScrollView
       style={{ flex: 1, backgroundColor: Colors.design.white, }}
@@ -52,7 +53,7 @@ export default function ExploreScreen() {
       scrollEventThrottle={16}
     >
       <MyPointsCard points={1000} rank={325} />
-      <RecentActivitySection surveys={myRecentSurveys.data ?? []} />
+      <RecentActivitySection surveys={myRecentSurveys.data} />
       <View>
         <DiscoverGigsSection />
         <GigList gigs={newSurveys.data ?? []} />

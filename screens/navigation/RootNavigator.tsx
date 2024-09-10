@@ -17,6 +17,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useAuth } from '@/services/auth/hooks';
 import { SurveyProvider } from '../detail/context';
 import { SQLiteProvider } from 'expo-sqlite';
+import { SavedSurveysProvider } from '@/contexts/SavedSurveysContext';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -94,17 +95,19 @@ function RootNavigatorContent() {
 function RootNavigator() {
     return (
         <SurveyProvider>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-                <NavigationContainer>
-                    <SafeAreaProvider style={{ backgroundColor: Colors.design.white }}>
-                        <BottomSheetModalProvider>
-                            <AuthProvider>
-                                <RootNavigatorContent />
-                            </AuthProvider>
-                        </BottomSheetModalProvider>
-                    </SafeAreaProvider>
-                </NavigationContainer>
-            </GestureHandlerRootView>
+            <SavedSurveysProvider>
+                <GestureHandlerRootView style={{ flex: 1 }}>
+                    <NavigationContainer>
+                        <SafeAreaProvider style={{ backgroundColor: Colors.design.white }}>
+                            <BottomSheetModalProvider>
+                                <AuthProvider>
+                                    <RootNavigatorContent />
+                                </AuthProvider>
+                            </BottomSheetModalProvider>
+                        </SafeAreaProvider>
+                    </NavigationContainer>
+                </GestureHandlerRootView>
+            </SavedSurveysProvider>
         </SurveyProvider>
     );
 }

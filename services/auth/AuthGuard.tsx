@@ -22,7 +22,6 @@ export const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children })
         return <LoadingScreen />; // Create a LoadingScreen component
     }
 
-    console.log({ isAuthenticated, isLoading })
 
     return isAuthenticated ? <>{children}</> : null;
 };

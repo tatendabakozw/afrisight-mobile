@@ -54,7 +54,6 @@ function formatDollarAmount(
 const GigDescriptionScreen = () => {
   const navigation = useNavigation<GigDescriptionScreenNavigationProp>();
   const route = useRoute<GigDescriptionScreenRouteProp>();
-  console.log(route.params)
   const { gig_id } = route.params as any as { gig_id: string };
 
   const [hasStarted, setHasStarted] = useState(false)
@@ -64,7 +63,6 @@ const GigDescriptionScreen = () => {
 
   const fetchHasSurveyStarted = async (id: string) => {
     const response = await axiosInstance.get(GIG_ROUTES.GET_SURVEY_RESPONSE_HAS_STARTED(id));
-    console.log(response.data)
     setHasStarted(response.data.hasStarted);
     setIsCompleted(response.data.status === "COMPLETED")
   }

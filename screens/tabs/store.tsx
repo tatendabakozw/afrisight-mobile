@@ -11,7 +11,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import tw from "twrnc";
 import TabsWithChat from "@/layouts/TabsWithChat";
-import RecentActivityComponent from "@/components/recent-activity/RecentActivityComponent";
+import MySurvey from "@/components/recent-activity/RecentActivityComponent";
 import GigList from "@/components/git-item/AllGigs";
 import { Fonts, Typography } from "@/constants/typography";
 import Text from "@/components/ui/Text";
