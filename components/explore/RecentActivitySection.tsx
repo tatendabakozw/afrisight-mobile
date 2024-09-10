@@ -3,8 +3,11 @@ import Text from "@/components/ui/Text";
 import Colors from "@/constants/Colors";
 import { Fonts, Typography } from "@/constants/typography";
 import RecentActivityComponent from "@/components/recent-activity/RecentActivityComponent";
-import { Survey } from "@/utils/types";
+import { Survey } from "@/types";
 import { FontAwesome6 } from "@expo/vector-icons";
+import { EmptyStateCaption } from "../captions";
+import IconText from "@/design-system/Text/IconText";
+import { SF_ICONS } from "@/constants/icons";
 
 interface RecentActivitySectionProps {
     surveys: Survey[];
@@ -12,13 +15,12 @@ interface RecentActivitySectionProps {
 
 export default function RecentActivitySection({ surveys }: RecentActivitySectionProps) {
     return (
-        <View >
+        <View>
             <View
                 style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    marginBottom: 20,
                     paddingHorizontal: 20
                 }}
             >
@@ -31,18 +33,19 @@ export default function RecentActivitySection({ surveys }: RecentActivitySection
                 >
                     Recent Activity
                 </Text>
-                <TouchableOpacity style={{ flexDirection: "row", gap: 6, alignItems: "center" }}>
-
+                <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }}>
                     <Text
                         style={{
-                            fontSize: Typography.paragraph,
+                            fontSize: Typography.body,
                             fontFamily: Fonts.Inter_600SemiBold,
-                            color: Colors.design.text,
+                            color: Colors.design.accent,
                         }}
                     >
                         View All
                     </Text>
-                    <Image source={require("@/assets/images/imports/caret.png")} style={{ width: 20, height: 20, objectFit: "contain" }} />
+                    <IconText style={{ color: Colors.design.accent }}>
+                        {SF_ICONS.chevron_right}
+                    </IconText>
                 </TouchableOpacity>
             </View>
             <FlatList
@@ -60,6 +63,7 @@ export default function RecentActivitySection({ surveys }: RecentActivitySection
                     />
                 )}
                 contentContainerStyle={{ paddingHorizontal: 20 }}
+                ListEmptyComponent={<EmptyStateCaption message="No recent activity" />}
             />
         </View>
     );

@@ -27,7 +27,7 @@ const SettingsItem = (props: Props) => {
         <Text style={{
           fontFamily: Fonts.Inter_600SemiBold,
           color: Colors.design.highContrastText,
-          fontSize: Typography.paragraph
+          fontSize: Typography.body
         }}>{props.heading}</Text>
       </View>
       <IconText style={{

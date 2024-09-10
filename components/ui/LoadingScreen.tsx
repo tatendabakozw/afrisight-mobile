@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 
     },
     message: {
-        fontSize: Typography.paragraph,
+        fontSize: Typography.body,
         textAlign: "center",
         marginBottom: 20,
 

@@ -6,6 +6,9 @@ import { Feather } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { interpolate, Extrapolation } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Text from './Text';
+import { SF_ICONS } from '@/constants/icons';
+import { Fonts, Typography } from '@/constants/typography';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -87,9 +90,11 @@ const AnimatedModal: React.FC<AnimatedModalProps> = ({ isOpen: isVisible, onClos
                 translucent={fullHeight}
             />
             <Animated.View style={[styles.contentContainer, fullHeight ? { flex: 1, maxHeight: SCREEN_HEIGHT - 8 } : {}, animatedStyle]}>
-                <View style={{ flexDirection: "row", justifyContent: "flex-start", marginBottom: 32 }}>
+                <View style={{ flexDirection: "row", justifyContent: "flex-end", marginBottom: 32 }}>
                     <TouchableOpacity onPress={onClose} style={{ borderRadius: 20, }}>
-                        <Feather name='x' size={24} />
+                        <Text style={{ fontSize: Typography.largeHeading, fontFamily: Fonts.Inter_700Bold, color: Colors.design.mutedText }}>
+                            {SF_ICONS.x}
+                        </Text>
                     </TouchableOpacity>
                 </View>
                 {children}

@@ -11,7 +11,7 @@ const Container = styled.View`
 
 const CaptionText = styled.Text`
     font-family: ${Fonts.Inter_600SemiBold};
-    font-size: ${Typography.paragraph}px;
+    font-size: ${Typography.body}px;
     color: ${Colors.design.mutedText};
     text-align: center;
 `
@@ -22,6 +22,20 @@ export const EndOfListCaption = () => {
             <CaptionText>
                 {SF_ICONS.checkmark_filled}{" "}
                 You've reached the end of the list</CaptionText>
+        </Container>
+    )
+}
+
+export const EmptyStateCaption = (props: {
+    message?: string
+}) => {
+
+    return (
+        <Container>
+            <CaptionText>
+                {SF_ICONS.x}{" "}
+                {props.message ?? "No results found"}
+            </CaptionText>
         </Container>
     )
 }

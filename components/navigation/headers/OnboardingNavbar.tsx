@@ -23,7 +23,7 @@ const OnboardingNavbar = ({ navigation, back, options }: any) => {
         {
           alignItems: "center",
           gap: 16,
-          paddingBottom: 16,
+          paddingVertical: 16,
           paddingHorizontal: 16
         },
       ]}

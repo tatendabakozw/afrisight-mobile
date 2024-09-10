@@ -21,15 +21,15 @@ const MoneyRewardsModal = () => {
     return (
         <ModalStackWrapper>
             <View style={{ alignItems: "center", flex: 1, justifyContent: "center" }}>
-                <Text style={{ fontSize: Typography.largeHeading * 2, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText, lineHeight: Typography.largeHeading * 2, marginBottom: 20 }}>
+                <Text style={{ fontSize: Typography.largeHeading * 2, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText, lineHeight: Typography.largeHeading * 2, }}>
                     $3.20
                 </Text>
-                <Row style={{ gap: 20, marginBottom: 10 }}>
+                <Row style={{ gap: 20, marginBottom: 20 }}>
                     <Row style={{ gap: 4 }}>
                         <IconText style={{ color: Colors.design.green }}>
                             {SF_ICONS.cards_stack}
                         </IconText>
-                        <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_700Bold, color: Colors.design.text }}>
+                        <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_700Bold, color: Colors.design.text }}>
                             12 Gigs
                         </Text>
                     </Row>
@@ -37,18 +37,19 @@ const MoneyRewardsModal = () => {
                         <IconText style={{ color: Colors.design.redText }}>
                             {SF_ICONS.medal_filled}
                         </IconText>
-                        <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_700Bold, color: Colors.design.text }}>
+                        <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_700Bold, color: Colors.design.text }}>
                             40 XP
                         </Text>
                     </Row>
                 </Row>
-                <Text style={{ textAlign: "center", maxWidth: 320, fontSize: Typography.paragraph, fontFamily: Fonts.Inter_600SemiBold, color: Colors.design.mutedText }}>
+                <Text style={{ textAlign: "center", maxWidth: 320, fontSize: Typography.body, fontFamily: Fonts.Inter_600SemiBold, color: Colors.design.mutedText }}>
                     You're almost there! Rewards are available to withdraw once you reach $10.00.
                 </Text>
             </View>
 
             <View style={{ marginBottom: 20, gap: 20 }}>
-                <Button leftIcon={SF_ICONS.checkmark_filled} text={"Request payout"} size="medium" variant="accent" />
+
+                <Button disabled leftIcon={SF_ICONS.dollar} text={"Request withdrawal"} size="medium" variant="surface" colorScheme="primary" />
                 <PayoutDetails />
             </View>
 
@@ -60,22 +61,22 @@ const PayoutDetails = () => {
     return (
         <View style={{ gap: 10 }}>
             <Row style={{ justifyContent: "space-between" }}>
-                <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_600SemiBold, color: Colors.design.text }}>
+                <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_600SemiBold, color: Colors.design.mutedText }}>
                     <IconText style={{ color: Colors.design.mutedText, fontSize: Typography.subheading, lineHeight: Typography.subheading * 1.5 }}>
                         {SF_ICONS.card}
                     </IconText>{"  "}Payout method
                 </Text>
-                <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
+                <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_700Bold, color: Colors.design.mutedText }}>
                     ***685
                 </Text>
             </Row>
             <Row style={{ justifyContent: "space-between" }}>
-                <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_600SemiBold, color: Colors.design.text }}>
+                <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_600SemiBold, color: Colors.design.mutedText }}>
                     <IconText style={{ color: Colors.design.mutedText, fontSize: Typography.subheading, lineHeight: Typography.subheading * 1.5 }}>
                         {SF_ICONS.dollar}
                     </IconText>{"  "}Amount
                 </Text>
-                <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
+                <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_700Bold, color: Colors.design.mutedText }}>
                     US $2.00
                 </Text>
             </Row>

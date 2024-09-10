@@ -44,14 +44,14 @@ export default function DiscoverGigsSection(props: {
         >
             <Text style={{
                 fontFamily: Fonts.Inter_600SemiBold,
-                fontSize: Typography.paragraph,
+                fontSize: Typography.body,
                 color: Colors.design.highContrastText
             }}>
                 {item.icon}
             </Text>
             <Text
                 style={{
-                    fontSize: Typography.paragraph,
+                    fontSize: Typography.body,
                     fontFamily:
                         selected_option._id === item._id
                             ? Fonts.Inter_700Bold

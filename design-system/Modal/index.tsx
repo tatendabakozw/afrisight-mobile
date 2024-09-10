@@ -1,6 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
-import Animated, { interpolate, Extrapolate, useAnimatedStyle } from 'react-native-reanimated';
+import Animated, {
+    interpolate,
+    Extrapolate,
+    useAnimatedStyle,
+    useSharedValue,
+    withSpring,
+    runOnJS,
+    withTiming,
+} from 'react-native-reanimated';
+import { Dimensions, StatusBar } from 'react-native';
 import Colors from '@/constants/Colors';
 import styled from 'styled-components/native';
 import { Fonts, Typography } from '@/constants/typography';
@@ -12,50 +21,62 @@ interface CXBottomSheetProps {
     children: React.ReactNode;
     title?: string;
     snapPoints?: string[];
+    isFullScreen?: boolean;
+    height?: number;
 }
 
-const CustomBackdrop = ({ animatedIndex, style }: BottomSheetBackdropProps) => {
-    const containerAnimatedStyle = useAnimatedStyle(() => ({
-        opacity: interpolate(
-            animatedIndex.value,
-            [0, 1],
-            [0, 1],
-            Extrapolate.CLAMP
-        ),
-    }));
 
-    const containerStyle = useMemo(
-        () => [
-            style,
-            {
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-            },
-            containerAnimatedStyle,
-        ],
-        [style, containerAnimatedStyle]
-    );
+const CXBottomSheet: React.FC<CXBottomSheetProps> = ({ isOpen, onClose, children, title, snapPoints: _snapPoints, isFullScreen = false, height }) => {
+    const [contentHeight, setContentHeight] = useState(height ?? 400); // Default height
 
-    return <Animated.View style={containerStyle} />;
-};
-
-const CXBottomSheet: React.FC<CXBottomSheetProps> = ({ isOpen, onClose, children, title, snapPoints: _snapPoints }) => {
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
     const snapPoints = useMemo(() => _snapPoints ?? ['50%'], [_snapPoints]);
-    const [contentHeight, setContentHeight] = useState(400); // Default height
+
+    const animatedPosition = useSharedValue(100);
+    const animatedOpacity = useSharedValue(0);
+    const animatedScale = useSharedValue(0.9);
+    const animatedBorderRadius = useSharedValue(32);
+    const animatedMargin = useSharedValue(10);
+
+    const { height: screenHeight, width: screenWidth } = Dimensions.get('window');
 
     const handleSheetChanges = useCallback((index: number) => {
         if (index === -1) {
-            onClose();
+            runOnJS(onClose)();
         }
     }, [onClose]);
 
     useEffect(() => {
         if (isOpen) {
             bottomSheetModalRef.current?.present();
+            animatedPosition.value = withSpring(0, { damping: 15, stiffness: 120 });
+            animatedOpacity.value = withSpring(1, { damping: 20, stiffness: 100 });
+            animatedScale.value = withSpring(1, { damping: 15, stiffness: 150 });
+
+            if (isFullScreen) {
+                animatedBorderRadius.value = withTiming(0, { duration: 300 });
+                animatedMargin.value = withTiming(0, { duration: 300 });
+            }
         } else {
+            animatedPosition.value = withSpring(100, { damping: 15, stiffness: 120 });
+            animatedOpacity.value = withSpring(0, { damping: 20, stiffness: 100 });
+            animatedScale.value = withSpring(0.9, { damping: 15, stiffness: 150 });
+            animatedBorderRadius.value = withTiming(32, { duration: 300 });
+            animatedMargin.value = withTiming(10, { duration: 300 });
             bottomSheetModalRef.current?.dismiss();
         }
-    }, [isOpen]);
+    }, [isOpen, isFullScreen]);
+
+    const animatedContentStyle = useAnimatedStyle(() => ({
+        opacity: animatedOpacity.value,
+        transform: [
+            { translateY: interpolate(animatedPosition.value, [0, 100], [0, 200]) },
+            { scale: animatedScale.value },
+        ],
+        borderRadius: animatedBorderRadius.value,
+        height: isFullScreen ? screenHeight : undefined,
+        width: isFullScreen ? screenWidth : undefined,
+    }));
 
     const renderBackdrop = useCallback(
         (props: BottomSheetBackdropProps) => (
@@ -74,47 +95,44 @@ const CXBottomSheet: React.FC<CXBottomSheetProps> = ({ isOpen, onClose, children
 
     return (
         <CXBottomSheetProvider value={contextValue}>
+            <StatusBar
+                backgroundColor={'transparent'}
+                barStyle="default"
+                translucent={isFullScreen}
+            />
             <BottomSheetModal
                 ref={bottomSheetModalRef}
                 onChange={handleSheetChanges}
                 backdropComponent={renderBackdrop}
-                bottomInset={20}
                 containerStyle={{
                     gap: 0,
-                    padding: 0,
-                    margin: 10,
+
                 }}
                 backgroundStyle={{
                     borderRadius: 32,
-
-                }}
-                style={{
-                    shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: 4,
-                    },
-                    shadowOpacity: 0.30,
-                    shadowRadius: 4.65,
-                    elevation: 8,
                 }}
                 handleStyle={{
-                    marginBottom: 0
+                    marginBottom: 0,
+                    paddingBottom: 0
+                }}
+                style={{
+                    overflow: 'hidden',
+                    marginHorizontal: isFullScreen ? 0 : 10,
+
+
                 }}
                 enableDynamicSizing
                 animateOnMount
                 enablePanDownToClose
-                detached
+                detached={!isFullScreen}
+                bottomInset={isFullScreen ? 0 : 16}
             >
                 <BottomSheetView style={{
-                    backgroundColor: Colors.design.white,
                     zIndex: 1000,
-                    overflow: 'hidden',
-                    borderRadius: 32,
                     flex: 0,
                     minHeight: contentHeight,
-                    marginBottom: 20,
-
+                    borderRadius: 32,
+                    overflow: 'hidden',
 
                 }}>
                     <CXBottomSheetProvider value={contextValue}>
@@ -128,9 +146,9 @@ const CXBottomSheet: React.FC<CXBottomSheetProps> = ({ isOpen, onClose, children
 
 const CXModalTitle = styled.Text`
     font-family: ${Fonts.Inter_700Bold};
-    font-size: ${Typography.paragraph}px;
+    font-size: ${Typography.body}px;
     color: ${Colors.design.highContrastText};
-    line-height: ${Typography.paragraph * 1.2}px;
+    line-height: ${Typography.body * 1.2}px;
     text-align: center;
 `;
 

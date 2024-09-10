@@ -1,42 +1,42 @@
-import { ScrollView, RefreshControl, View, Animated } from "react-native";
-import { useEffect, useState } from "react";
+import { RefreshControl, View, Animated } from "react-native";
 import { axiosInstance } from "../../utils/axios";
 import { GIG_ROUTES } from "@/constants/routers";
-import { Survey } from "@/utils/types";
 import Colors from "@/constants/Colors";
 import MyPointsCard from "@/components/explore/MyPointsCard";
 import DiscoverGigsSection from "@/components/explore/DiscoverGigsSection";
-import AllGigs from "@/components/git-item/AllGigs";
+import GigList from "@/components/git-item/AllGigs";
 import RecentActivitySection from "@/components/explore/RecentActivitySection";
-import { useScroll } from "@/contexts/ScrollContext";
 import { NAVBAR_HEIGHT } from "@/constants/layout";
-import { RouteProp } from "@react-navigation/native";
+import { SurveyRepository } from "@/model/survey/repo";
+import { useQuery } from "@tanstack/react-query";
+
+
+const localSurveyStoreRepository = new SurveyRepository();
+
 
 export default function ExploreScreen() {
-  const [surveys, setSurveys] = useState<Survey[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
-  const { scrollY } = useScroll();
+  const myRecentSurveys = useQuery({
+    queryKey: ['recent-surveys'],
+    async queryFn() {
+      return localSurveyStoreRepository.getSurveys();
+    },
+  });
+
+  const newSurveys = useQuery({
+    queryKey: ['surveys'],
+    async queryFn() {
+      return onFetchData();
+    },
+  });
+
 
   const onFetchData = async () => {
     const response = await axiosInstance.get(GIG_ROUTES.GET_ALL_GIGS);
-    const data = response.data;
-    setSurveys(data.surveys);
+    return response.data;
   };
 
   const onRefresh = async () => {
-    console.log("Refreshing");
-    setRefreshing(true);
-    await onFetchData();
-    setRefreshing(false);
-  };
-
-  useEffect(() => {
-    onFetchData();
-  }, []);
-
-  const handleScroll = (event: any) => {
-    const scrollY = event.nativeEvent.contentOffset.y;
-    // setIsScrollingUp(scrollY > 0);
+    await newSurveys.refetch();
   };
 
   return (
@@ -47,15 +47,15 @@ export default function ExploreScreen() {
         paddingTop: NAVBAR_HEIGHT + 20
       }}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        <RefreshControl refreshing={newSurveys.isLoading} onRefresh={onRefresh} />
       }
       scrollEventThrottle={16}
     >
       <MyPointsCard points={1000} rank={325} />
-      <RecentActivitySection surveys={surveys.slice(0, 5)} />
+      <RecentActivitySection surveys={myRecentSurveys.data ?? []} />
       <View>
         <DiscoverGigsSection />
-        <AllGigs gigs={surveys} />
+        <GigList gigs={newSurveys.data ?? []} />
       </View>
     </Animated.ScrollView>
   );

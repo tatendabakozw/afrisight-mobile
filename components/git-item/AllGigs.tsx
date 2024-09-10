@@ -1,31 +1,32 @@
-import { StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import GigItem from "./GigItem";
-import { Survey } from "@/utils/types";
 import Separator from "@/design-system/Separator";
-import { EndOfListCaption } from "../captions";
+import { EmptyStateCaption, EndOfListCaption } from "../captions";
+import { Survey } from "@/types";
 
-const AllGigs = (props: {
-  gigs: Survey[]
+const GigList = (props: {
+  gigs?: {
+    surveys: Survey[]
+  }
 }) => {
   return (
-    <View
-      style={{
-        flex: 1,
-        paddingBottom: 20
-      }}
-    >
-      {props.gigs.map((item, index) => (
-        <>
-          <GigItem key={index} {...item} />
-          <Separator key={`${index}-separator`} />
-        </>
-
-      ))}
-      <EndOfListCaption />
+    <View style={{ flex: 1, paddingBottom: 20 }}>
+      <FlatList
+        data={props.gigs?.surveys}
+        renderItem={({ item }: { item: Survey }) => (
+          <>
+            <GigItem {...item} />
+            <Separator />
+          </>
+        )}
+        keyExtractor={(item: Survey, index: number) => index.toString()}
+        ListFooterComponent={<EndOfListCaption />}
+        ListEmptyComponent={<EmptyStateCaption />}
+      />
     </View>
   );
 };
 
-export default AllGigs;
+export default GigList;
 
 const styles = StyleSheet.create({});

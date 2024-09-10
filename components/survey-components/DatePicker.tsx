@@ -31,7 +31,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ question, value, onChange }) =>
       <Text style={{
         fontFamily: Fonts.Inter_600SemiBold,
         color: Colors.design.highContrastText,
-        fontSize: Typography.paragraph,
+        fontSize: Typography.body,
         marginBottom: 8
       }}>{question}</Text>
       <TouchableOpacity

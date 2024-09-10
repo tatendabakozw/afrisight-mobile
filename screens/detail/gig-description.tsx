@@ -15,7 +15,6 @@ import { Fonts, Typography } from "@/constants/typography";
 import Colors from "@/constants/Colors";
 import { axiosInstance } from "../../utils/axios";
 import { GIG_ROUTES } from "@/constants/routers";
-import { Survey } from "@/utils/types";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import { timeFromNow } from "@/components/git-item/GigItem";
 import { Ionicons } from "@expo/vector-icons";
@@ -25,6 +24,7 @@ import IconText from "@/design-system/Text/IconText";
 import Separator from "@/design-system/Separator";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import Row from "@/design-system/Row";
 
 type RootStackParamList = {
   GigDetails: {
@@ -60,7 +60,7 @@ const GigDescriptionScreen = () => {
   const [hasStarted, setHasStarted] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
   const [refreshing, setRefreshing] = useState(false);
-  const [survey, setSurvey] = useState<Survey | null>(null);
+  const [survey, setSurvey] = useState<any | null>(null);
 
   const fetchHasSurveyStarted = async (id: string) => {
     const response = await axiosInstance.get(GIG_ROUTES.GET_SURVEY_RESPONSE_HAS_STARTED(id));
@@ -156,17 +156,17 @@ const GigDescriptionScreen = () => {
               style={{
                 fontFamily: Fonts.Inter_600SemiBold,
                 color: Colors.design.mutedText,
-                fontSize: Typography.paragraph
+                fontSize: Typography.body
               }}
             >
               {SF_ICONS.dollar}{" "}
               {formatDollarAmount(survey.dollarRewardValue)}
             </Text>
-            <Text style={{}}>&bull;</Text>
+            <Text>&bull;</Text>
             <Text
               style={{
                 fontFamily: Fonts.Inter_600SemiBold,
-                fontSize: Typography.paragraph,
+                fontSize: Typography.body,
                 color: Colors.design.mutedText
 
               }}
@@ -180,7 +180,7 @@ const GigDescriptionScreen = () => {
         <View style={{ alignItems: "center" }}>
           <Button disabled={isCompleted} onPress={navigateToFormPage} style={{ width: "100%" }} text={"Start gig"} size="medium" variant="accent" colorScheme="primary" />
 
-          {isCompleted && <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.paragraph, color: Colors.design.mutedText, marginTop: 10 }}>
+          {isCompleted && <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.body, color: Colors.design.mutedText, marginTop: 10 }}>
             You have already completed this gig
           </Text>}
         </View>
@@ -191,8 +191,8 @@ const GigDescriptionScreen = () => {
             style={[
               tw`text-zinc-600`,
               {
-                lineHeight: Typography.paragraph * 1.3,
-                fontSize: Typography.paragraph,
+                lineHeight: Typography.body * 1.3,
+                fontSize: Typography.body,
                 color: Colors.design.text,
                 fontFamily: Fonts.Inter_500Medium,
 
@@ -212,7 +212,7 @@ const GigDescriptionScreen = () => {
                 {SF_ICONS.eye}
               </IconText>
             }
-            value={<Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.paragraph }}>{survey.views}</Text>}
+            value={<Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.body }}>{survey.views}</Text>}
           />
           <DetailItem
             label="Reward"
@@ -226,19 +226,20 @@ const GigDescriptionScreen = () => {
                 style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
               >
                 {survey.reward.type === "points" ? (
-                  <>
+                  <Row>
                     <IconText>
                       {SF_ICONS.medal_filled}
-                    </IconText>                    <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.paragraph }}>
+                    </IconText>
+                    <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.body }}>
                       {(survey.reward.value as any).amount} XP
                     </Text>
-                  </>
+                  </Row>
                 ) : (
                   <>
                     <IconText>
                       {SF_ICONS.gift_filled}
                     </IconText>
-                    <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.paragraph, color: Colors.design.yellowText }}>
+                    <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.body, color: Colors.design.highContrastText }}>
                       Voucher
                     </Text>
                   </>
@@ -253,7 +254,7 @@ const GigDescriptionScreen = () => {
                 {SF_ICONS.people}
               </IconText>
             }
-            value={<Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.paragraph }}>{survey.completedParticipants}</Text>}
+            value={<Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.body }}>{survey.completedParticipants}</Text>}
           />
           <DetailItem
             label="Form ID"
@@ -267,7 +268,7 @@ const GigDescriptionScreen = () => {
                 style={{
                   fontFamily: Fonts.Inter_600SemiBold,
                   color: Colors.design.accent,
-                  fontSize: Typography.paragraph,
+                  fontSize: Typography.body,
                   maxWidth: 180
                 }}
                 numberOfLines={1}
@@ -294,7 +295,7 @@ const Section = (props: { label: string; children: ReactNode }) => {
     >
       <Text
         style={{
-          fontSize: Typography.paragraph,
+          fontSize: Typography.body,
           fontFamily: Fonts.Inter_700Bold,
           color: Colors.design.highContrastText,
           marginBottom: 20,
@@ -327,7 +328,7 @@ const DetailItem = ({
     >
       <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
         {icon}
-        <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.paragraph }}>{label}</Text>
+        <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.body }}>{label}</Text>
       </View>
       <View>{value}</View>
     </View>

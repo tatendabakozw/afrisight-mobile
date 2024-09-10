@@ -16,7 +16,7 @@ const FacebookAuthButton = (props: Props) => {
       <Text style={{
         fontFamily: Fonts.Inter_700Bold,
         color: Colors.design.highContrastText,
-        fontSize: Typography.paragraph
+        fontSize: Typography.body
       }}>
         Continue with Facebook
       </Text>

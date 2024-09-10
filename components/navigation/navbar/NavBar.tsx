@@ -9,9 +9,9 @@ import Row from "@/design-system/Row";
 import { SF_ICONS } from "@/constants/icons";
 import Button from "@/design-system/Button";
 import useDisclosure from "@/hooks/useDisclosure";
-import { ProfileModalStack } from "@/components/profile-modal";
 import { SettingsModalStack } from "@/components/settings/SettingsNavigator";
 import { MoneyRewardsModalStack } from "@/components/money-rewards-modal/MoneyRewardsModal";
+import { ProfileModalStack } from "@/components/profile-modal";
 
 const NAVBAR_HEIGHT = 72; // Adjust this value based on your navbar's height
 
@@ -79,7 +79,6 @@ const NavBar = () => {
       ]}
     >
       <ProfileModalStack isOpen={isProfileModalOpen} onClose={() => setIsProfileModalOpen(false)} />
-      <SettingsModalStack isOpen={isSettingsModalOpen} onClose={() => setIsSettingsModalOpen(false)} />
       <MoneyRewardsModalStack isOpen={isMoneyRewardsModalOpen} onClose={() => setIsMoneyRewardsModalOpen(false)} />
 
       <Row style={tw`gap-8`}>
@@ -94,10 +93,9 @@ const NavBar = () => {
         </TouchableOpacity>
 
         <Row style={{ gap: 10 }}>
-          <Button text={SF_ICONS.settings_filled} size="icon" onPress={() => setIsSettingsModalOpen(true)} />
           <TouchableOpacity onPress={() => setIsMoneyRewardsModalOpen(true)} style={{ flexDirection: "row", alignItems: "center", gap: 5, paddingHorizontal: 4, paddingRight: 20, paddingVertical: 6, borderRadius: 20, backgroundColor: Colors.design.surfaceOnSurface }}>
             <Image source={require("@/assets/images/imports/dollar-icon.png")} style={{ width: 32, height: 32 }} />
-            <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
+            <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
               $3.20
             </Text>
           </TouchableOpacity>

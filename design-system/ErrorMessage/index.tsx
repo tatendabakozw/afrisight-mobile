@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     text: {
         color: Colors.design.redText,
         fontFamily: Fonts.Inter_600SemiBold,
-        fontSize: Typography.paragraph
+        fontSize: Typography.body
     }
 })
 

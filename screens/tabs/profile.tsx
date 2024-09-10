@@ -96,7 +96,7 @@ const Header = () => {
         <Button text={SF_ICONS.settings_filled} size="icon" />
         <View style={{ flexDirection: "row", alignItems: "center", gap: 5, paddingHorizontal: 4, paddingRight: 20, paddingVertical: 6, borderRadius: 20, backgroundColor: Colors.design.surfaceOnSurface }}>
           <Image source={require("@/assets/images/imports/dollar-icon.png")} style={{ width: 32, height: 32 }} />
-          <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
+          <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
             $3.20
           </Text>
         </View>
@@ -123,7 +123,7 @@ const Profile = () => {
           </Text>
           <Text
             style={{
-              fontSize: Typography.paragraph,
+              fontSize: Typography.body,
               color: Colors.design.mutedText,
               fontFamily: Fonts.Inter_600SemiBold
             }}
@@ -134,16 +134,16 @@ const Profile = () => {
       )}
       <View style={{ flexDirection: "row", alignItems: "center", gap: 20, marginVertical: 20, paddingHorizontal: 20 }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 5, paddingHorizontal: 10, paddingRight: 20, paddingVertical: 6, borderRadius: 10, backgroundColor: Colors.design.surfaceOnSurface }}>
-          <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.paragraph, color: Colors.design.highContrastText }}>
+          <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.body, color: Colors.design.highContrastText }}>
             {SF_ICONS.trophy_filled}
           </Text>
-          <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
+          <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
             #23
           </Text>
         </View>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 5, paddingHorizontal: 10, paddingRight: 20, paddingVertical: 6, borderRadius: 10, backgroundColor: Colors.design.surfaceOnSurface }}>
           <Image source={require("@/assets/images/illustrations/xp-icon-yellow.png")} style={{ width: 28, height: 28 }} />
-          <Text style={{ fontSize: Typography.paragraph, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
+          <Text style={{ fontSize: Typography.body, fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText }}>
             400 XP
           </Text>
         </View>
@@ -160,15 +160,15 @@ const LeaderboardPosition = ({ idx }: { idx: number }) => {
       <View style={{ flexDirection: "row", gap: 10, alignItems: "center", flex: 1 }}>
         <ImageBackground source={require("@/assets/images/backgrounds/background-red.png")} style={{ width: 32, height: 32 }} imageStyle={{ borderRadius: 40 }}>
         </ImageBackground>
-        <Text style={{ fontFamily: Fonts.Inter_600SemiBold, color: Colors.design.highContrastText, fontSize: Typography.paragraph }}>
+        <Text style={{ fontFamily: Fonts.Inter_600SemiBold, color: Colors.design.highContrastText, fontSize: Typography.body }}>
           Tatenda Chris
         </Text>
       </View>
       <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
-        <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.paragraph }}>
+        <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.body }}>
           $109.20
         </Text>
-        <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.paragraph, color: idx < 4 ? color[idx - 1] : Colors.design.mutedText }}>
+        <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.body, color: idx < 4 ? color[idx - 1] : Colors.design.mutedText }}>
           {idx < 4 ? SF_ICONS.medal_filled : `#${idx}`}
         </Text>
       </View>

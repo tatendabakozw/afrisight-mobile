@@ -22,6 +22,13 @@ import { STRINGS } from '@/constants/strings';
 import AnimatedLoader from '@/components/ui/AnimatedLoader';
 import Button from '@/design-system/Button';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import CXBottomSheet from '@/design-system/Modal';
+import { SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
+import IconText from '@/design-system/Text/IconText';
+import { SF_ICONS } from '@/constants/icons';
+import { Dots } from '@/design-system/Pager';
+import Row from '@/design-system/Row';
+import { useSurvey } from '../detail/context';
 
 export type Reward = {
   type: string
@@ -39,6 +46,7 @@ const GigModalScreen = ({ navigation, route }: { navigation: any, route: any }) 
   const validSurveyLink = typeof surveyLink === "string" ? surveyLink : "";
   const { form, loading, error: formLoadingError } = useSingleForm(validSurveyLink);
   const { isOpen: isRewardModelOpen, onOpen: onOpenRewardModal, onClose: onCloseRewardModal } = useDisclosure()
+  const { isOpen: isSurveyModalOpen, onOpen: onOpenSurveyModal, onClose: onCloseSurveyModal } = useDisclosure()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
 
@@ -48,15 +56,31 @@ const GigModalScreen = ({ navigation, route }: { navigation: any, route: any }) 
   const [formData, setFormData] = useState<{ [key: string]: any }>({});
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  const {
+    completedSurveys,
+    inProgressSurveys,
+    draftSurveys,
+    addCompletedSurvey,
+    updateInProgressSurvey,
+    saveDraft,
+    deleteDraft,
+    getSurvey
+  } = useSurvey();
 
   const sections = form?.sections || [];
-  const progress = useMemo(() => ((currentSectionIndex + 1) / sections.length) * 100, [currentSectionIndex, sections.length]);
 
   useEffect(() => {
     if (user && gig_id) {
       fetchSurveyResponsesFromServer(gig_id as string, user._id);
     }
   }, [gig_id, user]);
+
+
+  useEffect(() => {
+    onOpenSurveyModal()
+
+    return () => onCloseSurveyModal()
+  }, [])
 
   const fetchSurveyResponsesFromServer = useCallback(async (id: string, userId: string) => {
     try {
@@ -149,6 +173,10 @@ const GigModalScreen = ({ navigation, route }: { navigation: any, route: any }) 
         value
       })
 
+      addCompletedSurvey({
+        id: gig_id
+      })
+
       onOpenRewardModal()
     } catch (err) {
       setError(STRINGS.ERROR_OCCURRED_TRY_AGAIN)
@@ -192,29 +220,34 @@ const GigModalScreen = ({ navigation, route }: { navigation: any, route: any }) 
   }
 
   const navigateToHome = () => {
-    navigation.replace("ExploreScreen")
+    navigation.replace("Main", {
+      screen: "ExploreScreen"
+    })
   }
 
+
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.design.white, }}>
-      {isRewardModelOpen && reward && <GigSubmission {...reward} isOpen={isRewardModelOpen} onClose={handleOnCloseRewardModal} onReturnHome={handleOnCloseRewardModal} />}
-      <View style={{ flex: 1, }}>
-        <Header progress={progress} onBack={() => navigation.goBack()} />
-        <ScrollView style={[tw`flex-1`, { paddingTop: 20 }]} contentContainerStyle={tw`gap-6`}>
-          <KeyboardAvoidingView>
-            <FormInfo name={form.name} description={form.description} />
-            {renderCurrentSection()}
-          </KeyboardAvoidingView>
-        </ScrollView>
+    <CXBottomSheet isOpen={isSurveyModalOpen} onClose={onCloseSurveyModal} height={SCREEN_HEIGHT * 0.9} isFullScreen>
+      <View style={{ flex: 1, backgroundColor: Colors.design.white, }}>
+        {isRewardModelOpen && reward && <GigSubmission {...reward} isOpen={isRewardModelOpen} onClose={handleOnCloseRewardModal} onReturnHome={handleOnCloseRewardModal} />}
+        <View style={{ flex: 1, }}>
+          <Header currentIndex={currentSectionIndex} count={sections.length} onBack={() => navigation.goBack()} />
+          <ScrollView style={[tw`flex-1`, { paddingTop: 20 }]} contentContainerStyle={tw`gap-6`}>
+            <KeyboardAvoidingView>
+              <FormInfo name={form.name} description={form.description} />
+              {renderCurrentSection()}
+            </KeyboardAvoidingView>
+          </ScrollView>
+        </View>
+        <Footer
+          currentSectionIndex={currentSectionIndex}
+          totalSections={sections.length}
+          onPrevious={handlePrevious}
+          onNext={handleNext}
+          isLoading={isLoading}
+        />
       </View>
-      <Footer
-        currentSectionIndex={currentSectionIndex}
-        totalSections={sections.length}
-        onPrevious={handlePrevious}
-        onNext={handleNext}
-        isLoading={isLoading}
-      />
-    </View>
+    </CXBottomSheet>
   );
 };
 
@@ -230,8 +263,9 @@ const NoFormView = () => (
   </View>
 );
 
-const Header = ({ progress, onBack }: {
-  progress: number;
+const Header = ({ currentIndex, count, onBack }: {
+  currentIndex: number;
+  count: number;
   onBack: () => void
 }) => (
   <View style={{
@@ -239,24 +273,30 @@ const Header = ({ progress, onBack }: {
     gap: 16,
     paddingHorizontal: 20,
     paddingVertical: 16,
-    borderColor: Colors.design.separator,
+    borderColor: Colors.design.surfaceOnSurface,
     borderBottomWidth: 1,
     alignItems: "center"
   }}>
-    <TouchableOpacity onPress={onBack}>
-      <MaterialIcons name="arrow-back" size={24} color={Colors.design.highContrastText} />
-    </TouchableOpacity>
-    <ProgressBar progress={progress} />
+
     <View style={{
       height: 24,
       paddingHorizontal: 10,
-      backgroundColor: Colors.design.accent,
       borderRadius: 16,
       alignItems: "center",
-      justifyContent: "center"
+      justifyContent: "center",
+      width: 28
     }}>
-      <Text style={{ fontFamily: Fonts.Inter_700Bold, color: Colors.design.white }}>32 XP</Text>
+
     </View>
+
+    <Row style={{ flex: 1, justifyContent: "center" }}>
+      <Dots count={count} activeIndex={currentIndex} />
+    </Row>
+    <TouchableOpacity onPress={onBack}>
+      <IconText style={{ fontSize: Typography.heading, lineHeight: Typography.heading * 1.3, color: Colors.design.mutedText }}>
+        {SF_ICONS.x}
+      </IconText>
+    </TouchableOpacity>
   </View>
 );
 
@@ -268,7 +308,7 @@ const FormInfo = ({ name, description }: {
     paddingHorizontal: 20,
   }}>
     <Text style={{ fontSize: Typography.largeHeading, color: Colors.design.highContrastText, fontFamily: Fonts.Inter_700Bold }}>{name}</Text>
-    <Text style={{ fontSize: Typography.paragraph, color: Colors.design.text }}>{description}</Text>
+    <Text style={{ fontSize: Typography.body, color: Colors.design.text }}>{description}</Text>
   </View>
 );
 
@@ -283,8 +323,6 @@ const Footer = ({ currentSectionIndex, isLoading, onPrevious, onNext }: {
     flexDirection: 'row',
     gap: 20,
     padding: 20,
-    borderTopWidth: 1,
-    borderColor: Colors.design.separator,
     marginTop: 0
   }} >
     {currentSectionIndex > 0 && (

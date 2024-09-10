@@ -77,7 +77,7 @@ const TextInput = (props: CustomTextInputProps) => {
                     props.style,
                     isFocused && styles.inputFocused,
                     {
-                        fontSize: Typography.paragraph,
+                        fontSize: Typography.body,
                         color: Colors.design.highContrastText,
                         paddingTop: props.withEmbeddedLabel ? 20 : 12,
                         paddingBottom: props.withEmbeddedLabel ? 4 : 12,

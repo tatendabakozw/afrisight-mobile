@@ -1,4 +1,5 @@
 export const SF_ICONS = {
+    device: '􀋚',
     bell_filled: "􀋚",
     bell_outlined: "􀋛",
     lock_filled: "􀋜",
@@ -40,6 +41,11 @@ export const SF_ICONS = {
     camera: '􀌞',
     person: '􀉭',
     phone_add: '􁄪',
-    card: '􀍰'
+    card: '􀍰',
+    progress: '􀐴',
+    phone: '􀍰',
+    trash: '􀁢',
+    chart_filled: '􀣌',
+    shield_filled: '􀣌',
 
 }

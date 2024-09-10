@@ -16,7 +16,8 @@ import useDisclosure from "@/hooks/useDisclosure";
 import { axiosInstance } from "../../utils/axios";
 import { AUTH_ROUTES } from "@/constants/routers";
 import { useAuth } from "@/services/auth/hooks";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../navigation/RootNavigator";
 
 const RegisterScreen = () => {
     const { emailAddress }: { emailAddress: string } = {
@@ -217,7 +218,7 @@ const RegisterScreen = () => {
                                     {!isSubmitting && <Text
                                         style={{
                                             fontFamily: Fonts.Inter_700Bold,
-                                            fontSize: Typography.paragraph,
+                                            fontSize: Typography.body,
                                             color: "#fff",
                                         }}
                                     >
@@ -240,7 +241,7 @@ const VerificationModal = (props: {
     mode: "email" | "phone",
     emailAddress: string
 }) => {
-    const navigator = useNavigation()
+    const navigator = useNavigation<NavigationProp<RootStackParamList>>();
     const auth = useAuth()
     const insets = useSafeAreaInsets();
     const [error, setError] = useState(false);
@@ -287,7 +288,7 @@ const VerificationModal = (props: {
 
                 const { data } = result
                 await auth.signIn({ accessToken: data.accessToken, refreshToken: data.refreshToken })
-                navigator.navigate("Main", { screen: 'ExploreScreen' })
+                navigator.navigate("Main")
             }
 
         } catch (err: any) {
@@ -361,7 +362,7 @@ const VerificationModal = (props: {
                     </View>
                 </View>
                 {isValid && <TouchableOpacity disabled={loading} onPress={onPressVerify} style={{ ...styles.primaryButton, }}>
-                    {!loading && <Text style={{ color: Colors.design.white, fontSize: Typography.paragraph, fontFamily: Fonts.Inter_600SemiBold }}>
+                    {!loading && <Text style={{ color: Colors.design.white, fontSize: Typography.body, fontFamily: Fonts.Inter_600SemiBold }}>
                         Verify and continue
                     </Text>}
                     {loading && <ActivityIndicator size={24} color={Colors.design.white} />}

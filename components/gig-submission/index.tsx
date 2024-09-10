@@ -14,6 +14,7 @@ export default function GigSubmission(props: Reward & {
     onReturnHome: () => void
     isOpen: boolean
 }) {
+
     const { message,
         type,
         value,
@@ -58,7 +59,7 @@ export default function GigSubmission(props: Reward & {
                         <Text
                             style={{
                                 fontFamily: Fonts.Inter_400Regular,
-                                fontSize: Typography.paragraph,
+                                fontSize: Typography.body,
                                 textAlign: "center",
                                 paddingHorizontal: 40,
                                 color: Colors.design.text,
@@ -104,7 +105,7 @@ const PointsReward = (props: {
 
                     <Text style={{
                         fontFamily: Fonts.Inter_700Bold,
-                        fontSize: Typography.paragraph,
+                        fontSize: Typography.body,
                         color: Colors.design.brand,
                     }}>
                         {props.value} points
@@ -129,10 +130,10 @@ const VoucherReward = (props: {
                 <Text style={{ fontFamily: Fonts.Inter_700Bold, fontSize: Typography.subheading, color: Colors.design.highContrastText }}>
                     {props.code ?? "CS234SD"}
                 </Text>
-                <Text style={{ fontFamily: Fonts.Inter_400Regular, fontSize: Typography.paragraph, color: Colors.design.text }}>
+                <Text style={{ fontFamily: Fonts.Inter_400Regular, fontSize: Typography.body, color: Colors.design.text }}>
                     CXMappers retail outlet
                 </Text>
-                <Text style={{ fontFamily: Fonts.Inter_400Regular, fontSize: Typography.paragraph, color: Colors.design.accent }}>
+                <Text style={{ fontFamily: Fonts.Inter_400Regular, fontSize: Typography.body, color: Colors.design.accent }}>
                     Expires 23 Jun 2024
                 </Text>
             </View>

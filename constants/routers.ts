@@ -11,6 +11,17 @@ export const AUTH_ROUTES = {
   PHONE_SIGNIN: "/auth/login/phone",
   PASSWORD_SIGNIN: "/auth/login/email",
   EMAIL_REGISTRATION: "/auth/register/email",
+  PRIVACY_SETTINGS: "/profile/privacy",
+  SURVEY_PREFERENCES: "/profile/survey-preferences",
+  WITHDRAWAL_METHODS: "/profile/withdrawal-methods",
+  CHANGE_PASSWORD: "/profile/password",
+  EARNINGS_DASHBOARD: "/profile/earnings-dashboard",
+  NOTIFICATION_SETTINGS: "/profile/notification-settings",
+  REMOVE_WITHDRAWAL_METHOD: "/profile/withdrawal-methods",
+  ADD_WITHDRAWAL_METHOD: "/profile/withdrawal-methods/add",
+  UPDATE_WITHDRAWAL_METHOD: "/profile/withdrawal-methods/update",
+  SET_DEFAULT_WITHDRAWAL_METHOD: "/profile/withdrawal-methods/set-default",
+  WITHDRAWAL_HISTORY: '/withdrawal-history',
 };
 
 export const GIG_ROUTES = {

@@ -56,6 +56,8 @@ const getTabBarIcon = (routeName: string) => {
             return SF_ICONS.doc_text;
         case "GiftShopScreen":
             return SF_ICONS.gift_filled;
+        case "LeaderboardScreen":
+            return SF_ICONS.trophy_filled;
     }
 }
 
@@ -67,6 +69,8 @@ const getTabLabel = (routeName: string) => {
             return "My Gigs";
         case "GiftShopScreen":
             return "CX Store";
+        case "LeaderboardScreen":
+            return "Leaderboard";
     }
 }
 
@@ -77,7 +81,7 @@ function CoreAppNavigator() {
                 <BottomSheetModalProvider>
                     <ScrollProvider>
                         <Tab.Navigator screenOptions={({ route }) => ({
-                            header: (props) => <NavBar {...props} route={route} />,
+                            header: () => <NavBar />,
                             tabBarIcon: ({ focused }) => {
                                 const color = focused ? Colors.design.highContrastText : Colors.design.mutedText;
                                 return (
@@ -91,7 +95,7 @@ function CoreAppNavigator() {
                                 return <Text style={{
                                     fontFamily: Fonts.Inter_600SemiBold,
                                     fontSize: Typography.base,
-                                    lineHeight: Typography.paragraph * 1.5,
+                                    lineHeight: Typography.body * 1.5,
                                     color: focused ? Colors.design.highContrastText : Colors.design.mutedText,
                                 }}>{label}</Text>;
                             },

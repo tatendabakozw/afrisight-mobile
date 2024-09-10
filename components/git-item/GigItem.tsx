@@ -95,18 +95,18 @@ const GigItem = (props: Survey) => {
           <Text
             style={{
               fontFamily: Fonts.Inter_600SemiBold,
-              fontSize: Typography.paragraph,
+              fontSize: Typography.body,
               color: Colors.design.highContrastText,
               maxWidth: 300,
               flex: 1,
-              lineHeight: Typography.paragraph
+              lineHeight: Typography.body
             }}
             numberOfLines={1}
           >
             {props.name}
           </Text>
           <Text style={{
-            color: Colors.design.text, fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.paragraph, lineHeight: Typography.paragraph
+            color: Colors.design.text, fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.body, lineHeight: Typography.body
           }}>
             ${props.dollarRewardValue}
           </Text>

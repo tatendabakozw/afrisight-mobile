@@ -1,6 +1,6 @@
 export const Typography = {
   base: 16,
-  paragraph: 20,
+  body: 20,
   subheading: 24,
   heading: 28,
   largeHeading: 36,

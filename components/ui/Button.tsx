@@ -49,7 +49,7 @@ const ButtonContainer = styled(AnimatedTouchableOpacity) <{ variant: ButtonVaria
 `;
 
 const ButtonText = styled(Text) <{ variant: ButtonVariant; disabled: boolean }>`
-  font-size: ${Typography.paragraph}px;
+  font-size: ${Typography.body}px;
   font-family: ${Fonts.Inter_700Bold};
   
   ${({ variant, disabled }) => {

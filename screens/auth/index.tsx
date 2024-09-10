@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
 import Text from "@/components/ui/Text";
@@ -16,8 +16,10 @@ import { AUTH_ROUTES } from "@/constants/routers";
 import { useAuth } from "@/services/auth/hooks";
 import Button from "@/design-system/Button";
 import ErrorMessage from "@/design-system/ErrorMessage";
-import { useNavigation } from '@react-navigation/native';
-import { NavigationStackProps } from "..";
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AuthStackParamList, RootStackParamList } from "../navigation/RootNavigator";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Row from "@/design-system/Row";
 
 const countryCodes = [
   { code: "+263", country: "Zimbabwe" },
@@ -42,7 +44,8 @@ export default function LoginScreen() {
     isLoading: isAuthStatusLoading,
     signInWithEmailAndPassword,
   } = useAuth();
-  const navigation = useNavigation<NavigationStackProps<"ExploreScreen">>();
+  const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
+  const mainAppNavigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handleEmailOrPhoneAuth = async () => {
     setError("");
@@ -51,7 +54,7 @@ export default function LoginScreen() {
     try {
       if (isEmailLogin) {
         await signInWithEmailAndPassword(emailAddress, password);
-        navigation.navigate("RegisterScreen", { emailAddress });
+        navigation.navigate("SignUp", { emailAddress });
       } else {
       }
     } catch (err: any) {
@@ -61,6 +64,8 @@ export default function LoginScreen() {
       setIsLoading(false);
     }
   };
+
+
 
   const startAuthFlow = async () => {
     setIsLoading(true);
@@ -77,7 +82,7 @@ export default function LoginScreen() {
         setShowPassword(true);
       }
 
-      navigation.navigate("RegisterScreen", { emailAddress });
+      navigation.navigate("SignUp", { emailAddress });
 
 
     } catch (err: any) {
@@ -114,7 +119,7 @@ export default function LoginScreen() {
         refreshToken: tokens.data.refreshToken,
       });
 
-      navigation.navigate("Main", { screen: "ExploreScreen" });
+      mainAppNavigation.navigate("Main");
     } catch (error) {
       console.error("Error:", error);
 
@@ -155,6 +160,10 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
+      <Row style={styles.logoContainer}>
+        <Image source={require("@/assets/branding/cx_logomark.png")} style={styles.logo} />
+
+      </Row>
       <Text style={styles.title}>
         {isSignUp
           ? "Sign up to start earning through surveys and gigs"
@@ -255,6 +264,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
 
   },
+  logoContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+    justifyContent: "center",
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
+  },
   title: {
     fontSize: Typography.heading,
     marginBottom: 20,
@@ -306,7 +325,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: Colors.design.white,
-    fontSize: Typography.paragraph,
+    fontSize: Typography.body,
     fontFamily: Fonts.Inter_600SemiBold,
   },
   divider: {
@@ -334,7 +353,7 @@ const styles = StyleSheet.create({
   },
   socialButtonText: {
     marginLeft: 10,
-    fontSize: Typography.paragraph,
+    fontSize: Typography.body,
     fontFamily: Fonts.Inter_600SemiBold,
     color: Colors.design.highContrastText,
   },
@@ -342,7 +361,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: "center",
     color: Colors.design.accent,
-    fontSize: Typography.paragraph,
+    fontSize: Typography.body,
     fontFamily: Fonts.Inter_600SemiBold,
   },
 });

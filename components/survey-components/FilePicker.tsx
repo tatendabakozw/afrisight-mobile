@@ -45,7 +45,7 @@ const FilePicker = ({ question, value, onChange }: Props) => {
       <Text style={{
         fontFamily: Fonts.Inter_600SemiBold,
         color: Colors.design.highContrastText,
-        fontSize: Typography.paragraph,
+        fontSize: Typography.body,
         marginBottom: 8
       }}>{question}</Text>
       <TouchableOpacity
@@ -66,7 +66,7 @@ const FilePicker = ({ question, value, onChange }: Props) => {
           <View style={{ alignItems: 'center' }}>
             <Feather name="image" size={24} color={Colors.design.accent} />
             <Text style={{
-              fontSize: Typography.paragraph,
+              fontSize: Typography.body,
               fontFamily: Fonts.Inter_700Bold,
               color: Colors.design.highContrastText,
               marginTop: 8,

@@ -19,7 +19,7 @@ const Paragraph = ({ question, value, onChange, error, required: optional }: Pro
       <Text style={{
         fontFamily: Fonts.Inter_600SemiBold,
         color: Colors.design.highContrastText,
-        fontSize: Typography.paragraph,
+        fontSize: Typography.body,
         marginBottom: 8
       }}>
         {question}

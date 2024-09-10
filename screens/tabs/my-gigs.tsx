@@ -1,7 +1,7 @@
 import { FlatList, Image, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useEffect, useState } from "react";
 import tw from "twrnc";
-import AllGigs from "@/components/git-item/AllGigs";
+import GigList from "@/components/git-item/AllGigs";
 import Colors from "@/constants/Colors";
 import Text from "@/components/ui/Text";
 import { Fonts, Typography } from "@/constants/typography";
@@ -73,7 +73,7 @@ const MyGigsScreen = () => {
     >
       <Text
         style={{
-          fontSize: Typography.paragraph,
+          fontSize: Typography.body,
           fontFamily:
             selected_option._id === item._id
               ? Fonts.Inter_700Bold
@@ -147,7 +147,7 @@ const MyGigsScreen = () => {
           }}>There's nothing here yet</Text>
           <Text style={{
             fontFamily: Fonts.Inter_500Medium,
-            fontSize: Typography.paragraph,
+            fontSize: Typography.body,
             color: Colors.design.text,
             textAlign: "center",
             marginBottom: 20,

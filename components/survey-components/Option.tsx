@@ -18,7 +18,7 @@ const Option = ({ question, options, value, onChange }: Props) => {
         style={{
           fontFamily: Fonts.Inter_600SemiBold,
           color: Colors.design.highContrastText,
-          fontSize: Typography.paragraph,
+          fontSize: Typography.body,
           marginBottom: 24,
           paddingHorizontal: 16,
         }}
@@ -51,7 +51,7 @@ const Option = ({ question, options, value, onChange }: Props) => {
             <Text
               style={{
                 fontFamily: Fonts.Inter_500Medium,
-                fontSize: Typography.paragraph,
+                fontSize: Typography.body,
                 color: Colors.design.highContrastText,
               }}
             >

@@ -12,7 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import tw from "twrnc";
 import TabsWithChat from "@/layouts/TabsWithChat";
 import RecentActivityComponent from "@/components/recent-activity/RecentActivityComponent";
-import AllGigs from "@/components/git-item/AllGigs";
+import GigList from "@/components/git-item/AllGigs";
 import { Fonts, Typography } from "@/constants/typography";
 import Text from "@/components/ui/Text";
 import { useEffect, useState } from "react";
@@ -123,7 +123,7 @@ export default function GiftShopScreen() {
             Marketplace
           </Text>
           <View style={{ flexDirection: 'row', gap: 6 }}>
-            <Text style={{ fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText, fontSize: Typography.paragraph, lineHeight: Typography.paragraph * 1.2 }}>
+            <Text style={{ fontFamily: Fonts.Inter_700Bold, color: Colors.design.highContrastText, fontSize: Typography.body, lineHeight: Typography.body * 1.2 }}>
               Most expensive
             </Text>
             <Image source={require("@/assets/images/illustrations/chevron-down-icon-gray.png")} style={{ height: 20, width: 20 }} />
@@ -142,7 +142,7 @@ export default function GiftShopScreen() {
 
       </View>
 
-      <AllGigs gigs={gigs} />
+      <GigList gigs={gigs} />
 
       {/* <View style={{ marginBottom: 48 }}>
           <Text style={{
@@ -194,15 +194,15 @@ const CollectedItem = (props: {
       <ImageBackground source={require("@/assets/images/backgrounds/background-lime.png")} style={{ height: 48, width: 48, }} imageStyle={{ borderRadius: 10 }}>
       </ImageBackground>
       <View style={{ flex: 1 }}>
-        <Text style={{ fontSize: Typography.paragraph, color: Colors.design.highContrastText, fontFamily: Fonts.Inter_600SemiBold, marginBottom: 4, lineHeight: Typography.paragraph }}>
+        <Text style={{ fontSize: Typography.body, color: Colors.design.highContrastText, fontFamily: Fonts.Inter_600SemiBold, marginBottom: 4, lineHeight: Typography.body }}>
           {props.name}
         </Text>
 
-        <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.paragraph, color: Colors.design.mutedText }}>
+        <Text style={{ fontFamily: Fonts.Inter_600SemiBold, fontSize: Typography.body, color: Colors.design.mutedText }}>
           {SF_ICONS.clock} {props.expiryDate}
         </Text>
       </View>
-      <Text style={{ fontSize: Typography.paragraph, color: Colors.design.highContrastText, fontFamily: Fonts.Inter_700Bold, lineHeight: Typography.paragraph }}>
+      <Text style={{ fontSize: Typography.body, color: Colors.design.highContrastText, fontFamily: Fonts.Inter_700Bold, lineHeight: Typography.body }}>
         {props.code}
       </Text>
     </View>
@@ -220,16 +220,16 @@ const MarketplaceItem = (props: {
       <ImageBackground source={require("@/assets/images/backgrounds/background-lime.png")} style={{ height: 48, width: 48, }} imageStyle={{ borderRadius: 10 }}>
       </ImageBackground>
       <View style={{ flex: 1 }}>
-        <Text style={{ fontSize: Typography.paragraph, color: Colors.design.highContrastText, fontFamily: Fonts.Inter_600SemiBold, marginBottom: 6, lineHeight: Typography.paragraph * 1.2 }}>
+        <Text style={{ fontSize: Typography.body, color: Colors.design.highContrastText, fontFamily: Fonts.Inter_600SemiBold, marginBottom: 6, lineHeight: Typography.body * 1.2 }}>
           {props.name}
         </Text>
-        <Text style={{ fontFamily: Fonts.Inter_600SemiBold, textAlign: "left", fontSize: Typography.paragraph, color: Colors.design.mutedText, lineHeight: Typography.paragraph * 1.2 }}>
+        <Text style={{ fontFamily: Fonts.Inter_600SemiBold, textAlign: "left", fontSize: Typography.body, color: Colors.design.mutedText, lineHeight: Typography.body * 1.2 }}>
           Base price: {props.basePrice} XP
         </Text>
 
       </View>
       <View>
-        <Text style={{ fontSize: Typography.paragraph, color: Colors.design.highContrastText, fontFamily: Fonts.Inter_700Bold, marginBottom: 6, textAlign: "right", lineHeight: Typography.paragraph }}>
+        <Text style={{ fontSize: Typography.body, color: Colors.design.highContrastText, fontFamily: Fonts.Inter_700Bold, marginBottom: 6, textAlign: "right", lineHeight: Typography.body }}>
           {props.currentPrice} XP
         </Text>
         <Text style={{ fontFamily: Fonts.Inter_700Bold, textAlign: "right", color: props.currentPrice - props.basePrice > 0 ? Colors.design.text : Colors.design.redText, lineHeight: 16 }}>

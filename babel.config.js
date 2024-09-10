@@ -14,6 +14,16 @@ module.exports = function (api) {
       ],
 
       "react-native-reanimated/plugin",
+      "@babel/transform-react-jsx-source",
+      "babel-plugin-transform-typescript-metadata",
+      [
+        "module-resolver",
+        {
+          alias: {
+            "~": "./src",
+          },
+        },
+      ],
     ],
   };
 };
